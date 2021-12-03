@@ -173,6 +173,10 @@ bool http_client_wasm::disconnect() {
   return true;
 }
 
+bool http_client_wasm::cancel_read() {
+  throw runtime_error("http_client_wasm::cancel_read() not implemented");
+}
+
 bool http_client_wasm::is_connected(bool *ssl) {
   return m_is_connected;
 }
@@ -206,7 +210,7 @@ void build_http_header_info(const boost::property_tree::ptree& headers_node, htt
   }
 }
 
-bool http_client_wasm::invoke_json(const boost::string_ref path, const boost::string_ref method, const std::string& body, std::chrono::milliseconds timeout, const http_response_info** ppresponse_info, const fields_list& additional_params) {
+bool http_client_wasm::invoke_json(const boost::string_ref path, const boost::string_ref method, const boost::string_ref body, std::chrono::milliseconds timeout, const http_response_info** ppresponse_info, const fields_list& additional_params) {
 
   // make json request through javascript
   string uri = string(m_ssl_enabled ? "https" : "http") + "://" + m_host + ":" + m_port + string(path);
@@ -248,7 +252,7 @@ bool http_client_wasm::invoke_json(const boost::string_ref path, const boost::st
   return m_response_info.m_response_code == 200;
 }
 
-bool http_client_wasm::invoke_binary(const boost::string_ref path, const boost::string_ref method, const std::string& body, std::chrono::milliseconds timeout, const http_response_info** ppresponse_info, const fields_list& additional_params) {
+bool http_client_wasm::invoke_binary(const boost::string_ref path, const boost::string_ref method, const boost::string_ref body, std::chrono::milliseconds timeout, const http_response_info** ppresponse_info, const fields_list& additional_params) {
 
   // make binary request through javascript
   string uri = string(m_ssl_enabled ? "https" : "http") + "://" + m_host + ":" + m_port + string(path);
@@ -295,20 +299,17 @@ bool http_client_wasm::invoke_binary(const boost::string_ref path, const boost::
   return m_response_info.m_response_code == 200;
 }
 
-bool http_client_wasm::invoke(const boost::string_ref path, const boost::string_ref method, const std::string& body, std::chrono::milliseconds timeout, const http_response_info** ppresponse_info, const fields_list& additional_params) {
+bool http_client_wasm::invoke(const boost::string_ref path, const boost::string_ref method, const boost::string_ref body, std::chrono::milliseconds timeout, const http_response_info** ppresponse_info, const fields_list& additional_params) {
   //cout << "invoke(" << path << ", " << method << ", ...)" << endl;
 
   if(!is_connected())
   {
     if (!m_auto_connect && false)
     {
-      MWARNING("Auto connect attempt to " << m_host << ":" << m_port << " disabled");
       return false;
     }
-    MDEBUG("Reconnecting...");
     if(!connect(timeout))
     {
-      MDEBUG("Failed to connect to " << m_host << ":" << m_port);
       return false;
     }
   }

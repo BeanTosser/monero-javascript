@@ -21,22 +21,12 @@ emmake cmake --build . -j$HOST_NCORES || exit 1
 # move available wasm files to ./dist
 cd ..
 mkdir -p ./dist || exit 1
-[ -f ./build/monero_wallet_keys.js ] \
+[ -f ./build/townforge.js ] \
   && {
-    mv ./build/monero_wallet_keys.js ./dist/
+    mv ./build/townforge.js ./dist/
   }
 
-[ -f ./build/monero_wallet_keys.wasm ] \
+[ -f ./build/townforge.wasm ] \
   && {
-    mv ./build/monero_wallet_keys.wasm ./dist/
-  }
-
-[ -f ./build/monero_wallet_full.js ] \
-  && {
-    mv ./build/monero_wallet_full.js ./dist/
-  }
-
-[ -f ./build/monero_wallet_full.wasm ] \
-  && {
-    mv ./build/monero_wallet_full.wasm ./dist/
+    mv ./build/townforge.wasm ./dist/
   }

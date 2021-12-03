@@ -63,44 +63,18 @@ class LibraryUtils {
   /**
    * Load the WebAssembly keys module with caching.
    */
-  static async loadKeysModule() {
+  static async loadTownforgeModule() {
     
     // use cache if suitable, full module supersedes keys module because it is superset
     if (LibraryUtils.WASM_MODULE) return LibraryUtils.WASM_MODULE;
     
     // load module
     delete LibraryUtils.WASM_MODULE;
-    LibraryUtils.WASM_MODULE = require("../../../../dist/monero_wallet_keys")();
+    LibraryUtils.WASM_MODULE = require("../../../../dist/townforge")();
     return new Promise(function(resolve, reject) {
       LibraryUtils.WASM_MODULE.then(module => {
         LibraryUtils.WASM_MODULE = module
         delete LibraryUtils.WASM_MODULE.then;
-        LibraryUtils._initWasmModule(LibraryUtils.WASM_MODULE);
-        resolve(LibraryUtils.WASM_MODULE);
-      });
-    });
-  }
-  
-  /**
-   * Load the WebAssembly full module with caching.
-   * 
-   * The full module is a superset of the keys module and overrides it.
-   * 
-   * TODO: this is separate static function from loadKeysModule() because webpack cannot bundle worker using runtime param for conditional import
-   */
-  static async loadFullModule() {
-    
-    // use cache if suitable, full module supersedes keys module because it is superset
-    if (LibraryUtils.WASM_MODULE && LibraryUtils.FULL_LOADED) return LibraryUtils.WASM_MODULE;
-    
-    // load module
-    delete LibraryUtils.WASM_MODULE;
-    LibraryUtils.WASM_MODULE = require("../../../../dist/monero_wallet_full")();
-    return new Promise(function(resolve, reject) {
-      LibraryUtils.WASM_MODULE.then(module => {
-        LibraryUtils.WASM_MODULE = module
-        delete LibraryUtils.WASM_MODULE.then;
-        LibraryUtils.FULL_LOADED = true;
         LibraryUtils._initWasmModule(LibraryUtils.WASM_MODULE);
         resolve(LibraryUtils.WASM_MODULE);
       });

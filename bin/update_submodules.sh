@@ -5,11 +5,11 @@ git submodule update --init --recursive
 
 # update monero-cpp
 cd ./external/monero-cpp
-git checkout master
-git pull --ff-only origin master
+git checkout townforge
+git pull --ff-only origin townforge
 
-# update monero-project
-cd ./external/monero-project
-git checkout master
-git pull --ff-only origin master
+# update townforge
+cd ./external/townforge
+git checkout cc
+git pull --ff-only origin cc
 cd ../../../../
