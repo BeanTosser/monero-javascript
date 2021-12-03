@@ -213,7 +213,7 @@ set(
     # monero-cpp (modified for WASM)
     #${MONERO_CPP_SRC}/wallet/monero_wallet_full.cpp # TODO: update for townforge if use case
     
-    # townforge
+    # townforge wallet (modified for WASM)
     ${TOWNFORGE}/external/db_drivers/liblmdb/mdb.c
     ${TOWNFORGE}/external/db_drivers/liblmdb/midl.c
     ${TOWNFORGE}/contrib/epee/src/abstract_http_client.cpp
@@ -242,6 +242,11 @@ set(
 set(
     TOWNFORGE_SRC_FILES
     
+    # townforge wasm bridge
+    src/main/cpp/townforge_index.cpp
+    src/main/cpp/townforge_wasm_bridge.cpp
+    
+    # townforge source files
     ${TOWNFORGE_SRC}/cryptonote_basic/cc_command_defs.cpp
 )
 

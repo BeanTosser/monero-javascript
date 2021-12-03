@@ -1,6 +1,7 @@
 // import test types
 const monerojs = require("../../index");
 const LibraryUtils = monerojs.LibraryUtils;
+const TestTownforge = require("./TestTownforge");
 const TestSampleCode = require("./TestSampleCode");
 const TestMoneroUtils = require("./TestMoneroUtils");
 const TestMoneroDaemonRpc = require("./TestMoneroDaemonRpc");
@@ -12,6 +13,9 @@ const TestMoneroConnectionManager = require("./TestMoneroConnectionManager");
 
 // set log level
 LibraryUtils.setLogLevel(1); // no need for await before worker used
+
+// test townforge
+new TestTownforge().runTests();
 
 // test sample code for readme
 new TestSampleCode().runTests();

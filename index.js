@@ -7,6 +7,9 @@
  */
 module.exports = {};
 
+// export Townforge models
+module.exports.TownforgeUtils = require("./src/main/js/townforge/TownforgeUtils");
+
 // export common models
 module.exports.GenUtils = require("./src/main/js/common/GenUtils");
 module.exports.BigInteger = require("./src/main/js/common/biginteger").BigInteger;
