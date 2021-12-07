@@ -1,9 +1,9 @@
 {
-  "name": "monero-javascript",
-  "description": "A JavaScript library for using Monero",
-  "version": "0.5.9",
+  "name": "townforge-wasm",
+  "description": "Builds Townforge as a wasm",
+  "version": "0.0.1",
   "license": "MIT",
-  "repository": "https://github.com/monero-ecosystem/monero-javascript",
+  "repository": "https://github.com/woodser/townforge-wasm",
   "private": false,
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
       {
         "provider": "github",
         "owner": "woodser",
-        "repo": "monero-javascript"
+        "repo": "townforge-wasm"
       }
     ]
   },

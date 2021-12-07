@@ -5,9 +5,9 @@
 using namespace std;
 using namespace townforge_wasm_bridge;
 
-string townforge_wasm_bridge::start_townforge()
+string townforge_wasm_bridge::start_townforge(string config)
 {
-  std::cout << "Bridge ready to call townforge source!" << std::endl;
+  std::cout << "Townforge wasm bridge called with config: " << config << std::endl;
   try {
     throw std::runtime_error("calling townforge source not implemented");
   } catch (exception& e) {

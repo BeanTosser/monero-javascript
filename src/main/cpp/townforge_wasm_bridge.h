@@ -12,7 +12,7 @@ using namespace emscripten;
 
 namespace townforge_wasm_bridge
 {
-  string start_townforge();
+  string start_townforge(string config);
 }
 
 #endif /* townforge_wasm_bridge_h */
