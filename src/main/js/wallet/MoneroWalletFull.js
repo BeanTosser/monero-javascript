@@ -47,7 +47,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
    * 
    * @param {string} path - path of the wallet on the file system
    * @param {fs} - Node.js compatible file system to use (optional, defaults to disk if nodejs)
-   * @return {boolean} true if a wallet exists at the given path, false otherwise
+   * @@return {Promise<boolean>} true if a wallet exists at the given path, false otherwise
    */
   static walletExists(path, fs) {
     assert(path, "Must provide a path to look for a wallet");
@@ -99,7 +99,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
    * @param {string|MoneroRpcConnection} daemonUriOrConnection - daemon URI or MoneroRpcConnection
    * @param {boolean} proxyToWorker - proxies wallet operations to a worker in order to not block the main thread (default true)
    * @param {fs} fs - Node.js compatible file system to use (defaults to disk or in-memory FS if browser)
-   * @return {MoneroWalletFull} the opened wallet
+   * @@return {Promise<MoneroWalletFull>} the opened wallet
    */
   static async openWallet(configOrPath, password, networkType, daemonUriOrConnection, proxyToWorker, fs) {
 
@@ -170,7 +170,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
    * @param {MoneroRpcConnection|object} config.server - MoneroRpcConnection or equivalent JS object providing daemon configuration (optional)
    * @param {boolean} config.proxyToWorker - proxies wallet operations to a worker in order to not block the main thread (default true)
    * @param {fs} config.fs - Node.js compatible file system to use (defaults to disk or in-memory FS if browser)
-   * @return {MoneroWalletFull} the created wallet
+   * @@return {Promise<MoneroWalletFull>} the created wallet
    */
   static async createWallet(config) {
     
@@ -375,7 +375,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
   /**
    * Get the maximum height of the peers the wallet's daemon is connected to.
    *
-   * @return {number} the maximum height of the peers the wallet's daemon is connected to
+   * @@return {Promise<number>} the maximum height of the peers the wallet's daemon is connected to
    */
   async getDaemonMaxPeerHeight() {
     let that = this;
@@ -397,7 +397,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
   /**
    * Indicates if the wallet's daemon is synced with the network.
    * 
-   * @return {boolean} true if the daemon is synced with the network, false otherwise
+   * @@return {Promise<boolean>} true if the daemon is synced with the network, false otherwise
    */
   async isDaemonSynced() {
     let that = this;
@@ -419,7 +419,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
   /**
    * Indicates if the wallet is synced with the daemon.
    * 
-   * @return {boolean} true if the wallet is synced with the daemon, false otherwise
+   * @@return {Promise<boolean>} true if the wallet is synced with the daemon, false otherwise
    */
   async isSynced() {
     let that = this;
@@ -441,7 +441,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
   /**
    * Get the wallet's network type (mainnet, testnet, or stagenet).
    * 
-   * @return {MoneroNetworkType} the wallet's network type
+   * @@return {Promise<MoneroNetworkType>} the wallet's network type
    */
   async getNetworkType() {
     let that = this;
@@ -454,7 +454,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
   /**
    * Get the height of the first block that the wallet scans.
    * 
-   * @return {number} the height of the first block that the wallet scans
+   * @@return {Promise<number>} the height of the first block that the wallet scans
    */
   async getSyncHeight() {
     let that = this;
@@ -1609,7 +1609,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
   /**
    * Get the wallet's keys and cache data.
    * 
-   * @return {DataView[]} is the keys and cache data respectively
+   * @@return {Promise<DataView[]>} is the keys and cache data respectively
    */
   async getData() {
     this._assertNotClosed();

@@ -19,7 +19,7 @@ class MoneroConnectionManager {
    * Add a listener to receive notifications when the connection changes.
    * 
    * @param {MoneroConnectionManagerListener} listener - the listener to add
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   addListener(listener) {
     this._listeners.push(listener);
@@ -30,7 +30,7 @@ class MoneroConnectionManager {
    * Remove a listener.
    * 
    * @param {MoneroConnectionManagerListener} listener - the listener to remove
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   removeListener(listener) {
     if (!GenUtils.remove(this._listeners, listener)) throw new MoneroError("Monero connection manager does not contain listener to remove");
@@ -41,7 +41,7 @@ class MoneroConnectionManager {
    * Add a connection. The connection may have an elevated priority for this manager to use.
    * 
    * @param {MoneroRpcConnection} connection - the connection to add
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   addConnection(connection) {
     for (let aConnection of this._connections) {
@@ -55,7 +55,7 @@ class MoneroConnectionManager {
    * Remove a connection.
    * 
    * @param {string} uri - of the the connection to remove
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   removeConnection(uri) {
     let connection = this.getConnectionByUri(uri);
@@ -68,7 +68,7 @@ class MoneroConnectionManager {
   /**
    * Indicates if the connection manager is connected to a node.
    * 
-   * @return {boolean} true if the current connection is set, online, and not unauthenticated. false otherwise
+   * @@return {Promise<boolean>} true if the current connection is set, online, and not unauthenticated. false otherwise
    */
   isConnected() {
     return this._currentConnection && this._currentConnection.isOnline() && this._currentConnection.isAuthenticated() !== false;
@@ -77,7 +77,7 @@ class MoneroConnectionManager {
   /**
    * Get the current connection.
    * 
-   * @return {MoneroRpcConnection} the current connection or undefined if no connection set
+   * @@return {Promise<MoneroRpcConnection>} the current connection or undefined if no connection set
    */
   getConnection() {
     return this._currentConnection;
@@ -87,7 +87,7 @@ class MoneroConnectionManager {
    * Get a connection by URI.
    * 
    * @param {string} uri is the URI of the connection to get
-   * @return {MoneroRpcConnection} the connection with the URI or undefined if no connection with the URI exists
+   * @@return {Promise<MoneroRpcConnection>} the connection with the URI or undefined if no connection with the URI exists
    */
   getConnectionByUri(uri) {
     for (let connection of this._connections) if (connection.getUri() === uri) return connection;
@@ -97,7 +97,7 @@ class MoneroConnectionManager {
   /**
    * Get all connections in order of current connection (if applicable), online status, priority, and name.
    * 
-   * @return {MoneroRpcConnection[]} the list of sorted connections
+   * @@return {Promise<MoneroRpcConnection[]>} the list of sorted connections
    */
   getConnections() {
     let sortedConnections = GenUtils.copyArray(this._connections);
@@ -108,7 +108,7 @@ class MoneroConnectionManager {
   /**
    * Get the best available connection in order of priority then response time.
    * 
-   * @return {MoneroRpcConnection} the best available connection in order of priority then response time, undefined if no connections available
+   * @@return {Promise<MoneroRpcConnection>} the best available connection in order of priority then response time, undefined if no connections available
    */
   async getBestAvailableConnection() {
     
@@ -149,7 +149,7 @@ class MoneroConnectionManager {
    * Provide a MoneroRpcConnection to add new connection or update credentials of existing connection with same URI.
    * 
    * @param {string|MoneroRpcConnection} uriOrConnection - is the uri of the connection or the connection to make current (default undefined for no current connection)
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   setConnection(uriOrConnection) {
     
@@ -199,7 +199,7 @@ class MoneroConnectionManager {
   /**
    * Check the current connection. If disconected and auto switch enabled, switches to best available connection.
    * 
-   * @return {MoneroRpcConnection} the current connection
+   * @@return {Promise<MoneroRpcConnection>} the current connection
    */
   async checkConnection() {
     let connection = this.getConnection();
@@ -212,7 +212,7 @@ class MoneroConnectionManager {
   /**
    * Check all managed connections.
    * 
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   async checkConnections() {
     await Promise.all(this.checkConnectionPromises());
@@ -222,7 +222,7 @@ class MoneroConnectionManager {
   /**
    * Check all managed connections, returning a promise for each connection check.
    *
-   * @return {Promise[]} a promise for each connection in the order of getConnections().
+   * @@return {Promise<Promise[]>} a promise for each connection in the order of getConnections().
    */
   checkConnectionPromises() {
     let that = this;
@@ -244,7 +244,7 @@ class MoneroConnectionManager {
    * Start checking connection status by polling the server in a fixed period loop.
    * 
    * @param {number} periodMs is the time between checks in milliseconds (default 10000 or 10 seconds)
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   startCheckingConnection(periodMs) {
     if (!periodMs) periodMs = MoneroConnectionManager.DEFAULT_CHECK_CONNECTION_PERIOD;
@@ -262,7 +262,7 @@ class MoneroConnectionManager {
   /**
    * Stop automatically checking the connection status.
    * 
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   stopCheckingConnection() {
     if (this._checkLooper) this._checkLooper.stop();
@@ -273,7 +273,7 @@ class MoneroConnectionManager {
    * Automatically switch to best available connection if current connection is disconnected after being checked.
    * 
    * @param {boolean} autoSwitch specifies if the connection should switch on disconnect
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   setAutoSwitch(autoSwitch) {
     this._autoSwitch = autoSwitch;
@@ -284,7 +284,7 @@ class MoneroConnectionManager {
    * Set the maximum request time before its connection is considered offline.
    * 
    * @param {int} timeoutInMs - the timeout before the connection is considered offline
-   * @return {MoneroConnectionManager} this connection manager for chaining
+   * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   setTimeout(timeoutInMs) {
     this._timeoutInMs = timeoutInMs;
@@ -294,7 +294,7 @@ class MoneroConnectionManager {
   /**
    * Get the request timeout.
    * 
-   * @return {int} the request timeout before a connection is considered offline
+   * @@return {Promise<int>} the request timeout before a connection is considered offline
    */
   getTimeout() {
     return this._timeoutInMs;
@@ -303,7 +303,7 @@ class MoneroConnectionManager {
   /**
    * Collect connectable peers of the managed connections.
    *
-   * @return {MoneroRpcConnection[]} connectable peers
+   * @@return {Promise<MoneroRpcConnection[]>} connectable peers
    */
   async getPeerConnections() {
     throw new MoneroError("Not implemented");

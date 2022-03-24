@@ -33,7 +33,7 @@ class ThreadPool {
    * Submit an asynchronous function to run using the thread pool.
    * 
    * @param {function} asyncFn - asynchronous function to run with the thread pool
-   * @return {Promise} resolves when the function completes execution
+   * @@return {Promise<Promise>} resolves when the function completes execution
    */
   async submit(asyncFn) {
     let that = this;
@@ -48,7 +48,7 @@ class ThreadPool {
   /**
    * Await all functions to complete.
    * 
-   * @return {Promise} resolves when all functions complete
+   * @@return {Promise<Promise>} resolves when all functions complete
    */
   async awaitAll() {
     if (this.taskQueue.length === 0) return;

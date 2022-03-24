@@ -35,7 +35,7 @@ class LibraryUtils {
   /**
    * Get the library's log level.
    *
-   * @return {int} the library's log level
+   * @@return {Promise<int>} the library's log level
    */
   static getLogLevel() {
     return LibraryUtils.LOG_LEVEL;
@@ -44,7 +44,7 @@ class LibraryUtils {
   /**
    * Get the total memory used by WebAssembly.
    * 
-   * @return {int} the total memory used by WebAssembly
+   * @@return {Promise<int>} the total memory used by WebAssembly
    */
   static async getWasmMemoryUsed() {
     let total = 0;
@@ -127,7 +127,7 @@ class LibraryUtils {
   /**
    * Get a singleton instance of a worker to share.
    * 
-   * @return {Worker} a worker to share among wallet instances
+   * @@return {Promise<Worker>} a worker to share among wallet instances
    */
   static async getWorker() {
     
@@ -175,7 +175,7 @@ class LibraryUtils {
    * @param {objectId} identifies the worker object to invoke
    * @param {string} fnName is the name of the function to invoke
    * @param {Object[]} args are function arguments to invoke with
-   * @return {Promise} resolves with response payload from the worker or an error
+   * @@return {Promise<Promise>} resolves with response payload from the worker or an error
    */
   static async invokeWorker(objectId, fnName, args) {
     assert(fnName.length >= 2);

@@ -50,7 +50,7 @@ class MoneroDaemon {
   /**
    * Get the listeners registered with the daemon.
    * 
-   * @return {MoneroDaemonListener[]} the registered listeners
+   * @@return {Promise<MoneroDaemonListener[]>} the registered listeners
    */
   getListeners() {
     throw new MoneroError("Subclass must implement");
@@ -59,7 +59,7 @@ class MoneroDaemon {
   /**
    * Indicates if the client is connected to the daemon via RPC.
    * 
-   * @return {boolean} true if the client is connected to the daemon, false otherwise
+   * @@return {Promise<boolean>} true if the client is connected to the daemon, false otherwise
    */
   async isConnected() {
     throw new MoneroError("Subclass must implement");
@@ -68,7 +68,7 @@ class MoneroDaemon {
   /**
    * Gets the version of the daemon.
    * 
-   * @return {MoneroVersion} the version of the daemon
+   * @@return {Promise<MoneroVersion>} the version of the daemon
    */
   async getVersion() {
     throw new MoneroError("Subclass must implement");
@@ -77,7 +77,7 @@ class MoneroDaemon {
   /**
    * Indicates if the daemon is trusted xor untrusted.
    * 
-   * @return {boolean} true if the daemon is trusted, false otherwise
+   * @@return {Promise<boolean>} true if the daemon is trusted, false otherwise
    */
   async isTrusted() {
     throw new MoneroError("Subclass must implement");
@@ -86,7 +86,7 @@ class MoneroDaemon {
   /**
    * Get the number of blocks in the longest chain known to the node.
    * 
-   * @return {int} the number of blocks
+   * @@return {Promise<int>} the number of blocks
    */
   async getHeight() {
     throw new MoneroError("Subclass must implement");
@@ -96,7 +96,7 @@ class MoneroDaemon {
    * Get a block's hash by its height.
    * 
    * @param {int} height - height of the block hash to get
-   * @return {string} the block's hash at the given height
+   * @@return {Promise<string>} the block's hash at the given height
    */
   async getBlockHash(height) {
     throw new MoneroError("Subclass must implement");
@@ -107,7 +107,7 @@ class MoneroDaemon {
    * 
    * @param {string} walletAddress - address of the wallet to receive miner transactions if block is successfully mined
    * @param {int} reserveSize - reserve size (optional)
-   * @return {MoneroBlockTemplate} is a block template for mining a new block
+   * @@return {Promise<MoneroBlockTemplate>} is a block template for mining a new block
    */
   async getBlockTemplate(walletAddress, reserveSize) {
     throw new MoneroError("Subclass must implement");
@@ -116,7 +116,7 @@ class MoneroDaemon {
   /**
    * Get the last block's header.
    * 
-   * @return {MoneroBlockHeader} last block's header
+   * @@return {Promise<MoneroBlockHeader>} last block's header
    */
   async getLastBlockHeader() {
     throw new MoneroError("Subclass must implement");
@@ -126,7 +126,7 @@ class MoneroDaemon {
    * Get a block header by its hash.
    * 
    * @param {string} blockHash - hash of the block to get the header of
-   * @return {MoneroBlockHeader} block's header
+   * @@return {Promise<MoneroBlockHeader>} block's header
    */
   async getBlockHeaderByHash(blockHash) {
     throw new MoneroError("Subclass must implement");
@@ -136,7 +136,7 @@ class MoneroDaemon {
    * Get a block header by its height.
    * 
    * @param {int} height - height of the block to get the header of
-   * @return {MoneroBlockHeader} block's header
+   * @@return {Promise<MoneroBlockHeader>} block's header
    */
   async getBlockHeaderByHeight(height) {
     throw new MoneroError("Subclass must implement");
@@ -147,7 +147,7 @@ class MoneroDaemon {
    * 
    * @param {int} startHeight - start height lower bound inclusive (optional)
    * @param {int} endHeight - end height upper bound inclusive (optional)
-   * @return {MoneroBlockHeader[]} for the given range
+   * @@return {Promise<MoneroBlockHeader[]>} for the given range
    */
   async getBlockHeadersByRange(startHeight, endHeight) {
     throw new MoneroError("Subclass must implement");
@@ -157,7 +157,7 @@ class MoneroDaemon {
    * Get a block by hash.
    * 
    * @param {string} blockHash - hash of the block to get
-   * @return {MoneroBlock} with the given hash
+   * @@return {Promise<MoneroBlock>} with the given hash
    */
   async getBlockByHash(blockHash) {
     throw new MoneroError("Subclass must implement");
@@ -171,7 +171,7 @@ class MoneroDaemon {
    *        and the last one is always genesis block
    * @param {int} startHeight - start height to get blocks by hash
    * @param {boolean} prune - specifies if returned blocks should be pruned (defaults to false)  // TODO: test default
-   * @return {MoneroBlock[]} retrieved blocks
+   * @@return {Promise<MoneroBlock[]>} retrieved blocks
    */
   async getBlocksByHash(blockHashes, startHeight, prune) {
     throw new MoneroError("Subclass must implement");
@@ -181,7 +181,7 @@ class MoneroDaemon {
    * Get a block by height.
    * 
    * @param {int} height - height of the block to get
-   * @return {MoneroBlock} with the given height
+   * @@return {Promise<MoneroBlock>} with the given height
    */
   async getBlockByHeight(height) {
     throw new MoneroError("Subclass must implement");
@@ -191,7 +191,7 @@ class MoneroDaemon {
    * Get blocks at the given heights.
    * 
    * @param {int[]} heights - heights of the blocks to get
-   * @return {MoneroBlock[]} are blocks at the given heights
+   * @@return {Promise<MoneroBlock[]>} are blocks at the given heights
    */
   async getBlocksByHeight(heights) {
     throw new MoneroError("Subclass must implement");
@@ -202,7 +202,7 @@ class MoneroDaemon {
    * 
    * @param {int} startHeight - start height lower bound inclusive (optional)
    * @param {int} endHeight - end height upper bound inclusive (optional)
-   * @return {MoneroBlock[]} are blocks in the given height range
+   * @@return {Promise<MoneroBlock[]>} are blocks in the given height range
    */
   async getBlocksByRange(startHeight, endHeight) {
     throw new MoneroError("Subclass must implement");
@@ -215,7 +215,7 @@ class MoneroDaemon {
    * @param {int} startHeight - start height lower bound inclusive (optional)
    * @param {int} endHeight - end height upper bound inclusive (optional)
    * @param {int} maxChunkSize - maximum chunk size in any one request (default 3,000,000 bytes)
-   * @return {MoneroBlock[]} blocks in the given height range
+   * @@return {Promise<MoneroBlock[]>} blocks in the given height range
    */
   async getBlocksByRangeChunked(startHeight, endHeight, maxChunkSize) {
     throw new MoneroError("Subclass must implement");
@@ -228,7 +228,7 @@ class MoneroDaemon {
    *        sequential, next goes in pow(2,n) offset, like 2, 4, 8, 16, 32, 64
    *        and so on, and the last one is always genesis block
    * @param {int} startHeight - starting height of block hashes to return
-   * @return {string[]} requested block hashes     
+   * @@return {Promise<string[]>} requested block hashes     
    */
   async getBlockHashes(blockHashes, startHeight) {
     throw new MoneroError("Subclass must implement");
@@ -239,7 +239,7 @@ class MoneroDaemon {
    * 
    * @param {string} txHash - hash of the transaction to get
    * @param {boolean} prune - specifies if the returned tx should be pruned (defaults to false)
-   * @return {MoneroTx} transaction with the given hash
+   * @@return {Promise<MoneroTx>} transaction with the given hash
    */
   async getTx(txHash, prune = false) {
     return (await this.getTxs([txHash], prune))[0];
@@ -250,7 +250,7 @@ class MoneroDaemon {
    * 
    * @param {string[]} txHashes - hashes of transactions to get
    * @param {boolean} prune - specifies if the returned txs should be pruned (defaults to false)
-   * @return {MoneroTx[]} transactions with the given hashes
+   * @@return {Promise<MoneroTx[]>} transactions with the given hashes
    */
   async getTxs(txHashes, prune = false) {
     throw new MoneroError("Subclass must implement");
@@ -261,7 +261,7 @@ class MoneroDaemon {
    * 
    * @param {string} txHash - hash of the transaction to get hex from
    * @param {boolean} prune - specifies if the returned tx hex should be pruned (defaults to false)
-   * @return {string} tx hex with the given hash
+   * @@return {Promise<string>} tx hex with the given hash
    */
   async getTxHex(txHash, prune = false) {
     return (await this.getTxHexes([txHash], prune))[0];
@@ -272,7 +272,7 @@ class MoneroDaemon {
    * 
    * @param {string[]} txHashes - hashes of transactions to get hexes from
    * @param {boolean} prune - specifies if the returned tx hexes should be pruned (defaults to false)
-   * @return {string[]} tx hexes
+   * @@return {Promise<string[]>} tx hexes
    */
   async getTxHexes(txHashes, prune = false) {
     throw new MoneroError("Subclass must implement");
@@ -283,7 +283,7 @@ class MoneroDaemon {
    * 
    * @param {int} height - height to start computing the miner sum
    * @param {int} numBlocks - number of blocks to include in the sum
-   * @return {MoneroMinerTxSum} encapsulates the total emissions and fees since the genesis block
+   * @@return {Promise<MoneroMinerTxSum>} encapsulates the total emissions and fees since the genesis block
    */
   async getMinerTxSum(height, numBlocks) {
     throw new MoneroError("Subclass must implement");
@@ -293,7 +293,7 @@ class MoneroDaemon {
    * Get the fee estimate per kB.
    * 
    * @param {int} graceBlocks TODO
-   * @return {BigInteger} fee estimate per kB.
+   * @@return {Promise<BigInteger>} fee estimate per kB.
    */
   async getFeeEstimate(graceBlocks) {
     throw new MoneroError("Subclass must implement");
@@ -304,7 +304,7 @@ class MoneroDaemon {
    * 
    * @param {string} txHex - raw transaction hex to submit
    * @param {boolean} doNotRelay specifies if the tx should be relayed (optional)
-   * @return {MoneroSubmitTxResult} contains submission results
+   * @@return {Promise<MoneroSubmitTxResult>} contains submission results
    */
   async submitTxHex(txHex, doNotRelay) {
     throw new MoneroError("Subclass must implement");
@@ -334,7 +334,7 @@ class MoneroDaemon {
    * Get valid transactions seen by the node but not yet mined into a block, as well
    * as spent key image information for the tx pool.
    * 
-   * @return {MoneroTx[]} are transactions in the transaction pool
+   * @@return {Promise<MoneroTx[]>} are transactions in the transaction pool
    */
   async getTxPool() {
     throw new MoneroError("Subclass must implement");
@@ -343,7 +343,7 @@ class MoneroDaemon {
   /**
    * Get hashes of transactions in the transaction pool.
    * 
-   * @return {string[]} are hashes of transactions in the transaction pool
+   * @@return {Promise<string[]>} are hashes of transactions in the transaction pool
    */
   async getTxPoolHashes() {
     throw new MoneroError("Subclass must implement");
@@ -352,7 +352,7 @@ class MoneroDaemon {
   /**
    * Get all transaction pool backlog.
    * 
-   * @return {MoneroTxBacklogEntry[]} backlog entries 
+   * @@return {Promise<MoneroTxBacklogEntry[]>} backlog entries 
    */
   async getTxPoolBacklog() {
     throw new MoneroError("Subclass must implement");
@@ -361,7 +361,7 @@ class MoneroDaemon {
   /**
    * Get transaction pool statistics.
    * 
-   * @return {MoneroTxPoolStats} contains statistics about the transaction pool
+   * @@return {Promise<MoneroTxPoolStats>} contains statistics about the transaction pool
    */
   async getTxPoolStats() {
     throw new MoneroError("Subclass must implement");
@@ -380,7 +380,7 @@ class MoneroDaemon {
    * Get the spent status of the given key image.
    * 
    * @param {string} keyImage - key image hex to get the status of
-   * @return {MoneroKeyImageSpentStatus} status of the key image
+   * @@return {Promise<MoneroKeyImageSpentStatus>} status of the key image
    */
   async getKeyImageSpentStatus(keyImage) {
     return (await this.getKeyImageSpentStatuses([keyImage]))[0];
@@ -390,7 +390,7 @@ class MoneroDaemon {
    * Get the spent status of each given key image.
    * 
    * @param {string[]} keyImages are hex key images to get the statuses of
-   * @return {MoneroKeyImageSpentStatus[]} status for each key image
+   * @@return {Promise<MoneroKeyImageSpentStatus[]>} status for each key image
    */
   async getKeyImageSpentStatuses(keyImages) {
     throw new MoneroError("Subclass must implement");
@@ -401,7 +401,7 @@ class MoneroDaemon {
    * request.
    * 
    * @param {MoneroOutput[]} outputs - identify each output by amount and index
-   * @return {MoneroOutput[]} identified outputs
+   * @@return {Promise<MoneroOutput[]>} identified outputs
    */
   async getOutputs(outputs) {
     throw new MoneroError("Subclass must implement");
@@ -417,7 +417,7 @@ class MoneroDaemon {
    * @param {int} maxCount - TODO
    * @param {boolean} isUnlocked - makes a histogram with outputs with the specified lock state
    * @param {int} recentCutoff - TODO
-   * @return {MoneroOutputHistogramEntry[]} are entries meeting the parameters
+   * @@return {Promise<MoneroOutputHistogramEntry[]>} are entries meeting the parameters
    */
   async getOutputHistogram(amounts, minCount, maxCount, isUnlocked, recentCutoff) {
     throw new MoneroError("Subclass must implement");
@@ -430,7 +430,7 @@ class MoneroDaemon {
    * @param {boolean} cumulative - specifies if the results should be cumulative (defaults to TODO)
    * @param {int} startHeight - start height lower bound inclusive (optional)
    * @param {int} endHeight - end height upper bound inclusive (optional)
-   * @return {MoneroOutputDistributionEntry[]} are entries meeting the parameters
+   * @@return {Promise<MoneroOutputDistributionEntry[]>} are entries meeting the parameters
    */
   async getOutputDistribution(amounts, cumulative, startHeight, endHeight) {
     throw new MoneroError("Subclass must implement");
@@ -439,7 +439,7 @@ class MoneroDaemon {
   /**
    * Get general information about the state of the node and the network.
    * 
-   * @return {MoneroDaemonInfo} is general information about the node and network
+   * @@return {Promise<MoneroDaemonInfo>} is general information about the node and network
    */
   async getInfo() {
     throw new MoneroError("Subclass must implement");
@@ -448,7 +448,7 @@ class MoneroDaemon {
   /**
    * Get synchronization information.
    * 
-   * @return {MoneroDaemonSyncInfo} contains sync information
+   * @@return {Promise<MoneroDaemonSyncInfo>} contains sync information
    */
   async getSyncInfo() {
     throw new MoneroError("Subclass must implement");
@@ -457,7 +457,7 @@ class MoneroDaemon {
   /**
    * Look up information regarding hard fork voting and readiness.
    * 
-   * @return {MoneroHardForkInfo} contains hard fork information
+   * @@return {Promise<MoneroHardForkInfo>} contains hard fork information
    */
   async getHardForkInfo() {
     throw new MoneroError("Subclass must implement");
@@ -466,7 +466,7 @@ class MoneroDaemon {
   /**
    * Get alternative chains seen by the node.
    * 
-   * @return {MoneroAltChain[]} alternative chains
+   * @@return {Promise<MoneroAltChain[]>} alternative chains
    */
   async getAltChains() {
     throw new MoneroError("Subclass must implement");
@@ -475,7 +475,7 @@ class MoneroDaemon {
   /**
    * Get known block hashes which are not on the main chain.
    * 
-   * @return {string[]} known block hashes which are not on the main chain
+   * @@return {Promise<string[]>} known block hashes which are not on the main chain
    */
   async getAltBlockHashes() {
     throw new MoneroError("Subclass must implement");
@@ -484,7 +484,7 @@ class MoneroDaemon {
   /**
    * Get the download bandwidth limit.
    * 
-   * @return {int} download bandwidth limit
+   * @@return {Promise<int>} download bandwidth limit
    */
   async getDownloadLimit() {
     throw new MoneroError("Subclass must implement");
@@ -494,7 +494,7 @@ class MoneroDaemon {
    * Set the download bandwidth limit.
    * 
    * @param {int} limit - download limit to set (-1 to reset to default)
-   * @return {int} new download limit after setting
+   * @@return {Promise<int>} new download limit after setting
    */
   async setDownloadLimit(limit) {
     throw new MoneroError("Subclass must implement");
@@ -503,7 +503,7 @@ class MoneroDaemon {
   /**
    * Reset the download bandwidth limit.
    * 
-   * @return {int} download bandwidth limit after resetting
+   * @@return {Promise<int>} download bandwidth limit after resetting
    */
   async resetDownloadLimit() {
     throw new MoneroError("Subclass must implement");
@@ -512,7 +512,7 @@ class MoneroDaemon {
   /**
    * Get the upload bandwidth limit.
    * 
-   * @return {int} upload bandwidth limit
+   * @@return {Promise<int>} upload bandwidth limit
    */
   async getUploadLimit() {
     throw new MoneroError("Subclass must implement");
@@ -522,7 +522,7 @@ class MoneroDaemon {
    * Set the upload bandwidth limit.
    * 
    * @param limit - upload limit to set (-1 to reset to default)
-   * @return {int} new upload limit after setting
+   * @@return {Promise<int>} new upload limit after setting
    */
   async setUploadLimit(limit) {
     throw new MoneroError("Subclass must implement");
@@ -531,7 +531,7 @@ class MoneroDaemon {
   /**
    * Reset the upload bandwidth limit.
    * 
-   * @return {int} upload bandwidth limit after resetting
+   * @@return {Promise<int>} upload bandwidth limit after resetting
    */
   async resetUploadLimit() {
     throw new MoneroError("Subclass must implement");
@@ -540,7 +540,7 @@ class MoneroDaemon {
   /**
    * Get known peers including their last known online status.
    * 
-   * @return {MoneroDaemonPeer[]} known peers
+   * @@return {Promise<MoneroDaemonPeer[]>} known peers
    */
   async getKnownPeers() {
     throw new MoneroError("Subclass must implement");
@@ -549,7 +549,7 @@ class MoneroDaemon {
   /**
    * Get incoming and outgoing connections to the node.
    * 
-   * @return {MoneroDaemonConnection[]} daemon's peer connections
+   * @@return {Promise<MoneroDaemonConnection[]>} daemon's peer connections
    */
   async getConnections() {
     throw new MoneroError("Subclass must implement");
@@ -576,7 +576,7 @@ class MoneroDaemon {
   /**
    * Get peer bans.
    * 
-   * @return {MoneroBan[]} entries about banned peers
+   * @@return {Promise<MoneroBan[]>} entries about banned peers
    */
   async getPeerBans() {
     throw new MoneroError("Subclass must implement");
@@ -622,7 +622,7 @@ class MoneroDaemon {
   /**
    * Get the daemon's mining status.
    * 
-   * @return {MoneroMiningStatus} daemon's mining status
+   * @@return {Promise<MoneroMiningStatus>} daemon's mining status
    */
   async getMiningStatus() {
     throw new MoneroError("Subclass must implement");
@@ -649,7 +649,7 @@ class MoneroDaemon {
   /**
    * Check for update.
    * 
-   * @return {MoneroDaemonUpdateCheckResult} the result
+   * @@return {Promise<MoneroDaemonUpdateCheckResult>} the result
    */
   async checkForUpdate() {
     throw new MoneroError("Subclass must implement");
@@ -659,7 +659,7 @@ class MoneroDaemon {
    * Download an update.
    * 
    * @param {string} path - path to download the update (optional)
-   * @return {MoneroDaemonUpdateDownloadResult} the result
+   * @@return {Promise<MoneroDaemonUpdateDownloadResult>} the result
    */
   async downloadUpdate(path) {
     throw new MoneroError("Subclass must implement");
@@ -675,7 +675,7 @@ class MoneroDaemon {
   /**
    * Get the header of the next block added to the chain.
    * 
-   * @return {MoneroBlockHeader} header of the next block added to the chain
+   * @@return {Promise<MoneroBlockHeader>} header of the next block added to the chain
    */
   async waitForNextBlockHeader() {
     throw new MoneroError("Subclass must implement");
@@ -687,7 +687,7 @@ class MoneroDaemon {
    * Parses a network string to an enumerated type.
    * 
    * @param {string} network - network string to parse
-   * @return {MoneroNetworkType} enumerated network type
+   * @@return {Promise<MoneroNetworkType>} enumerated network type
    */
   static parseNetworkType(network) {
     const MoneroNetworkType = require("./model/MoneroNetworkType");

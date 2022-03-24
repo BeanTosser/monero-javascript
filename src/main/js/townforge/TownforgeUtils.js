@@ -12,7 +12,7 @@ class TownforgeUtils {
    * <p>Proof of concept to run Townforge source from the browser.<p>
    * 
    * @param {string} config - starting configuration
-   * @return {string} the response from the Townforge wasm module
+   * @@return {Promise<string>} the response from the Townforge wasm module
    */
   static startTownforge(config) {
     

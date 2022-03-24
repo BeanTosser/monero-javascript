@@ -39,7 +39,7 @@ class MoneroWalletKeys extends MoneroWallet {
    * @param {string} config.privateViewKey - private view key of the wallet to create (optional)
    * @param {string} config.privateSpendKey - private spend key of the wallet to create (optional)
    * @param {string} config.language - language of the wallet's mnemonic phrase (defaults to "English" or auto-detected)
-   * @return {MoneroWalletKeys} the created wallet
+   * @@return {Promise<MoneroWalletKeys>} the created wallet
    */
   static async createWallet(config) {
     

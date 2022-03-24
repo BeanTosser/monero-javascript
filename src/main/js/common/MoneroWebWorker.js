@@ -643,7 +643,7 @@ self.getTxs = async function(walletId, blockJsonQuery, missingTxHashes) {
   
   // serialize blocks to json
   for (let i = 0; i < blocks.length; i++) blocks[i] = blocks[i].toJson();
-  return {blocks: blocks, missingTxHashes: missingTxHashes};
+  @return {Promise<blocks: blocks, missingTxHashes: missingTxHashes>};
 }
 
 self.getTransfers = async function(walletId, blockJsonQuery) {

@@ -148,7 +148,7 @@ class HttpClient {
   /**
    * Get a singleton instance of an HTTP client to share.
    * 
-   * @return {http.Agent} a shared agent for network requests among library instances
+   * @@return {Promise<http.Agent>} a shared agent for network requests among library instances
    */
   static _getHttpAgent() {
     if (!HttpClient.HTTP_AGENT) {
@@ -161,7 +161,7 @@ class HttpClient {
   /**
    * Get a singleton instance of an HTTPS client to share.
    * 
-   * @return {https.Agent} a shared agent for network requests among library instances
+   * @@return {Promise<https.Agent>} a shared agent for network requests among library instances
    */
   static _getHttpsAgent() {
     if (!HttpClient.HTTPS_AGENT) {

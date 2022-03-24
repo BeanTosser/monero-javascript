@@ -1230,7 +1230,7 @@ class GenUtils {
   /**
    * Indicates if the current environment is a browser.
    * 
-   * @return {boolean} true if the environment is a browser, false otherwise
+   * @@return {Promise<boolean>} true if the environment is a browser, false otherwise
    */
   static isBrowser() {
     let isWorker = typeof importScripts === 'function';
@@ -1242,7 +1242,7 @@ class GenUtils {
   /**
    * Indicates if the current environment is a firefox-based browser.
    * 
-   * @return {boolean} true if the environment is a firefox-based browser, false otherwise
+   * @@return {Promise<boolean>} true if the environment is a firefox-based browser, false otherwise
    */
   static isFirefox() {
     return this.isBrowser() && navigator.userAgent.indexOf("Firefox") > 0;
@@ -1467,7 +1467,7 @@ class GenUtils {
    * to preserve numeric precision.
    * 
    * @param {string} str is the string to be modified
-   * @return {string} the modified string with big numbers converted to strings
+   * @@return {Promise<string>} the modified string with big numbers converted to strings
    */
   static stringifyBIs(str) {
     return str.replace(/("[^"]*"\s*:\s*)(\d{16,})/g, '$1"$2"');

@@ -16,7 +16,7 @@ class MoneroUtils {
   /**
    * <p>Get the version of the monero-javascript library.<p>
    * 
-   * @return {string} the version of this monero-javascript library
+   * @@return {Promise<string>} the version of this monero-javascript library
    */
   static getVersion() {
     return "0.5.9";
@@ -39,7 +39,7 @@ class MoneroUtils {
    * Indicates if a private view key is valid.
    * 
    * @param {string} privateViewKey is the private view key to validate
-   * @return {bool} true if the private view key is valid, false otherwise
+   * @@return {Promise<bool>} true if the private view key is valid, false otherwise
    */
   static isValidPrivateViewKey(privateViewKey) {
     try {
@@ -54,7 +54,7 @@ class MoneroUtils {
    * Indicates if a public view key is valid.
    * 
    * @param {string} publicViewKey is the public view key to validate
-   * @return {bool} true if the public view key is valid, false otherwise
+   * @@return {Promise<bool>} true if the public view key is valid, false otherwise
    */
   static isValidPublicViewKey(publicViewKey) {
     try {
@@ -69,7 +69,7 @@ class MoneroUtils {
    * Indicates if a private spend key is valid.
    * 
    * @param {string} privateSpendKey is the private spend key to validate
-   * @return {bool} true if the private spend key is valid, false otherwise
+   * @@return {Promise<bool>} true if the private spend key is valid, false otherwise
    */
   static isValidPrivateSpendKey(privateSpendKey) {
     try {
@@ -84,7 +84,7 @@ class MoneroUtils {
    * Indicates if a public spend key is valid.
    * 
    * @param {string} publicSpendKey is the public spend key to validate
-   * @return {bool} true if the public spend key is valid, false otherwise
+   * @@return {Promise<bool>} true if the public spend key is valid, false otherwise
    */
   static isValidPublicSpendKey(publicSpendKey) {
     try {
@@ -137,7 +137,7 @@ class MoneroUtils {
    * @param {MoneroNetworkType} networkType - network type of the integrated address
    * @param {string} standardAddress - primary address or subaddress for the integrated address
    * @param {string} paymentId - optionally specifies the integrated address's payment id (defaults to random payment id)
-   * @return {MoneroIntegratedAddress} the integrated address
+   * @@return {Promise<MoneroIntegratedAddress>} the integrated address
    */
   static getIntegratedAddress(networkType, standardAddress, paymentId) {
   
@@ -161,7 +161,7 @@ class MoneroUtils {
    * 
    * @param {string} address - address
    * @param {MoneroNetworkType} networkType - network type of the address to validate
-   * @return {boolean} true if the address is valid, false otherwise
+   * @@return {Promise<boolean>} true if the address is valid, false otherwise
    */
   static isValidAddress(address, networkType) {
     
@@ -203,7 +203,7 @@ class MoneroUtils {
    * Determine if the given payment id is valid.
    * 
    * @param {string} paymentId - payment id to determine if valid
-   * @return {bool} true if the payment id is valid, false otherwise
+   * @@return {Promise<bool>} true if the payment id is valid, false otherwise
    */
   static isValidPaymentId(paymentId) {
     try {
@@ -233,7 +233,7 @@ class MoneroUtils {
    * TODO: use c++ bridge for this
    * 
    * @param [byte[]] txExtra - array of tx extra bytes
-   * @return {string} the last pub key as a hexidecimal string
+   * @@return {Promise<string>} the last pub key as a hexidecimal string
    */
   static getLastTxPubKey(txExtra) {
     let lastPubKeyIdx;
@@ -256,7 +256,7 @@ class MoneroUtils {
    * 
    * @param {string} paymentId1 is a payment id to compare
    * @param {string} paymentId2 is a payment id to compare
-   * @return {bool} true if the payment ids are equal, false otherwise
+   * @@return {Promise<bool>} true if the payment ids are equal, false otherwise
    */
   static paymentIdsEqual(paymentId1, paymentId2) {
     let maxLength = Math.max(paymentId1.length, paymentId2.length);
@@ -288,7 +288,7 @@ class MoneroUtils {
    * Convert the given JSON to a binary Uint8Array using Monero's portable storage format.
    * 
    * @param {object} json - json to convert to binary
-   * @return {Uint8Array} the json converted to portable storage binary
+   * @@return {Promise<Uint8Array>} the json converted to portable storage binary
    */
   static jsonToBinary(json) {
     
@@ -320,7 +320,7 @@ class MoneroUtils {
    * Convert the given portable storage binary to JSON.
    * 
    * @param {Uint8Array} uint8arr - binary data in Monero's portable storage format
-   * @return {object} JSON object converted from the binary data
+   * @@return {Promise<object>} JSON object converted from the binary data
    */
   static binaryToJson(uint8arr) {
     
@@ -352,7 +352,7 @@ class MoneroUtils {
    * Convert the binary response from daemon RPC block retrieval to JSON.
    * 
    * @param {Uint8Array} uint8arr - binary response from daemon RPC when getting blocks
-   * @return {object} JSON object with the blocks data
+   * @@return {Promise<object>} JSON object with the blocks data
    */
   static binaryBlocksToJson(uint8arr) {
     
@@ -387,7 +387,7 @@ class MoneroUtils {
    * Convert XMR to atomic units.
    * 
    * @param {number|string} amountXmr - amount in XMR to convert to atomic units
-   * @return {BigInteger} amount in atomic units
+   * @@return {Promise<BigInteger>} amount in atomic units
    */
   static xmrToAtomicUnits(amountXmr) {
     if (typeof amountXmr === "number") amountXmr = "" + amountXmr;
@@ -405,7 +405,7 @@ class MoneroUtils {
    * Convert atomic units to XMR.
    * 
    * @param {BigInteger|string} amountAtomicUnits - amount in atomic units to convert to XMR
-   * @return {number} amount in XMR 
+   * @@return {Promise<number>} amount in XMR 
    */
   static atomicUnitsToXmr(amountAtomicUnits) {
     if (typeof amountAtomicUnits === "string") amountAtomicUnits = new BigInteger(amountAtomicUnits);

@@ -102,7 +102,7 @@ class MoneroDaemonRpc extends MoneroDaemon {
    * @param {boolean} rejectUnauthorized - rejects self-signed certificates if true (default true)
    * @param {number} pollInterval - poll interval to query for updates in ms (default 5000)
    * @param {boolean} proxyToWorker - runs the daemon client in a worker if true (default true)
-   * @return {MoneroDaemonRpc} the daemon RPC client
+   * @@return {Promise<MoneroDaemonRpc>} the daemon RPC client
    */
   static async _connectToDaemonRpc(uriOrConfig, username, password, rejectUnauthorized, pollInterval, proxyToWorker) {
     if (GenUtils.isArray(uriOrConfig)) return MoneroDaemonRpc._startMonerodProcess(uriOrConfig, rejectUnauthorized, pollInterval, proxyToWorker); // handle array as terminal command
@@ -227,7 +227,7 @@ class MoneroDaemonRpc extends MoneroDaemon {
   /**
    * Get the daemon's RPC connection.
    * 
-   * @return {MoneroRpcConnection} the daemon's rpc connection
+   * @@return {Promise<MoneroRpcConnection>} the daemon's rpc connection
    */
   async getRpcConnection() {
     return this.rpc;
@@ -839,7 +839,7 @@ class MoneroDaemonRpc extends MoneroDaemon {
    * @param {number} startHeight - start height to retrieve blocks (default 0)
    * @param {number} maxHeight - maximum end height to retrieve blocks (default blockchain height)
    * @param {number} maxReqSize - maximum amount of block data to fetch from the blockchain in bytes (default 3,000,000 bytes)
-   * @return {MoneroBlock[]} are the resulting chunk of blocks
+   * @@return {Promise<MoneroBlock[]>} are the resulting chunk of blocks
    */
   async _getMaxBlocks(startHeight, maxHeight, maxReqSize) {
     if (startHeight === undefined) startHeight = 0;
@@ -1181,7 +1181,7 @@ class MoneroDaemonRpc extends MoneroDaemon {
    * Initializes sync info from RPC sync info.
    * 
    * @param rpcSyncInfo - rpc map to initialize the sync info from
-   * @return {MoneroDaemonSyncInfo} is sync info initialized from the map
+   * @@return {Promise<MoneroDaemonSyncInfo>} is sync info initialized from the map
    */
   static _convertRpcSyncInfo(rpcSyncInfo) {
     let syncInfo = new MoneroDaemonSyncInfo();
