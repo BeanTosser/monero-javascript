@@ -9,7 +9,7 @@ class MoneroKeyImage {
   /**
    * Construct the model.
    * 
-   * @param {MoneroKeyImage|object|string} stateOrHex is a MoneroKeyImage, JS object, or hex string to initialize from (optional)
+   * @param {MoneroKeyImage|object|string} [stateOrHex] is a MoneroKeyImage, JS object, or hex string to initialize from 
    * @param {string} signature is the key image's signature
    */
   constructor(stateOrHex, signature) {

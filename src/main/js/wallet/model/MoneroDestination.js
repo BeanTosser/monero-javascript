@@ -10,7 +10,7 @@ class MoneroDestination {
   /**
    * Construct the model.
    * 
-   * @param {MoneroDestination|object|string} stateOrAddress is a MoneroDestination, JS object, or hex string to initialize from (optional)
+   * @param {MoneroDestination|object|string} [stateOrAddress] is a MoneroDestination, JS object, or hex string to initialize from 
    * @param {BigInteger|string} amount - the destination amount
    */
   constructor(stateOrAddress, amount) {

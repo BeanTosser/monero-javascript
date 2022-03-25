@@ -13,7 +13,7 @@ class MoneroOutputWallet extends MoneroOutput {
   /**
    * Construct the model.
    * 
-   * @param {MoneroOutputWallet|object} state is existing state to initialize from (optional)
+   * @param {MoneroOutputWallet|object} [state] is existing state to initialize from 
    */
   constructor(state) {
     super(state);

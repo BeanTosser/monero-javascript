@@ -12,7 +12,7 @@ class MoneroIncomingTransfer extends MoneroTransfer {
   /**
    * Construct the model.
    * 
-   * @param {MoneroTransfer|object} state is existing state to initialize from (optional)
+   * @param {MoneroTransfer|object} [state] is existing state to initialize from 
    */
   constructor(state) {
     super(state);

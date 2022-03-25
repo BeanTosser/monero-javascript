@@ -28,12 +28,12 @@ class MoneroRpcConnection {
    * 
    * @param {string|object|MoneroRpcConnection} uriOrConfigOrConnection - RPC endpoint URI, MoneroRpcConnection, or equivalent JS object
    * @param {string} uriOrConfigOrConnection.uri - URI of the RPC endpoint
-   * @param {string} uriOrConfigOrConnection.username - username to authenticate with the RPC endpoint (optional)
-   * @param {string} uriOrConfigOrConnection.password - password to authenticate with the RPC endpoint (optional)
-   * @param {boolean} uriOrConfigOrConnection.rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {string} username - username to authenticate with the RPC endpoint (optional)
-   * @param {string} password - password to authenticate with the RPC endpoint (optional)
-   * @param {boolean} rejectUnauthorized - reject self-signed certificates if true (default true)
+   * @param {string} [uriOrConfigOrConnection.username] - username to authenticate with the RPC endpoint 
+   * @param {string} [uriOrConfigOrConnection.password] - password to authenticate with the RPC endpoint 
+   * @param {boolean} [uriOrConfigOrConnection.rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {string} [username] - username to authenticate with the RPC endpoint 
+   * @param {string} [password] - password to authenticate with the RPC endpoint 
+   * @param {boolean} [rejectUnauthorized] - reject self-signed certificates if true (default true)
    */
   constructor(uriOrConfigOrConnection, username, password, rejectUnauthorized) {
     
@@ -113,7 +113,7 @@ class MoneroRpcConnection {
   /**
    * Set the connection's priority relative to other managed connections.
    * 
-   * @param {int} priority - the connection priority which increases as the value increases (default 0)
+   * @param {int} [priority] - the connection priority which increases as the value increases (default 0)
    * @@return {Promise<MoneroRpcConnection>} this connection
    */
   setPriority(priority) {

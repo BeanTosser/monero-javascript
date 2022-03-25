@@ -76,12 +76,12 @@ class MoneroWalletRpc extends MoneroWallet {
    * 
    * @param {string|object|MoneroRpcConnection|string[]} uriOrConfig - uri of monero-wallet-rpc or JS config object or MoneroRpcConnection or command line parameters to run a monero-wallet-rpc process internally
    * @param {string} uriOrConfig.uri - uri of monero-wallet-rpc
-   * @param {string} uriOrConfig.username - username to authenticate with monero-wallet-rpc (optional)
-   * @param {string} uriOrConfig.password - password to authenticate with monero-wallet-rpc (optional)
-   * @param {boolean} uriOrConfig.rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {string} username - username to authenticate with monero-wallet-rpc (optional)
-   * @param {string} password - password to authenticate with monero-wallet-rpc (optional)
-   * @param {boolean} rejectUnauthorized - rejects self-signed certificates if true (default true)
+   * @param {string} [uriOrConfig.username] - username to authenticate with monero-wallet-rpc 
+   * @param {string} [uriOrConfig.password] - password to authenticate with monero-wallet-rpc 
+   * @param {boolean} [uriOrConfig.rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {string} [username] - username to authenticate with monero-wallet-rpc 
+   * @param {string} [password] - password to authenticate with monero-wallet-rpc 
+   * @param {boolean} [rejectUnauthorized] - rejects self-signed certificates if true (default true)
    */
   constructor(uriOrConfig, username, password, rejectUnauthorized) {
     super();
@@ -98,12 +98,12 @@ class MoneroWalletRpc extends MoneroWallet {
    * 
    * @param {string|string[]|object|MoneroRpcConnection} uriOrConfig - uri of monero-wallet-rpc or terminal parameters or JS config object or MoneroRpcConnection
    * @param {string} uriOrConfig.uri - uri of monero-wallet-rpc
-   * @param {string} uriOrConfig.username - username to authenticate with monero-wallet-rpc (optional)
-   * @param {string} uriOrConfig.password - password to authenticate with monero-wallet-rpc (optional)
-   * @param {boolean} uriOrConfig.rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {string} username - username to authenticate with monero-wallet-rpc (optional)
-   * @param {string} password - password to authenticate with monero-wallet-rpc (optional)
-   * @param {boolean} rejectUnauthorized - rejects self-signed certificates if true (default true)
+   * @param {string} [uriOrConfig.username] - username to authenticate with monero-wallet-rpc 
+   * @param {string} [uriOrConfig.password] - password to authenticate with monero-wallet-rpc 
+   * @param {boolean} [uriOrConfig.rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {string} [username] - username to authenticate with monero-wallet-rpc 
+   * @param {string} [password] - password to authenticate with monero-wallet-rpc 
+   * @param {boolean} [rejectUnauthorized] - rejects self-signed certificates if true (default true)
    * @@return {Promise<MoneroWalletRpc>} the wallet RPC client
    */
   static async _connectToWalletRpc(uriOrConfig, username, password, rejectUnauthorized) {
@@ -236,10 +236,10 @@ class MoneroWalletRpc extends MoneroWallet {
    * @param {string} pathOrConfig.path - path of the wallet to create (optional, in-memory wallet if not given)
    * @param {string} pathOrConfig.password - password of the wallet to create
    * @param {string} pathOrConfig.serverUri - uri of a daemon to use (optional, monero-wallet-rpc usually started with daemon config)
-   * @param {string} pathOrConfig.serverUsername - username to authenticate with the daemon (optional)
-   * @param {string} pathOrConfig.serverPassword - password to authenticate with the daemon (optional)
-   * @param {boolean} pathOrConfig.rejectUnauthorized - reject self-signed server certificates if true (defaults to true)
-   * @param {MoneroRpcConnection|object} pathOrConfig.server - MoneroRpcConnection or equivalent JS object providing daemon configuration (optional)
+   * @param {string} [pathOrConfig.serverUsername] - username to authenticate with the daemon 
+   * @param {string} [pathOrConfig.serverPassword] - password to authenticate with the daemon 
+   * @param {boolean} [pathOrConfig.rejectUnauthorized] - reject self-signed server certificates if true (defaults to true)
+   * @param {MoneroRpcConnection|object} [pathOrConfig.server] - MoneroRpcConnection or equivalent JS object providing daemon configuration 
    * @param {string} password is the wallet's password
    * @@return {Promise<MoneroWalletRpc>} this wallet client
    */
@@ -285,16 +285,16 @@ class MoneroWalletRpc extends MoneroWallet {
    * @param {string} config.mnemonic - mnemonic of the wallet to create (optional, random wallet created if neither mnemonic nor keys given)
    * @param {string} config.seedOffset - the offset used to derive a new seed from the given mnemonic to recover a secret wallet from the mnemonic phrase
    * @param {string} config.primaryAddress - primary address of the wallet to create (only provide if restoring from keys)
-   * @param {string} config.privateViewKey - private view key of the wallet to create (optional)
-   * @param {string} config.privateSpendKey - private spend key of the wallet to create (optional)
-   * @param {number} config.restoreHeight - block height to start scanning from (defaults to 0 unless generating random wallet)
-   * @param {string} config.language - language of the wallet's mnemonic phrase (defaults to "English" or auto-detected)
+   * @param {string} [config.privateViewKey] - private view key of the wallet to create 
+   * @param {string} [config.privateSpendKey] - private spend key of the wallet to create 
+   * @param {number} [config.restoreHeight] - block height to start scanning from (defaults to 0 unless generating random wallet)
+   * @param {string} [config.language] - language of the wallet's mnemonic phrase (defaults to "English" or auto-detected)
    * @param {string} config.serverUri - uri of a daemon to use (optional, monero-wallet-rpc usually started with daemon config)
-   * @param {string} config.serverUsername - username to authenticate with the daemon (optional)
-   * @param {string} config.serverPassword - password to authenticate with the daemon (optional)
-   * @param {boolean} config.rejectUnauthorized - reject self-signed server certificates if true (defaults to true)
-   * @param {MoneroRpcConnection|object} config.server - MoneroRpcConnection or equivalent JS object providing daemon configuration (optional)
-   * @param {boolean} config.saveCurrent - specifies if the current RPC wallet should be saved before being closed (default true)
+   * @param {string} [config.serverUsername] - username to authenticate with the daemon 
+   * @param {string} [config.serverPassword] - password to authenticate with the daemon 
+   * @param {boolean} [config.rejectUnauthorized] - reject self-signed server certificates if true (defaults to true)
+   * @param {MoneroRpcConnection|object} [config.server] - MoneroRpcConnection or equivalent JS object providing daemon configuration 
+   * @param {boolean} [config.saveCurrent] - specifies if the current RPC wallet should be saved before being closed (default true)
    * @@return {Promise<MoneroWalletRpc>} this wallet client
    */
   async createWallet(config) {
@@ -355,7 +355,7 @@ class MoneroWalletRpc extends MoneroWallet {
    * @param {string} name - name of the wallet to create on the RPC server
    * @param {string} password - wallet's password
    * @param {string} mnemonic - mnemonic of the wallet to construct
-   * @param {int} restoreHeight - block height to restore from (default = 0)
+   * @param {int} [restoreHeight] - block height to restore from (default = 0)
    * @param {string} language - language of the mnemonic in case the old language is invalid
    * @param {string} seedOffset - offset used to derive a new seed from the given mnemonic to recover a secret wallet from the mnemonic phrase
    * @param {boolean} saveCurrent - specifies if the current RPC wallet should be saved before being closed
@@ -434,7 +434,7 @@ class MoneroWalletRpc extends MoneroWallet {
   /**
    * Set the wallet's daemon connection.
    * 
-   * @param {string|MoneroRpcConnection} uriOrConnection - the daemon's URI or connection (defaults to offline)
+   * @param {string|MoneroRpcConnection} [uriOrConnection] - the daemon's URI or connection (defaults to offline)
    * @param {boolean} isTrusted - indicates if the daemon in trusted
    * @param {SslOptions} sslOptions - custom SSL configuration
    */
@@ -1937,7 +1937,7 @@ class MoneroWalletRpc extends MoneroWallet {
    * Initializes a sent transaction.
    * 
    * @param {MoneroTxConfig} config - send config
-   * @param {MoneroTxWallet} tx - existing transaction to initialize (optional)
+   * @param {MoneroTxWallet} [tx] - existing transaction to initialize 
    * @@return {Promise<MoneroTxWallet>} is the initialized send tx
    */
   static _initSentTxWallet(config, tx) {

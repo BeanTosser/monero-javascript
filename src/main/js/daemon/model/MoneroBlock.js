@@ -15,7 +15,7 @@ class MoneroBlock extends MoneroBlockHeader {
   /**
    * Construct the model.
    * 
-   * @param {MoneroBlock|MoneroBlockHeader|object} state is existing state to initialize from (optional)
+   * @param {MoneroBlock|MoneroBlockHeader|object} [state] is existing state to initialize from 
    * @param {MoneroBlock.DeserializationType} txType informs the tx deserialization type (MoneroTx, MoneroTxWallet, MoneroTxQuery)
    */
   constructor(state, txType) {

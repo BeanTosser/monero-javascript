@@ -17,7 +17,7 @@ class MoneroTxWallet extends MoneroTx {
   /**
    * Construct the model.
    * 
-   * @param {MoneroTxWallet|object} state is existing state to initialize from (optional)
+   * @param {MoneroTxWallet|object} [state] is existing state to initialize from 
    */
   constructor(state) {
     super(state);

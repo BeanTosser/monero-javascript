@@ -13,7 +13,7 @@ class MoneroOutgoingTransfer extends MoneroTransfer {
   /**
    * Construct the model.
    * 
-   * @param {MoneroOutgoingTranser|object} state is existing state to initialize from (optional)
+   * @param {MoneroOutgoingTranser|object} [state] is existing state to initialize from 
    */
   constructor(state) {
     super(state);

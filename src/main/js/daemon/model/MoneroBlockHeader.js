@@ -12,7 +12,7 @@ class MoneroBlockHeader {
   /**
    * Construct the model.
    * 
-   * @param {MoneroBlockHeader|object} state is existing state to initialize from (optional)
+   * @param {MoneroBlockHeader|object} [state] is existing state to initialize from 
    */
   constructor(state) {
     

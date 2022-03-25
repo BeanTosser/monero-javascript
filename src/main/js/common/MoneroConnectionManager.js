@@ -148,7 +148,7 @@ class MoneroConnectionManager {
    * Provide a URI to select an existing connection without updating its credentials.
    * Provide a MoneroRpcConnection to add new connection or update credentials of existing connection with same URI.
    * 
-   * @param {string|MoneroRpcConnection} uriOrConnection - is the uri of the connection or the connection to make current (default undefined for no current connection)
+   * @param {string|MoneroRpcConnection} [uriOrConnection] - is the uri of the connection or the connection to make current (default undefined for no current connection)
    * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   setConnection(uriOrConnection) {
@@ -243,7 +243,7 @@ class MoneroConnectionManager {
   /**
    * Start checking connection status by polling the server in a fixed period loop.
    * 
-   * @param {number} periodMs is the time between checks in milliseconds (default 10000 or 10 seconds)
+   * @param {number} [periodMs] is the time between checks in milliseconds (default 10000 or 10 seconds)
    * @@return {Promise<MoneroConnectionManager>} this connection manager for chaining
    */
   startCheckingConnection(periodMs) {

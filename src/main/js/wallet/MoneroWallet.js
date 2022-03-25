@@ -76,9 +76,9 @@ class MoneroWallet {
   /**
    * Set the wallet's daemon connection.
    * 
-   * @param {string|MoneroRpcConnection} uriOrConnection - daemon's URI or connection (defaults to offline)
-   * @param {string} username - username to authenticate with the daemon (optional)
-   * @param {string} password - password to authenticate with the daemon (optional)
+   * @param {string|MoneroRpcConnection} [uriOrConnection] - daemon's URI or connection (defaults to offline)
+   * @param {string} [username] - username to authenticate with the daemon 
+   * @param {string} [password] - password to authenticate with the daemon 
    */
   async setDaemonConnection(uriOrConnection, username, password) {
     throw new MoneroError("Not supported");
@@ -258,8 +258,8 @@ class MoneroWallet {
   /**
    * Synchronize the wallet with the daemon as a one-time synchronous process.
    * 
-   * @param {MoneroWalletListener|number} listenerOrStartHeight - listener xor start height (defaults to no sync listener, the last synced block)
-   * @param {number} startHeight - startHeight if not given in first arg (defaults to last synced block)
+   * @param {MoneroWalletListener|number} [listenerOrStartHeight] - listener xor start height (defaults to no sync listener, the last synced block)
+   * @param {number} [startHeight] - startHeight if not given in first arg (defaults to last synced block)
    */
   async sync(listenerOrStartHeight, startHeight) {
     throw new MoneroError("Not supported");
@@ -268,7 +268,7 @@ class MoneroWallet {
   /**
    * Start background synchronizing with a maximum period between syncs.
    * 
-   * @param {int} syncPeriodInMs - maximum period between syncs in milliseconds (default is wallet-specific)
+   * @param {int} [syncPeriodInMs] - maximum period between syncs in milliseconds (default is wallet-specific)
    */
   async startSyncing(syncPeriodInMs) {
     throw new MoneroError("Not supported");
@@ -308,8 +308,8 @@ class MoneroWallet {
   /**
    * Get the balance of the wallet, account, or subaddress.
    * 
-   * @param {int} accountIdx - index of the account to get the balance of (default all accounts)
-   * @param {int} subaddressIdx - index of the subaddress to get the balance of (default all subaddresses)
+   * @param {int} [accountIdx] - index of the account to get the balance of (default all accounts)
+   * @param {int} [subaddressIdx] - index of the subaddress to get the balance of (default all subaddresses)
    * @@return {Promise<BigInteger>} the balance of the wallet, account, or subaddress
    */
   async getBalance(accountIdx, subaddressIdx) {
@@ -319,8 +319,8 @@ class MoneroWallet {
   /**
    * Get the unlocked balance of the wallet, account, or subaddress.
    * 
-   * @param {int} accountIdx - index of the account to get the unlocked balance of (optional)
-   * @param {int} subaddressIdx - index of the subaddress to get the unlocked balance of (optional)
+   * @param {int} [accountIdx] - index of the account to get the unlocked balance of 
+   * @param {int} [subaddressIdx] - index of the subaddress to get the unlocked balance of 
    * @@return {Promise<BigInteger>} the unlocked balance of the wallet, account, or subaddress
    */
   async getUnlockedBalance(accountIdx, subaddressIdx) {
@@ -396,7 +396,7 @@ class MoneroWallet {
   /**
    * Create a new account with a label for the first subaddress.
    * 
-   * @param {string} label - label for account's first subaddress (optional)
+   * @param {string} [label] - label for account's first subaddress 
    * @@return {Promise<MoneroAccount>} the created account
    */
   async createAccount(label) {
@@ -407,7 +407,7 @@ class MoneroWallet {
    * Get subaddresses in an account.
    * 
    * @param {int} accountIdx - account to get subaddresses within
-   * @param {int[]} subaddressIndices - indices of subaddresses to get (optional)
+   * @param {int[]} [subaddressIndices] - indices of subaddresses to get 
    * @@return {Promise<MoneroSubaddress[]>} the retrieved subaddresses
    */
   async getSubaddresses(accountIdx, subaddressIndices) {
@@ -431,7 +431,7 @@ class MoneroWallet {
    * Create a subaddress within an account.
    * 
    * @param {int} accountIdx - index of the account to create the subaddress within
-   * @param {string} label - the label for the subaddress (optional)
+   * @param {string} [label] - the label for the subaddress 
    * @@return {Promise<MoneroSubaddress>} the created subaddress
    */
   async createSubaddress(accountIdx, label) {
@@ -457,23 +457,23 @@ class MoneroWallet {
    * meet every criteria defined in the query in order to be returned.  All
    * criteria are optional and no filtering is applied when not defined.</p>
    * 
-   * @param {(MoneroTxQuery|string[]|object)} query - configures the query (optional)
-   * @param {boolean} query.isConfirmed - get txs that are confirmed or not (optional)
-   * @param {boolean} query.inTxPool - get txs that are in the tx pool or not (optional)
-   * @param {boolean} query.isRelayed - get txs that are relayed or not (optional)
-   * @param {boolean} query.isFailed - get txs that are failed or not (optional)
-   * @param {boolean} query.isMinerTx - get miner txs or not (optional)
-   * @param {string} query.hash - get a tx with the hash (optional)
-   * @param {string[]} query.hashes - get txs with the hashes (optional)
-   * @param {string} query.paymentId - get transactions with the payment id (optional)
-   * @param {string[]} query.paymentIds - get transactions with the payment ids (optional)
-   * @param {boolean} query.hasPaymentId - get transactions with a payment id or not (optional)
-   * @param {int} query.minHeight - get txs with height >= the given height (optional)
-   * @param {int} query.maxHeight - get txs with height <= the given height (optional)
-   * @param {boolean} query.isOutgoing - get txs with an outgoing transfer or not (optional)
-   * @param {boolean} query.isIncoming - get txs with an incoming transfer or not (optional)
-   * @param {MoneroTransferQuery} query.transferQuery - get txs that have a transfer that meets this query (optional)
-   * @param {boolean} query.includeOutputs - specifies that tx outputs should be returned with tx results (optional)
+   * @param {(MoneroTxQuery|string[]|object)} [query] - configures the query 
+   * @param {boolean} [query.isConfirmed] - get txs that are confirmed or not 
+   * @param {boolean} [query.inTxPool] - get txs that are in the tx pool or not 
+   * @param {boolean} [query.isRelayed] - get txs that are relayed or not 
+   * @param {boolean} [query.isFailed] - get txs that are failed or not 
+   * @param {boolean} [query.isMinerTx] - get miner txs or not 
+   * @param {string} [query.hash] - get a tx with the hash 
+   * @param {string[]} [query.hashes] - get txs with the hashes 
+   * @param {string} [query.paymentId] - get transactions with the payment id 
+   * @param {string[]} [query.paymentIds] - get transactions with the payment ids 
+   * @param {boolean} [query.hasPaymentId] - get transactions with a payment id or not 
+   * @param {int} [query.minHeight] - get txs with height >= the given height 
+   * @param {int} [query.maxHeight] - get txs with height <= the given height 
+   * @param {boolean} [query.isOutgoing] - get txs with an outgoing transfer or not 
+   * @param {boolean} [query.isIncoming] - get txs with an incoming transfer or not 
+   * @param {MoneroTransferQuery} [query.transferQuery] - get txs that have a transfer that meets this query 
+   * @param {boolean} [query.includeOutputs] - specifies that tx outputs should be returned with tx results 
    * @param {string[]} missingTxHashes - populated with hashes of unfound or unmet transactions that were queried by hash (throws error if undefined and queried transaction hashes are unfound or unmet) 
    * @@return {Promise<MoneroTxWallet[]>} wallet transactions per the configuration
    */
@@ -493,17 +493,17 @@ class MoneroWallet {
    * meet every criteria defined in the query in order to be returned.  All
    * criteria are optional and no filtering is applied when not defined.</p>
    * 
-   * @param {(MoneroTransferQuery|object)} query - configures the query (optional)
-   * @param {boolean} query.isOutgoing - get transfers that are outgoing or not (optional)
-   * @param {boolean} query.isIncoming - get transfers that are incoming or not (optional)
-   * @param {string} query.address - wallet's address that a transfer either originated from (if outgoing) or is destined for (if incoming) (optional)
-   * @param {int} query.accountIndex - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific account index (optional)
-   * @param {int} query.subaddressIndex - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific subaddress index (optional)
-   * @param {int[]} query.subaddressIndices - get transfers that either originated from (if outgoing) or are destined for (if incoming) specific subaddress indices (optional)
-   * @param {BigInteger} query.amount - amount being transferred (optional)
-   * @param {MoneroDestination[]} query.destinations - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain (optional)
-   * @param {boolean} query.hasDestinations - get transfers that have destinations or not (optional)
-   * @param {MoneroTxQuery} query.txQuery - get transfers whose transaction meets this query (optional)
+   * @param {(MoneroTransferQuery|object)} [query] - configures the query 
+   * @param {boolean} [query.isOutgoing] - get transfers that are outgoing or not 
+   * @param {boolean} [query.isIncoming] - get transfers that are incoming or not 
+   * @param {string} [query.address] - wallet's address that a transfer either originated from (if outgoing) or is destined for (if incoming) 
+   * @param {int} [query.accountIndex] - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific account index 
+   * @param {int} [query.subaddressIndex] - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific subaddress index 
+   * @param {int[]} [query.subaddressIndices] - get transfers that either originated from (if outgoing) or are destined for (if incoming) specific subaddress indices 
+   * @param {BigInteger} [query.amount] - amount being transferred 
+   * @param {MoneroDestination[]} [query.destinations] - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain 
+   * @param {boolean} [query.hasDestinations] - get transfers that have destinations or not 
+   * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query 
    * @@return {Promise<MoneroTransfer[]>} wallet transfers that meet the query
    */
   async getTransfers(query) {
@@ -513,13 +513,13 @@ class MoneroWallet {
   /**
    * Get incoming transfers.
    * 
-   * @param {(MoneroTransferQuery|object)} query - configures the query (optional)
-   * @param {string} query.address - get incoming transfers to a specific address in the wallet (optional)
-   * @param {int} query.accountIndex - get incoming transfers to a specific account index (optional)
-   * @param {int} query.subaddressIndex - get incoming transfers to a specific subaddress index (optional)
-   * @param {int[]} query.subaddressIndices - get transfers destined for specific subaddress indices (optional)
-   * @param {BigInteger} query.amount - amount being transferred (optional)
-   * @param {MoneroTxQuery} query.txQuery - get transfers whose transaction meets this query (optional)
+   * @param {(MoneroTransferQuery|object)} [query] - configures the query 
+   * @param {string} [query.address] - get incoming transfers to a specific address in the wallet 
+   * @param {int} [query.accountIndex] - get incoming transfers to a specific account index 
+   * @param {int} [query.subaddressIndex] - get incoming transfers to a specific subaddress index 
+   * @param {int[]} [query.subaddressIndices] - get transfers destined for specific subaddress indices 
+   * @param {BigInteger} [query.amount] - amount being transferred 
+   * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query 
    * @@return {Promise<MoneroIncomingTransfer[]>} incoming transfers that meet the query
    */
   async getIncomingTransfers(query) {
@@ -532,15 +532,15 @@ class MoneroWallet {
   /**
    * Get outgoing transfers.
    * 
-   * @param {(MoneroTransferQuery|object)} query - configures the query (optional)
-   * @param {string} query.address - get outgoing transfers from a specific address in the wallet (optional)
-   * @param {int} query.accountIndex - get outgoing transfers from a specific account index (optional)
-   * @param {int} query.subaddressIndex - get outgoing transfers from a specific subaddress index (optional)
-   * @param {int[]} query.subaddressIndices - get outgoing transfers from specific subaddress indices (optional)
-   * @param {BigInteger} query.amount - amount being transferred (optional)
-   * @param {MoneroDestination[]} query.destinations - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain (optional)
-   * @param {boolean} query.hasDestinations - get transfers that have destinations or not (optional)
-   * @param {MoneroTxQuery} query.txQuery - get transfers whose transaction meets this query (optional)
+   * @param {(MoneroTransferQuery|object)} [query] - configures the query 
+   * @param {string} [query.address] - get outgoing transfers from a specific address in the wallet 
+   * @param {int} [query.accountIndex] - get outgoing transfers from a specific account index 
+   * @param {int} [query.subaddressIndex] - get outgoing transfers from a specific subaddress index 
+   * @param {int[]} [query.subaddressIndices] - get outgoing transfers from specific subaddress indices 
+   * @param {BigInteger} [query.amount] - amount being transferred 
+   * @param {MoneroDestination[]} [query.destinations] - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain 
+   * @param {boolean} [query.hasDestinations] - get transfers that have destinations or not 
+   * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query 
    * @@return {Promise<MoneroOutgoingTransfer[]>} outgoing transfers that meet the query
    */
   async getOutgoingTransfers(query) {
@@ -559,16 +559,16 @@ class MoneroWallet {
    * meet every criteria defined in the query in order to be returned.  All
    * filtering is optional and no filtering is applied when not defined.</p>
    * 
-   * @param {(MoneroOutputQuery|object)} query - configures the query (optional)
-   * @param {int} query.accountIndex - get outputs associated with a specific account index (optional)
-   * @param {int} query.subaddressIndex - get outputs associated with a specific subaddress index (optional)
-   * @param {int[]} query.subaddressIndices - get outputs associated with specific subaddress indices (optional)
-   * @param {BigInteger} query.amount - get outputs with a specific amount (optional)
-   * @param {BigInteger} query.minAmount - get outputs greater than or equal to a minimum amount (optional)
-   * @param {BigInteger} query.maxAmount - get outputs less than or equal to a maximum amount (optional)
-   * @param {boolean} query.isSpent - get outputs that are spent or not (optional)
-   * @param {string|MoneroKeyImage} query.keyImage - get output with a key image or which matches fields defined in a MoneroKeyImage (optional)
-   * @param {MoneroTxQuery} query.txQuery - get outputs whose transaction meets this filter (optional)
+   * @param {(MoneroOutputQuery|object)} [query] - configures the query 
+   * @param {int} [query.accountIndex] - get outputs associated with a specific account index 
+   * @param {int} [query.subaddressIndex] - get outputs associated with a specific subaddress index 
+   * @param {int[]} [query.subaddressIndices] - get outputs associated with specific subaddress indices 
+   * @param {BigInteger} [query.amount] - get outputs with a specific amount 
+   * @param {BigInteger} [query.minAmount] - get outputs greater than or equal to a minimum amount 
+   * @param {BigInteger} [query.maxAmount] - get outputs less than or equal to a maximum amount 
+   * @param {boolean} [query.isSpent] - get outputs that are spent or not 
+   * @param {string|MoneroKeyImage} [query.keyImage] - get output with a key image or which matches fields defined in a MoneroKeyImage 
+   * @param {MoneroTxQuery} [query.txQuery] - get outputs whose transaction meets this filter 
    * @@return {Promise<MoneroOutputWallet[]>} the queried outputs
    */
   async getOutputs(query) {
@@ -659,13 +659,13 @@ class MoneroWallet {
    * @param {string} config.address - single destination address (required unless `destinations` provided)
    * @param {BigInteger|string} config.amount - single destination amount (required unless `destinations` provided)
    * @param {int} config.accountIndex - source account index to transfer funds from (required)
-   * @param {int} config.subaddressIndex - source subaddress index to transfer funds from (optional)
-   * @param {int[]} config.subaddressIndices - source subaddress indices to transfer funds from (optional)
-   * @param {boolean} config.relay - relay the transaction to peers to commit to the blockchain (default false)
-   * @param {MoneroTxPriority} config.priority - transaction priority (default MoneroTxPriority.NORMAL)
+   * @param {int} [config.subaddressIndex] - source subaddress index to transfer funds from 
+   * @param {int[]} [config.subaddressIndices] - source subaddress indices to transfer funds from 
+   * @param {boolean} [config.relay] - relay the transaction to peers to commit to the blockchain (default false)
+   * @param {MoneroTxPriority} [config.priority] - transaction priority (default MoneroTxPriority.NORMAL)
    * @param {MoneroDestination[]} config.destinations - addresses and amounts in a multi-destination tx (required unless `address` and `amount` provided)
-   * @param {string} config.paymentId - transaction payment ID (optional)
-   * @param {int} config.unlockHeight - minimum height for the transaction to unlock (default 0)
+   * @param {string} [config.paymentId] - transaction payment ID 
+   * @param {int} [config.unlockHeight] - minimum height for the transaction to unlock (default 0)
    * @@return {Promise<MoneroTxWallet>} the created transaction
    */
   async createTx(config) {
@@ -682,14 +682,14 @@ class MoneroWallet {
    * @param {string} config.address - single destination address (required unless `destinations` provided)
    * @param {BigInteger|string} config.amount - single destination amount (required unless `destinations` provided)
    * @param {int} config.accountIndex - source account index to transfer funds from (required)
-   * @param {int} config.subaddressIndex - source subaddress index to transfer funds from (optional)
-   * @param {int[]} config.subaddressIndices - source subaddress indices to transfer funds from (optional)
-   * @param {boolean} config.relay - relay the transactions to peers to commit to the blockchain (default false)
-   * @param {MoneroTxPriority} config.priority - transaction priority (default MoneroTxPriority.NORMAL)
+   * @param {int} [config.subaddressIndex] - source subaddress index to transfer funds from 
+   * @param {int[]} [config.subaddressIndices] - source subaddress indices to transfer funds from 
+   * @param {boolean} [config.relay] - relay the transactions to peers to commit to the blockchain (default false)
+   * @param {MoneroTxPriority} [config.priority] - transaction priority (default MoneroTxPriority.NORMAL)
    * @param {MoneroDestination[]} config.destinations - addresses and amounts in a multi-destination tx (required unless `address` and `amount` provided)
-   * @param {string} config.paymentId - transaction payment ID (optional)
-   * @param {int} config.unlockHeight - minimum height for the transactions to unlock (default 0)
-   * @param {boolean} config.canSplit - allow funds to be transferred using multiple transactions (default true)
+   * @param {string} [config.paymentId] - transaction payment ID 
+   * @param {int} [config.unlockHeight] - minimum height for the transactions to unlock (default 0)
+   * @param {boolean} [config.canSplit] - allow funds to be transferred using multiple transactions (default true)
    * @@return {Promise<MoneroTxWallet[]>} the created transactions
    */
   async createTxs(config) {
@@ -702,9 +702,9 @@ class MoneroWallet {
    * @param {MoneroTxConfig} config - configures the transaction to create (required)
    * @param {string} config.address - single destination address (required)
    * @param {string} config.keyImage - key image to sweep (required)
-   * @param {boolean} config.relay - relay the transaction to peers to commit to the blockchain (default false)
-   * @param {int} config.unlockHeight - minimum height for the transaction to unlock (default 0)
-   * @param {MoneroTxPriority} config.priority - transaction priority (default MoneroTxPriority.NORMAL)
+   * @param {boolean} [config.relay] - relay the transaction to peers to commit to the blockchain (default false)
+   * @param {int} [config.unlockHeight] - minimum height for the transaction to unlock (default 0)
+   * @param {MoneroTxPriority} [config.priority] - transaction priority (default MoneroTxPriority.NORMAL)
    * @@return {Promise<MoneroTxWallet>} the created transaction
    */
   async sweepOutput(config) {
@@ -718,11 +718,11 @@ class MoneroWallet {
    * @param {string} config.address - single destination address (required)
    * @param {int} config.accountIndex - source account index to sweep from (optional, defaults to all accounts)
    * @param {int} config.subaddressIndex - source subaddress index to sweep from (optional, defaults to all subaddresses)
-   * @param {int[]} config.subaddressIndices - source subaddress indices to sweep from (optional)
-   * @param {boolean} config.relay - relay the transactions to peers to commit to the blockchain (default false)
-   * @param {MoneroTxPriority} config.priority - transaction priority (default MoneroTxPriority.NORMAL)
-   * @param {int} config.unlockHeight - minimum height for the transactions to unlock (default 0)
-   * @param {boolean} config.sweepEachSubaddress - sweep each subaddress individually if true (default false)
+   * @param {int[]} [config.subaddressIndices] - source subaddress indices to sweep from 
+   * @param {boolean} [config.relay] - relay the transactions to peers to commit to the blockchain (default false)
+   * @param {MoneroTxPriority} [config.priority] - transaction priority (default MoneroTxPriority.NORMAL)
+   * @param {int} [config.unlockHeight] - minimum height for the transactions to unlock (default 0)
+   * @param {boolean} [config.sweepEachSubaddress] - sweep each subaddress individually if true (default false)
    * @@return {Promise<MoneroTxWallet[]>} the created transactions
    */
   async sweepUnlocked(config) {
@@ -734,7 +734,7 @@ class MoneroWallet {
    * 
    * <p>NOTE: Dust only exists pre RCT, so this method will throw "no dust to sweep" on new wallets.</p>
    * 
-   * @param {boolean} relay - specifies if the resulting transaction should be relayed (default false)
+   * @param {boolean} [relay] - specifies if the resulting transaction should be relayed (default false)
    * @@return {Promise<MoneroTxWallet[]>} the created transactions
    */
   async sweepDust(relay) {
@@ -795,9 +795,9 @@ class MoneroWallet {
    * Sign a message.
    * 
    * @param {string} message - the message to sign
-   * @param {MoneroMessageSignatureType} signatureType - sign with spend key or view key (default spend key)
-   * @param {int} accountIdx - the account index of the message signature (default 0)
-   * @param {int} subaddressIdx - the subaddress index of the message signature (default 0)
+   * @param {MoneroMessageSignatureType} [signatureType] - sign with spend key or view key (default spend key)
+   * @param {int} [accountIdx] - the account index of the message signature (default 0)
+   * @param {int} [subaddressIdx] - the subaddress index of the message signature (default 0)
    * @@return {Promise<string>} the signature
    */
   async signMessage(message, signatureType, accountIdx, subaddressIdx) {
@@ -843,7 +843,7 @@ class MoneroWallet {
    * 
    * @param {string} txHash - transaction to prove
    * @param {string} address - destination public address of the transaction
-   * @param {string} message - message to include with the signature to further authenticate the proof (optional)
+   * @param {string} [message] - message to include with the signature to further authenticate the proof 
    * @@return {Promise<string>} the transaction signature
    */
   async getTxProof(txHash, address, message) {
@@ -855,7 +855,7 @@ class MoneroWallet {
    * 
    * @param {string} txHash - transaction to prove
    * @param {string} address - destination public address of the transaction
-   * @param {string} message - message included with the signature to further authenticate the proof (optional)
+   * @param {string} [message] - message included with the signature to further authenticate the proof 
    * @param {string} signature - transaction signature to confirm
    * @@return {Promise<MoneroCheckTx>} the result of the check
    */
@@ -867,7 +867,7 @@ class MoneroWallet {
    * Generate a signature to prove a spend. Unlike proving a transaction, it does not require the destination public address.
    * 
    * @param {string} txHash - transaction to prove
-   * @param {string} message - message to include with the signature to further authenticate the proof (optional)
+   * @param {string} [message] - message to include with the signature to further authenticate the proof 
    * @@return {Promise<string>} the transaction signature
    */
   async getSpendProof(txHash, message) {
@@ -878,7 +878,7 @@ class MoneroWallet {
    * Prove a spend using a signature. Unlike proving a transaction, it does not require the destination public address.
    * 
    * @param {string} txHash - transaction to prove
-   * @param {string} message - message included with the signature to further authenticate the proof (optional)
+   * @param {string} [message] - message included with the signature to further authenticate the proof 
    * @param {string} signature - transaction signature to confirm
    * @@return {Promise<boolean>} true if the signature is good, false otherwise
    */
@@ -901,7 +901,7 @@ class MoneroWallet {
    * 
    * @param {int} accountIdx - account to prove ownership of the amount
    * @param {BigInteger} amount - minimum amount to prove as available in the account
-   * @param {string} message - message to include with the signature to further authenticate the proof (optional)
+   * @param {string} [message] - message to include with the signature to further authenticate the proof 
    * @@return {Promise<string>} the reserve proof signature
    */
   async getReserveProofAccount(accountIdx, amount, message) {
@@ -912,7 +912,7 @@ class MoneroWallet {
    * Proves a wallet has a disposable reserve using a signature.
    * 
    * @param {string} address - public wallet address
-   * @param {string} message - message included with the signature to further authenticate the proof (optional)
+   * @param {string} [message] - message included with the signature to further authenticate the proof 
    * @param {string} signature - reserve proof signature to check
    * @@return {Promise<MoneroCheckReserve>} the result of checking the signature proof
    */
@@ -974,7 +974,7 @@ class MoneroWallet {
    * Add an address book entry.
    * 
    * @param {string} address - entry address
-   * @param {string} description - entry description (optional)
+   * @param {string} [description] - entry description 
    * @@return {Promise<int>} the index of the added entry
    */
   async addAddressBookEntry(address, description) {
@@ -1084,9 +1084,9 @@ class MoneroWallet {
   /**
    * Start mining.
    * 
-   * @param {int} numThreads - number of threads created for mining (optional)
-   * @param {boolean} backgroundMining - specifies if mining should occur in the background (optional)
-   * @param {boolean} ignoreBattery - specifies if the battery should be ignored for mining (optional)
+   * @param {int} [numThreads] - number of threads created for mining 
+   * @param {boolean} [backgroundMining] - specifies if mining should occur in the background 
+   * @param {boolean} [ignoreBattery] - specifies if the battery should be ignored for mining 
    */
   async startMining(numThreads, backgroundMining, ignoreBattery) {
     throw new MoneroError("Not supported");
@@ -1210,7 +1210,7 @@ class MoneroWallet {
   /**
    * Optionally save then close the wallet.
    *
-   * @param {boolean} save - specifies if the wallet should be saved before being closed (default false)
+   * @param {boolean} [save] - specifies if the wallet should be saved before being closed (default false)
    */
   async close(save) {
     throw new MoneroError("Not supported");

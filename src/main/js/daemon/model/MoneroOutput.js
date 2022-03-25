@@ -13,7 +13,7 @@ class MoneroOutput {
   /**
    * Construct the model.
    * 
-   * @param {MoneroOutput|object} state is existing state to initialize from (optional)
+   * @param {MoneroOutput|object} [state] is existing state to initialize from 
    */
   constructor(state) {
     

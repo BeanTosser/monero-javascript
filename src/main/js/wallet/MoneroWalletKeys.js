@@ -36,9 +36,9 @@ class MoneroWalletKeys extends MoneroWallet {
    * @param {string} config.mnemonic - mnemonic of the wallet to create (optional, random wallet created if neither mnemonic nor keys given)
    * @param {string} config.seedOffset - the offset used to derive a new seed from the given mnemonic to recover a secret wallet from the mnemonic phrase
    * @param {string} config.primaryAddress - primary address of the wallet to create (only provide if restoring from keys)
-   * @param {string} config.privateViewKey - private view key of the wallet to create (optional)
-   * @param {string} config.privateSpendKey - private spend key of the wallet to create (optional)
-   * @param {string} config.language - language of the wallet's mnemonic phrase (defaults to "English" or auto-detected)
+   * @param {string} [config.privateViewKey] - private view key of the wallet to create 
+   * @param {string} [config.privateSpendKey] - private spend key of the wallet to create 
+   * @param {string} [config.language] - language of the wallet's mnemonic phrase (defaults to "English" or auto-detected)
    * @@return {Promise<MoneroWalletKeys>} the created wallet
    */
   static async createWallet(config) {

@@ -23,17 +23,17 @@ class MoneroTxConfig {
    * });<br><br>
    * </code>
    * 
-   * @param {MoneroTxConfig|object} config - configures the transaction to create (optional)
+   * @param {MoneroTxConfig|object} [config] - configures the transaction to create 
    * @param {string} config.address - single destination address
    * @param {BigInteger} config.amount - single destination amount
    * @param {int} config.accountIndex - source account index to transfer funds from
    * @param {int} config.subaddressIndex - source subaddress index to transfer funds from
    * @param {int[]} config.subaddressIndices - source subaddress indices to transfer funds from
    * @param {boolean} config.relay - relay the transaction to peers to commit to the blockchain
-   * @param {MoneroTxPriority} config.priority - transaction priority (default MoneroTxPriority.NORMAL)
+   * @param {MoneroTxPriority} [config.priority] - transaction priority (default MoneroTxPriority.NORMAL)
    * @param {MoneroDestination[]} config.destinations - addresses and amounts in a multi-destination tx
    * @param {string} config.paymentId - transaction payment ID
-   * @param {int} config.unlockHeight - minimum height for the transaction to unlock (default 0)
+   * @param {int} [config.unlockHeight] - minimum height for the transaction to unlock (default 0)
    * @param {string} config.note - transaction note saved locally with the wallet
    * @param {string} config.recipientName - recipient name saved locally with the wallet
    * @param {boolean} config.canSplit - allow funds to be transferred using multiple transactions
