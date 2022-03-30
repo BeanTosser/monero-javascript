@@ -8,7 +8,7 @@ class ThreadPool {
   /**
    * Construct the thread pool.
    * 
-   * @param {int} [maxConcurrency] - maximum number of threads in the pool (default 1)
+   * @@param {number} [maxConcurrency] - maximum number of threads in the pool (default 1)
    */
   constructor(maxConcurrency) {
     if (maxConcurrency === undefined) maxConcurrency = 1;

@@ -32,9 +32,9 @@ class MoneroTxQuery extends MoneroTxWallet {
    * @param {object} config - tx query configuration
    * @param {string} config.hash - get a tx with this hash
    * @param {string[]} config.txHashes - get txs with these hashes
-   * @param {int} config.height - get txs with this height
-   * @param {int} config.minHeight - get txs with height greater than or equal to this height
-   * @param {int} config.maxHeight - get txs with height less than or equal to this height
+   * @@param {number} config.height - get txs with this height
+   * @@param {number} config.minHeight - get txs with height greater than or equal to this height
+   * @@param {number} config.maxHeight - get txs with height less than or equal to this height
    * @param {boolean} config.isConfirmed - get confirmed or unconfirmed txs
    * @param {boolean} config.inTxPool - get txs in or out of the tx pool
    * @param {boolean} config.relay - get txs with the same relay status

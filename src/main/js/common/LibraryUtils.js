@@ -13,7 +13,7 @@ class LibraryUtils {
   /**
    * Log a message.
    *
-   * @param {int} level - log level of the message
+   * @@param {number} level - log level of the message
    * @param {string} msg - message to log
    */
   static log(level, msg) {
@@ -24,7 +24,7 @@ class LibraryUtils {
   /**
    * Set the library's log level with 0 being least verbose.
    *
-   * @param {int} level - the library's log level
+   * @@param {number} level - the library's log level
    */
   static async setLogLevel(level) {
     assert(level === parseInt(level, 10) && level >= 0, "Log level must be an integer >= 0");

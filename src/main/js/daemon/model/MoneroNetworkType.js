@@ -10,7 +10,7 @@ class MoneroNetworkType {
   /**
    * Validates the given network type.
    * 
-   * @param {int} networkType - the network type to validate as a numeric
+   * @@param {number} networkType - the network type to validate as a numeric
    */
   static validate(networkType) {
     if (networkType !== 0 && networkType !== 1 && networkType !== 2) throw new MoneroError("Network type is invalid: " + networkType);
@@ -19,7 +19,7 @@ class MoneroNetworkType {
   /**
    * Indicates if the given network type is valid or not.
    * 
-   * @param {int} networkType - the network type to validate as a numeric
+   * @@param {number} networkType - the network type to validate as a numeric
    * @return {boolean} true if the network type is valid, false otherwise
    */
   static isValid(networkType) {

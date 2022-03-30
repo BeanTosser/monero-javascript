@@ -135,7 +135,7 @@ class TestMoneroWalletCommon {
    * Close a test wallet with customization for each wallet type. 
    * 
    * @param {MoneroWallet} wallet - the wallet to close
-   * @param {bool} save - whether or not to save the wallet
+   * @param {boolean} save - whether or not to save the wallet
    */
    async closeWallet(wallet, save) {
     throw new Error("Subclass must implement");

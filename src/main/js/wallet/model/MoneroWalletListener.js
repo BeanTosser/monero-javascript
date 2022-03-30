@@ -17,7 +17,7 @@ class MoneroWalletListener {
   /**
    * Invoked when a new block is added to the chain.
    * 
-   * @param {int} height - the height of the new block (i.e. the number of blocks before it).
+   * @@param {number} height - the height of the new block (i.e. the number of blocks before it).
    */
   async onNewBlock(height) { }
   

@@ -124,7 +124,7 @@ class MoneroRpcConnection {
    * Set the connection's priority relative to other connections. Priority 1 is highest,
    * then priority 2, etc. The default priority of 0 is lowest priority.
    * 
-   * @param {int} [priority] - the connection priority (default 0)
+   * @@param {number} [priority] - the connection priority (default 0)
    * @return {MoneroRpcConnection} this connection
    */
   setPriority(priority) {
@@ -146,7 +146,7 @@ class MoneroRpcConnection {
   /**
    * Check the connection status to update isOnline, isAuthenticated, and response time.
    * 
-   * @param {int} timeoutInMs - maximum response time before considered offline
+   * @@param {number} timeoutInMs - maximum response time before considered offline
    * @return {Promise<boolean>} true if there is a change in status, false otherwise
    */
   async checkConnection(timeoutInMs) {
@@ -214,7 +214,7 @@ class MoneroRpcConnection {
    * 
    * @param {string} method - JSON RPC method to invoke
    * @param {object} params - request parameters
-   * @param {int} timeoutInMs - request timeout in milliseconds
+   * @@param {number} timeoutInMs - request timeout in milliseconds
    * @return {object} is the response map
    */
   async sendJsonRequest(method, params, timeoutInMs) {
@@ -269,7 +269,7 @@ class MoneroRpcConnection {
    * 
    * @param {string} path - JSON RPC path to invoke
    * @param {object} params - request parameters
-   * @param {int} timeoutInMs - request timeout in milliseconds
+   * @@param {number} timeoutInMs - request timeout in milliseconds
    * @return {object} is the response map
    */
   async sendPathRequest(path, params, timeoutInMs) {
@@ -315,7 +315,7 @@ class MoneroRpcConnection {
    * 
    * @param {string} path - path of the binary RPC method to invoke
    * @param {object} params - request parameters
-   * @param {int} timeoutInMs - request timeout in milliseconds
+   * @@param {number} timeoutInMs - request timeout in milliseconds
    * @return {Uint8Array} the binary response
    */
   async sendBinaryRequest(path, params, timeoutInMs) {

@@ -27,8 +27,8 @@ class MoneroTransferQuery extends MoneroTransfer {
    * 
    * @param {object} [config] - transfer query configuration (optional)
    * @param {BigInteger} config.amount - get transfers with this amount
-   * @param {int} config.accountIndex - get transfers to/from this account index
-   * @param {int} config.subaddressIndex - get transfers to/from this subaddress index
+   * @@param {number} config.accountIndex - get transfers to/from this account index
+   * @@param {number} config.subaddressIndex - get transfers to/from this subaddress index
    * @param {int[]} config.subaddressIndices - get transfers to/from these subaddress indices
    * @param {string} config.address - get transfers to/from this wallet address
    * @param {string[]} config.addresses - get transfers to/from these wallet addresses

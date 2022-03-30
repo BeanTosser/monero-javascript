@@ -347,7 +347,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
    * This method should not be called externally but should be called through
    * static wallet creation utilities in this class.
    * 
-   * @param {int} cppAddress - address of the wallet instance in C++
+   * @@param {number} cppAddress - address of the wallet instance in C++
    * @param {string} path - path of the wallet instance
    * @param {string} password - password of the wallet instance
    * @param {FileSystem} fs - node.js-compatible file system to read/write wallet files
@@ -665,7 +665,7 @@ class MoneroWalletFull extends MoneroWalletKeys {
    * 
    * @param {MoneroWalletListener|number} [listenerOrStartHeight] - listener xor start height (defaults to no sync listener, the last synced block)
    * @param {number} [startHeight] - startHeight if not given in first arg (defaults to last synced block)
-   * @param {bool} [allowConcurrentCalls] - allow other wallet methods to be processed simultaneously during sync (default false)<br><br><b>WARNING</b>: enabling this option will crash wallet execution if another call makes a simultaneous network request. TODO: possible to sync wasm network requests in http_client_wasm.cpp? 
+   * @param {boolean} [allowConcurrentCalls] - allow other wallet methods to be processed simultaneously during sync (default false)<br><br><b>WARNING</b>: enabling this option will crash wallet execution if another call makes a simultaneous network request. TODO: possible to sync wasm network requests in http_client_wasm.cpp? 
    */
   async sync(listenerOrStartHeight, startHeight, allowConcurrentCalls) {
     this._assertNotClosed();

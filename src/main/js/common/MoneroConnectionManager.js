@@ -394,7 +394,7 @@ class MoneroConnectionManager {
   /**
    * Set the maximum request time before its connection is considered offline.
    * 
-   * @param {int} timeoutInMs - the timeout before the connection is considered offline
+   * @@param {number} timeoutInMs - the timeout before the connection is considered offline
    * @return {MoneroConnectionManager} this connection manager for chaining
    */
   setTimeout(timeoutInMs) {

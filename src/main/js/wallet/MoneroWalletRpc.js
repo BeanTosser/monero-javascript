@@ -356,7 +356,7 @@ class MoneroWalletRpc extends MoneroWallet {
    * @param {string} name - name of the wallet to create on the RPC server
    * @param {string} password - wallet's password
    * @param {string} mnemonic - mnemonic of the wallet to construct
-   * @param {int} [restoreHeight] - block height to restore from (default = 0)
+   * @@param {number} [restoreHeight] - block height to restore from (default = 0)
    * @param {string} language - language of the mnemonic in case the old language is invalid
    * @param {string} seedOffset - offset used to derive a new seed from the given mnemonic to recover a secret wallet from the mnemonic phrase
    * @param {boolean} saveCurrent - specifies if the current RPC wallet should be saved before being closed
