@@ -26,7 +26,7 @@ class MoneroOutputQuery extends MoneroOutputWallet {
    * 
    * <p>All configuration is optional.  All outputs are returned except those that don't meet criteria defined in this query.</p>
    * 
-   * @param {object} config - output query configuration (optional)
+   * @param {object} [config] - output query configuration (optional)
    * @param {int} config.accountIndex - get outputs in this account index
    * @param {int} config.subaddressIndex - get outputs in this subaddress index
    * @param {int[]} config.subaddressIndices - get outputs in these subaddress indices

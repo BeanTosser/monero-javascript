@@ -1496,7 +1496,7 @@ class GenUtils {
    * Kill the given nodejs child process.
    * 
    * @param {process} process - the nodejs child process to kill
-   * @param {string} signal - the kill signal, e.g. SIGTERM, SIGKILL, SIGINT (default)
+   * @param {string} [signal] - the kill signal, e.g. SIGTERM, SIGKILL, SIGINT (default)
    */
   static async killProcess(process, signal) {
     return new Promise(function(resolve, reject) {

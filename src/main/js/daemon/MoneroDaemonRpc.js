@@ -63,15 +63,15 @@ class MoneroDaemonRpc extends MoneroDaemon {
    * 
    * @param {string|object|MoneroRpcConnection} uriOrConfig - uri of monerod or JS config object or MoneroRpcConnection
    * @param {string} uriOrConfig.uri - uri of monerod
-   * @param {string} uriOrConfig.username - username to authenticate with monerod (optional)
-   * @param {string} uriOrConfig.password - password to authenticate with monerod (optional)
-   * @param {boolean} uriOrConfig.rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {number} uriOrConfig.pollInterval - poll interval to query for updates in ms (default 5000)
-   * @param {string} username - username to authenticate with monerod (optional)
-   * @param {string} password - password to authenticate with monerod (optional)
-   * @param {boolean} rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {number} pollInterval - poll interval to query for updates in ms (default 5000)
-   * @param {boolean} proxyToWorker - runs the daemon client in a worker if true (default true)
+   * @param {string} [uriOrConfig.username] - username to authenticate with monerod (optional)
+   * @param {string} [uriOrConfig.password] - password to authenticate with monerod (optional)
+   * @param {boolean} [uriOrConfig.rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {number} [uriOrConfig.pollInterval] - poll interval to query for updates in ms (default 5000)
+   * @param {string} [username] - username to authenticate with monerod (optional)
+   * @param {string} [password] - password to authenticate with monerod (optional)
+   * @param {boolean} [rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {number} [pollInterval] - poll interval to query for updates in ms (default 5000)
+   * @param {boolean} [proxyToWorker] - runs the daemon client in a worker if true (default true)
    */
   constructor(uriOrConfig, username, password, rejectUnauthorized, pollInterval, proxyToWorker) {
     super();
@@ -91,16 +91,16 @@ class MoneroDaemonRpc extends MoneroDaemon {
    * 
    * @param {string|string[]|object|MoneroRpcConnection} uriOrConfig - uri of monerod or terminal parameters or JS config object or MoneroRpcConnection
    * @param {string} uriOrConfig.uri - uri of monerod
-   * @param {string} uriOrConfig.username - username to authenticate with monerod (optional)
-   * @param {string} uriOrConfig.password - password to authenticate with monerod (optional)
-   * @param {boolean} uriOrConfig.rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {number} uriOrConfig.pollInterval - poll interval to query for updates in ms (default 5000)
-   * @param {boolean} uriOrConfig.proxyToWorker - run the daemon client in a worker if true (default true)
-   * @param {string} username - username to authenticate with monerod (optional)
-   * @param {string} password - password to authenticate with monerod (optional)
-   * @param {boolean} rejectUnauthorized - rejects self-signed certificates if true (default true)
-   * @param {number} pollInterval - poll interval to query for updates in ms (default 5000)
-   * @param {boolean} proxyToWorker - runs the daemon client in a worker if true (default true)
+   * @param {string} [uriOrConfig.username] - username to authenticate with monerod (optional)
+   * @param {string} [uriOrConfig.password] - password to authenticate with monerod (optional)
+   * @param {boolean} [uriOrConfig.rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {number} [uriOrConfig.pollInterval] - poll interval to query for updates in ms (default 5000)
+   * @param {boolean} [uriOrConfig.proxyToWorker] - run the daemon client in a worker if true (default true)
+   * @param {string} [username] - username to authenticate with monerod (optional)
+   * @param {string} [password] - password to authenticate with monerod (optional)
+   * @param {boolean} [rejectUnauthorized] - rejects self-signed certificates if true (default true)
+   * @param {number} [pollInterval] - poll interval to query for updates in ms (default 5000)
+   * @param {boolean} [proxyToWorker] - runs the daemon client in a worker if true (default true)
    * @return {MoneroDaemonRpc} the daemon RPC client
    */
   static async _connectToDaemonRpc(uriOrConfig, username, password, rejectUnauthorized, pollInterval, proxyToWorker) {
@@ -835,9 +835,9 @@ class MoneroDaemonRpc extends MoneroDaemon {
    * Get a contiguous chunk of blocks starting from a given height up to a maximum
    * height or amount of block data fetched from the blockchain, whichever comes first.
    * 
-   * @param {number} startHeight - start height to retrieve blocks (default 0)
-   * @param {number} maxHeight - maximum end height to retrieve blocks (default blockchain height)
-   * @param {number} maxReqSize - maximum amount of block data to fetch from the blockchain in bytes (default 3,000,000 bytes)
+   * @param {number} [startHeight] - start height to retrieve blocks (default 0)
+   * @param {number} [maxHeight] - maximum end height to retrieve blocks (default blockchain height)
+   * @param {number} [maxReqSize] - maximum amount of block data to fetch from the blockchain in bytes (default 3,000,000 bytes)
    * @return {MoneroBlock[]} are the resulting chunk of blocks
    */
   async _getMaxBlocks(startHeight, maxHeight, maxReqSize) {

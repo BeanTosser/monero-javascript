@@ -19,12 +19,12 @@ class HttpClient {
    * @param {string} request.method - HTTP method ("GET", "PUT", "POST", "DELETE", etc)
    * @param {string} request.uri - uri to request
    * @param {string|object|Uint8Array} request.body - request body
-   * @param {string} request.username - username to authenticate the request (optional)
-   * @param {string} request.password - password to authenticate the request (optional)
-   * @param {object} request.headers - headers to add to the request (optional)
-   * @param {string} request.requestApi - one of "fetch" or "xhr" (default "fetch")
-   * @param {boolean} request.resolveWithFullResponse - return full response if true, else body only (default false)
-   * @param {boolean} request.rejectUnauthorized - whether or not to reject self-signed certificates (default true)
+   * @param {string} [request.username] - username to authenticate the request (optional)
+   * @param {string} [request.password] - password to authenticate the request (optional)
+   * @param {object} [request.headers] - headers to add to the request (optional)
+   * @param {string} [request.requestApi] - one of "fetch" or "xhr" (default "fetch")
+   * @param {boolean} [request.resolveWithFullResponse] - return full response if true, else body only (default false)
+   * @param {boolean} [request.rejectUnauthorized] - whether or not to reject self-signed certificates (default true)
    * @param {number} request.timeout - maximum time allowed in milliseconds
    * @param {number} request.proxyToWorker - proxy request to worker thread
    * @returns {object} response - the response object

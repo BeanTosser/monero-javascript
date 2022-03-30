@@ -63,7 +63,7 @@ class MoneroConnectionManager {
   /**
    * Construct a connection manager.
    * 
-   * @param {boolean} proxyToWorker - configure all connections to proxy to worker (default true)
+   * @param {boolean} [proxyToWorker] - configure all connections to proxy to worker (default true)
    */
   constructor(proxyToWorker) {
     this._proxyToWorker = proxyToWorker !== false;
@@ -179,7 +179,7 @@ class MoneroConnectionManager {
   /**
    * Get the best available connection in order of priority then response time.
    * 
-   * @param {MoneroRpcConnection[]} excludedConnections - connections to be excluded from consideration (optional)
+   * @param {MoneroRpcConnection[]} [excludedConnections] - connections to be excluded from consideration (optional)
    * @return {Promise<MoneroRpcConnection>} the best available connection in order of priority then response time, undefined if no connections available
    */
   async getBestAvailableConnection(excludedConnections) {
@@ -217,7 +217,7 @@ class MoneroConnectionManager {
    * Notify if current connection changes.
    * Does not check the connection.
    * 
-   * @param {string|MoneroRpcConnection} uriOrConnection - is the uri of the connection or the connection to make current (default undefined for no current connection)
+   * @param {string|MoneroRpcConnection} [uriOrConnection] - is the uri of the connection or the connection to make current (default undefined for no current connection)
    * @return {MoneroConnectionManager} this connection manager for chaining
    */
   setConnection(uriOrConnection) {

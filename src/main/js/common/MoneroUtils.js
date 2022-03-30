@@ -136,7 +136,7 @@ class MoneroUtils {
    * 
    * @param {MoneroNetworkType} networkType - network type of the integrated address
    * @param {string} standardAddress - primary address or subaddress for the integrated address
-   * @param {string} paymentId - optionally specifies the integrated address's payment id (defaults to random payment id)
+   * @param {string} [paymentId] - optionally specifies the integrated address's payment id (defaults to random payment id)
    * @return {MoneroIntegratedAddress} the integrated address
    */
   static getIntegratedAddress(networkType, standardAddress, paymentId) {

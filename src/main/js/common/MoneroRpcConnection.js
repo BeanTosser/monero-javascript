@@ -29,13 +29,13 @@ class MoneroRpcConnection {
    * 
    * @param {string|object|MoneroRpcConnection} uriOrConfigOrConnection - RPC endpoint URI, MoneroRpcConnection, or equivalent JS object
    * @param {string} uriOrConfigOrConnection.uri - URI of the RPC endpoint
-   * @param {string} uriOrConfigOrConnection.username - username to authenticate with the RPC endpoint (optional)
-   * @param {string} uriOrConfigOrConnection.password - password to authenticate with the RPC endpoint (optional)
-   * @param {boolean} uriOrConfigOrConnection.rejectUnauthorized - rejects self-signed certificates if true (default true)
+   * @param {string} [uriOrConfigOrConnection.username] - username to authenticate with the RPC endpoint (optional)
+   * @param {string} [uriOrConfigOrConnection.password] - password to authenticate with the RPC endpoint (optional)
+   * @param {boolean} [uriOrConfigOrConnection.rejectUnauthorized] - rejects self-signed certificates if true (default true)
    * @param {boolean} uriOrConfigOrConnection.proxyToWorker - proxy requests to worker
-   * @param {string} username - username to authenticate with the RPC endpoint (optional)
-   * @param {string} password - password to authenticate with the RPC endpoint (optional)
-   * @param {boolean} rejectUnauthorized - reject self-signed certificates if true (default true)
+   * @param {string} [username] - username to authenticate with the RPC endpoint (optional)
+   * @param {string} [password] - password to authenticate with the RPC endpoint (optional)
+   * @param {boolean} [rejectUnauthorized] - reject self-signed certificates if true (default true)
    */
   constructor(uriOrConfigOrConnection, username, password, rejectUnauthorized, proxyToWorker) {
     
@@ -124,7 +124,7 @@ class MoneroRpcConnection {
    * Set the connection's priority relative to other connections. Priority 1 is highest,
    * then priority 2, etc. The default priority of 0 is lowest priority.
    * 
-   * @param {int} priority - the connection priority (default 0)
+   * @param {int} [priority] - the connection priority (default 0)
    * @return {MoneroRpcConnection} this connection
    */
   setPriority(priority) {

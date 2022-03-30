@@ -25,7 +25,7 @@ class MoneroTransferQuery extends MoneroTransfer {
    * 
    * <p>All configuration is optional.  All transfers are returned except those that don't meet criteria defined in this query.</p>
    * 
-   * @param {object} config - transfer query configuration (optional)
+   * @param {object} [config] - transfer query configuration (optional)
    * @param {BigInteger} config.amount - get transfers with this amount
    * @param {int} config.accountIndex - get transfers to/from this account index
    * @param {int} config.subaddressIndex - get transfers to/from this subaddress index
