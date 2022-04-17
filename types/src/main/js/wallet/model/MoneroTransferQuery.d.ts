@@ -21,7 +21,7 @@ declare class MoneroTransferQuery extends MoneroTransfer {
      * <p>All configuration is optional.  All transfers are returned except those that don't meet criteria defined in this query.</p>
      *
      * @param {object} [config] - transfer query configuration (optional)
-     * @param {BigInteger} config.amount - get transfers with this amount
+     * @param {BigInt} config.amount - get transfers with this amount
      * @@param {number} config.accountIndex - get transfers to/from this account index
      * @@param {number} config.subaddressIndex - get transfers to/from this subaddress index
      * @param {int[]} config.subaddressIndices - get transfers to/from these subaddress indices
@@ -33,7 +33,7 @@ declare class MoneroTransferQuery extends MoneroTransfer {
      * @param {object|MoneroTxQuery} config.txQuery - get transfers whose tx match this tx query
      */
     constructor(config?: {
-        amount: BigInteger;
+        amount: BigInt;
     });
     copy(): MoneroTransferQuery;
     getTxQuery(): any;

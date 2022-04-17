@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("./biginteger").BigInteger;
 const GenUtils = require("./GenUtils");
 const LibraryUtils = require("./LibraryUtils");
 const MoneroError = require("./MoneroError");
@@ -387,7 +386,7 @@ class MoneroUtils {
    * Convert XMR to atomic units.
    * 
    * @param {number|string} amountXmr - amount in XMR to convert to atomic units
-   * @return {BigInteger} amount in atomic units
+   * @return {BigInt} amount in atomic units
    */
   static xmrToAtomicUnits(amountXmr) {
     if (typeof amountXmr === "number") amountXmr = "" + amountXmr;
@@ -398,19 +397,19 @@ class MoneroUtils {
       decimalDivisor = Math.pow(10, amountXmr.length - decimalIdx - 1);
       amountXmr = amountXmr.slice(0, decimalIdx) + amountXmr.slice(decimalIdx + 1);
     }
-    return new BigInteger(amountXmr).multiply(new BigInteger(MoneroUtils.AU_PER_XMR)).divide(new BigInteger(decimalDivisor));
+    return BigInt(amountXmr) * BigInt(MoneroUtils.AU_PER_XMR) / BigInt(decimalDivisor);
   }
   
   /**
    * Convert atomic units to XMR.
    * 
-   * @param {BigInteger|string} amountAtomicUnits - amount in atomic units to convert to XMR
+   * @param {BigInt|string} amountAtomicUnits - amount in atomic units to convert to XMR
    * @return {number} amount in XMR 
    */
   static atomicUnitsToXmr(amountAtomicUnits) {
-    if (typeof amountAtomicUnits === "string") amountAtomicUnits = new BigInteger(amountAtomicUnits);
-    else if (!(amountAtomicUnits instanceof BigInteger)) throw new MoneroError("Must provide atomic units as BigInteger or string to convert to XMR");
-    let quotientAndRemainder = amountAtomicUnits.divRem(new BigInteger(MoneroUtils.AU_PER_XMR));
+    if (typeof amountAtomicUnits === "string") amountAtomicUnits = BigInt(amountAtomicUnits);
+    else if (!(amountAtomicUnits instanceof BigInt)) throw new MoneroError("Must provide atomic units as BigInt or string to convert to XMR");
+    let quotientAndRemainder = amountAtomicUnits.divRem(BigInt(MoneroUtils.AU_PER_XMR));
     return Number(quotientAndRemainder[0].toJSValue() + quotientAndRemainder[1].toJSValue() / MoneroUtils.AU_PER_XMR);
   }
   

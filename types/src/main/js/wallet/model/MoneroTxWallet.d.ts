@@ -13,7 +13,7 @@ declare class MoneroTxWallet extends MoneroTx {
     setIsIncoming(isIncoming: any): MoneroTxWallet;
     isOutgoing(): any;
     setIsOutgoing(isOutgoing: any): MoneroTxWallet;
-    getIncomingAmount(): BigInteger;
+    getIncomingAmount(): bigint;
     getOutgoingAmount(): any;
     getTransfers(transferQuery: any): any[];
     filterTransfers(transferQuery: any): any[];
@@ -56,5 +56,3 @@ declare class MoneroTxWallet extends MoneroTx {
     toString(indent: number, oneLine: any): string;
 }
 import MoneroTx = require("../../daemon/model/MoneroTx");
-import BigInteger_1 = require("../../common/biginteger");
-import BigInteger = BigInteger_1.BigInteger;

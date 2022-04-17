@@ -24,8 +24,8 @@ class MoneroWalletListener {
   /**
    * Invoked when the wallet's balances change.
    * 
-   * @param {BigInteger} newBalance - new wallet balance
-   * @param {BigInteger} newUnlockedBalance - new unlocked wallet balance
+   * @param {BigInt} newBalance - new wallet balance
+   * @param {BigInt} newUnlockedBalance - new unlocked wallet balance
    */
   async onBalancesChanged(newBalance, newUnlockedBalance) { }
 

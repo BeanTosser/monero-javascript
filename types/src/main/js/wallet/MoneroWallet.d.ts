@@ -222,17 +222,17 @@ declare class MoneroWallet {
      *
      * @@param {number} [accountIdx] - index of the account to get the balance of (default all accounts)
      * @@param {number} [subaddressIdx] - index of the subaddress to get the balance of (default all subaddresses)
-     * @return {BigInteger} the balance of the wallet, account, or subaddress
+     * @return {BigInt} the balance of the wallet, account, or subaddress
      */
-    getBalance(accountIdx?: number, subaddressIdx?: number): BigInteger;
+    getBalance(accountIdx?: number, subaddressIdx?: number): BigInt;
     /**
      * Get the unlocked balance of the wallet, account, or subaddress.
      *
      * @@param {number} [accountIdx] - index of the account to get the unlocked balance of (optional)
      * @@param {number} [subaddressIdx] - index of the subaddress to get the unlocked balance of (optional)
-     * @return {BigInteger} the unlocked balance of the wallet, account, or subaddress
+     * @return {BigInt} the unlocked balance of the wallet, account, or subaddress
      */
-    getUnlockedBalance(accountIdx?: number, subaddressIdx?: number): BigInteger;
+    getUnlockedBalance(accountIdx?: number, subaddressIdx?: number): BigInt;
     /**
      * Get the number of blocks until the next and last funds unlock.
      *
@@ -341,7 +341,7 @@ declare class MoneroWallet {
      * @@param {number} [query.accountIndex] - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific account index (optional)
      * @@param {number} [query.subaddressIndex] - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific subaddress index (optional)
      * @param {int[]} [query.subaddressIndices] - get transfers that either originated from (if outgoing) or are destined for (if incoming) specific subaddress indices (optional)
-     * @param {BigInteger} [query.amount] - amount being transferred (optional)
+     * @param {BigInt} [query.amount] - amount being transferred (optional)
      * @param {MoneroDestination[]} [query.destinations] - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain (optional)
      * @param {boolean} [query.hasDestinations] - get transfers that have destinations or not (optional)
      * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query (optional)
@@ -356,7 +356,7 @@ declare class MoneroWallet {
      * @@param {number} [query.accountIndex] - get incoming transfers to a specific account index (optional)
      * @@param {number} [query.subaddressIndex] - get incoming transfers to a specific subaddress index (optional)
      * @param {int[]} [query.subaddressIndices] - get transfers destined for specific subaddress indices (optional)
-     * @param {BigInteger} [query.amount] - amount being transferred (optional)
+     * @param {BigInt} [query.amount] - amount being transferred (optional)
      * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query (optional)
      * @return {MoneroIncomingTransfer[]} incoming transfers that meet the query
      */
@@ -369,7 +369,7 @@ declare class MoneroWallet {
      * @@param {number} [query.accountIndex] - get outgoing transfers from a specific account index (optional)
      * @@param {number} [query.subaddressIndex] - get outgoing transfers from a specific subaddress index (optional)
      * @param {int[]} [query.subaddressIndices] - get outgoing transfers from specific subaddress indices (optional)
-     * @param {BigInteger} [query.amount] - amount being transferred (optional)
+     * @param {BigInt} [query.amount] - amount being transferred (optional)
      * @param {MoneroDestination[]} [query.destinations] - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain (optional)
      * @param {boolean} [query.hasDestinations] - get transfers that have destinations or not (optional)
      * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query (optional)
@@ -389,9 +389,9 @@ declare class MoneroWallet {
      * @@param {number} [query.accountIndex] - get outputs associated with a specific account index (optional)
      * @@param {number} [query.subaddressIndex] - get outputs associated with a specific subaddress index (optional)
      * @param {int[]} [query.subaddressIndices] - get outputs associated with specific subaddress indices (optional)
-     * @param {BigInteger} [query.amount] - get outputs with a specific amount (optional)
-     * @param {BigInteger} [query.minAmount] - get outputs greater than or equal to a minimum amount (optional)
-     * @param {BigInteger} [query.maxAmount] - get outputs less than or equal to a maximum amount (optional)
+     * @param {BigInt} [query.amount] - get outputs with a specific amount (optional)
+     * @param {BigInt} [query.minAmount] - get outputs greater than or equal to a minimum amount (optional)
+     * @param {BigInt} [query.maxAmount] - get outputs less than or equal to a maximum amount (optional)
      * @param {boolean} [query.isSpent] - get outputs that are spent or not (optional)
      * @param {string|MoneroKeyImage} [query.keyImage] - get output with a key image or which matches fields defined in a MoneroKeyImage (optional)
      * @param {MoneroTxQuery} [query.txQuery] - get outputs whose transaction meets this filter (optional)
@@ -456,7 +456,7 @@ declare class MoneroWallet {
      *
      * @param {MoneroTxConfig|object} config - configures the transaction to create (required)
      * @param {string} config.address - single destination address (required unless `destinations` provided)
-     * @param {BigInteger|string} config.amount - single destination amount (required unless `destinations` provided)
+     * @param {BigInt|string} config.amount - single destination amount (required unless `destinations` provided)
      * @@param {number} config.accountIndex - source account index to transfer funds from (required)
      * @@param {number} [config.subaddressIndex] - source subaddress index to transfer funds from (optional)
      * @param {int[]} [config.subaddressIndices] - source subaddress indices to transfer funds from (optional)
@@ -473,7 +473,7 @@ declare class MoneroWallet {
      *
      * @param {MoneroTxConfig|object} config - configures the transactions to create (required)
      * @param {string} config.address - single destination address (required unless `destinations` provided)
-     * @param {BigInteger|string} config.amount - single destination amount (required unless `destinations` provided)
+     * @param {BigInt|string} config.amount - single destination amount (required unless `destinations` provided)
      * @@param {number} config.accountIndex - source account index to transfer funds from (required)
      * @@param {number} [config.subaddressIndex] - source subaddress index to transfer funds from (optional)
      * @param {int[]} [config.subaddressIndices] - source subaddress indices to transfer funds from (optional)
@@ -639,11 +639,11 @@ declare class MoneroWallet {
      * Generate a signature to prove an available amount in an account.
      *
      * @@param {number} accountIdx - account to prove ownership of the amount
-     * @param {BigInteger} amount - minimum amount to prove as available in the account
+     * @param {BigInt} amount - minimum amount to prove as available in the account
      * @param {string} [message] - message to include with the signature to further authenticate the proof (optional)
      * @return {string} the reserve proof signature
      */
-    getReserveProofAccount(accountIdx: number, amount: BigInteger, message?: string): string;
+    getReserveProofAccount(accountIdx: number, amount: BigInt, message?: string): string;
     /**
      * Proves a wallet has a disposable reserve using a signature.
      *
@@ -876,8 +876,6 @@ declare class MoneroWallet {
 declare namespace MoneroWallet {
     const DEFAULT_LANGUAGE: string;
 }
-import BigInteger_1 = require("../common/biginteger");
-import BigInteger = BigInteger_1.BigInteger;
 import MoneroTxQuery = require("./model/MoneroTxQuery");
 import MoneroTransferQuery = require("./model/MoneroTransferQuery");
 import MoneroOutputQuery = require("./model/MoneroOutputQuery");

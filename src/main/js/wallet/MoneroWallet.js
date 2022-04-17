@@ -1,6 +1,5 @@
 const assert = require("assert");
 const MoneroBlock = require("../daemon/model/MoneroBlock");
-const BigInteger = require("../common/biginteger").BigInteger;
 const MoneroError = require("../common/MoneroError");
 const MoneroOutputQuery = require("./model/MoneroOutputQuery");
 const MoneroTransferQuery = require("./model/MoneroTransferQuery");
@@ -310,7 +309,7 @@ class MoneroWallet {
    * 
    * @@param {number} [accountIdx] - index of the account to get the balance of (default all accounts)
    * @@param {number} [subaddressIdx] - index of the subaddress to get the balance of (default all subaddresses)
-   * @return {BigInteger} the balance of the wallet, account, or subaddress
+   * @return {BigInt} the balance of the wallet, account, or subaddress
    */
   async getBalance(accountIdx, subaddressIdx) {
     throw new MoneroError("Not supported");
@@ -321,7 +320,7 @@ class MoneroWallet {
    * 
    * @@param {number} [accountIdx] - index of the account to get the unlocked balance of (optional)
    * @@param {number} [subaddressIdx] - index of the subaddress to get the unlocked balance of (optional)
-   * @return {BigInteger} the unlocked balance of the wallet, account, or subaddress
+   * @return {BigInt} the unlocked balance of the wallet, account, or subaddress
    */
   async getUnlockedBalance(accountIdx, subaddressIdx) {
     throw new MoneroError("Not supported");
@@ -336,14 +335,14 @@ class MoneroWallet {
     
     // get balances
     let balance = await this.getBalance();
-    if (balance.compare(new BigInteger(0)) === 0) return [undefined, undefined]; // skip if no balance
+    if (balance.compare(BigInt(0)) === 0) return [undefined, undefined]; // skip if no balance
     let unlockedBalance = await this.getUnlockedBalance();
     
     // compute number of blocks until next funds available
     let txs;
     let height;
     let numBlocksToNextUnlock = undefined;
-    if (unlockedBalance.compare(new BigInteger(0)) > 0) numBlocksToNextUnlock = 0;
+    if (unlockedBalance.compare(BigInt(0)) > 0) numBlocksToNextUnlock = 0;
     else {
       txs = await this.getTxs({isLocked: true}); // get locked txs
       height = await this.getHeight(); // get most recent height
@@ -356,7 +355,7 @@ class MoneroWallet {
     // compute number of blocks until all funds available
     let numBlocksToLastUnlock = undefined;
     if (balance.compare(unlockedBalance) === 0) {
-      if (unlockedBalance.compare(new BigInteger(0)) > 0) numBlocksToLastUnlock = 0;
+      if (unlockedBalance.compare(BigInt(0)) > 0) numBlocksToLastUnlock = 0;
     } else {
       if (!txs) {
         txs = await this.getTxs({isLocked: true}); // get locked txs
@@ -500,7 +499,7 @@ class MoneroWallet {
    * @@param {number} [query.accountIndex] - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific account index (optional)
    * @@param {number} [query.subaddressIndex] - get transfers that either originated from (if outgoing) or are destined for (if incoming) a specific subaddress index (optional)
    * @param {int[]} [query.subaddressIndices] - get transfers that either originated from (if outgoing) or are destined for (if incoming) specific subaddress indices (optional)
-   * @param {BigInteger} [query.amount] - amount being transferred (optional)
+   * @param {BigInt} [query.amount] - amount being transferred (optional)
    * @param {MoneroDestination[]} [query.destinations] - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain (optional)
    * @param {boolean} [query.hasDestinations] - get transfers that have destinations or not (optional)
    * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query (optional)
@@ -518,7 +517,7 @@ class MoneroWallet {
    * @@param {number} [query.accountIndex] - get incoming transfers to a specific account index (optional)
    * @@param {number} [query.subaddressIndex] - get incoming transfers to a specific subaddress index (optional)
    * @param {int[]} [query.subaddressIndices] - get transfers destined for specific subaddress indices (optional)
-   * @param {BigInteger} [query.amount] - amount being transferred (optional)
+   * @param {BigInt} [query.amount] - amount being transferred (optional)
    * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query (optional)
    * @return {MoneroIncomingTransfer[]} incoming transfers that meet the query
    */
@@ -537,7 +536,7 @@ class MoneroWallet {
    * @@param {number} [query.accountIndex] - get outgoing transfers from a specific account index (optional)
    * @@param {number} [query.subaddressIndex] - get outgoing transfers from a specific subaddress index (optional)
    * @param {int[]} [query.subaddressIndices] - get outgoing transfers from specific subaddress indices (optional)
-   * @param {BigInteger} [query.amount] - amount being transferred (optional)
+   * @param {BigInt} [query.amount] - amount being transferred (optional)
    * @param {MoneroDestination[]} [query.destinations] - individual destinations of an outgoing transfer, which is local wallet data and NOT recoverable from the blockchain (optional)
    * @param {boolean} [query.hasDestinations] - get transfers that have destinations or not (optional)
    * @param {MoneroTxQuery} [query.txQuery] - get transfers whose transaction meets this query (optional)
@@ -563,9 +562,9 @@ class MoneroWallet {
    * @@param {number} [query.accountIndex] - get outputs associated with a specific account index (optional)
    * @@param {number} [query.subaddressIndex] - get outputs associated with a specific subaddress index (optional)
    * @param {int[]} [query.subaddressIndices] - get outputs associated with specific subaddress indices (optional)
-   * @param {BigInteger} [query.amount] - get outputs with a specific amount (optional)
-   * @param {BigInteger} [query.minAmount] - get outputs greater than or equal to a minimum amount (optional)
-   * @param {BigInteger} [query.maxAmount] - get outputs less than or equal to a maximum amount (optional)
+   * @param {BigInt} [query.amount] - get outputs with a specific amount (optional)
+   * @param {BigInt} [query.minAmount] - get outputs greater than or equal to a minimum amount (optional)
+   * @param {BigInt} [query.maxAmount] - get outputs less than or equal to a maximum amount (optional)
    * @param {boolean} [query.isSpent] - get outputs that are spent or not (optional)
    * @param {string|MoneroKeyImage} [query.keyImage] - get output with a key image or which matches fields defined in a MoneroKeyImage (optional)
    * @param {MoneroTxQuery} [query.txQuery] - get outputs whose transaction meets this filter (optional)
@@ -657,7 +656,7 @@ class MoneroWallet {
    * 
    * @param {MoneroTxConfig|object} config - configures the transaction to create (required)
    * @param {string} config.address - single destination address (required unless `destinations` provided)
-   * @param {BigInteger|string} config.amount - single destination amount (required unless `destinations` provided)
+   * @param {BigInt|string} config.amount - single destination amount (required unless `destinations` provided)
    * @@param {number} config.accountIndex - source account index to transfer funds from (required)
    * @@param {number} [config.subaddressIndex] - source subaddress index to transfer funds from (optional)
    * @param {int[]} [config.subaddressIndices] - source subaddress indices to transfer funds from (optional)
@@ -680,7 +679,7 @@ class MoneroWallet {
    * 
    * @param {MoneroTxConfig|object} config - configures the transactions to create (required)
    * @param {string} config.address - single destination address (required unless `destinations` provided)
-   * @param {BigInteger|string} config.amount - single destination amount (required unless `destinations` provided)
+   * @param {BigInt|string} config.amount - single destination amount (required unless `destinations` provided)
    * @@param {number} config.accountIndex - source account index to transfer funds from (required)
    * @@param {number} [config.subaddressIndex] - source subaddress index to transfer funds from (optional)
    * @param {int[]} [config.subaddressIndices] - source subaddress indices to transfer funds from (optional)
@@ -900,7 +899,7 @@ class MoneroWallet {
    * Generate a signature to prove an available amount in an account.
    * 
    * @@param {number} accountIdx - account to prove ownership of the amount
-   * @param {BigInteger} amount - minimum amount to prove as available in the account
+   * @param {BigInt} amount - minimum amount to prove as available in the account
    * @param {string} [message] - message to include with the signature to further authenticate the proof (optional)
    * @return {string} the reserve proof signature
    */

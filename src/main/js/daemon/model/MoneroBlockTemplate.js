@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Monero block template to mine.
@@ -9,9 +8,9 @@ class MoneroBlockTemplate {
     state = Object.assign({}, state);
     this.state = state;
     
-    // deserialize BigIntegers
-    if (state.expectedReward !== undefined && !(state.expectedReward instanceof BigInteger)) state.expectedReward = BigInteger.parse(state.expectedReward);
-    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInteger)) state.difficulty = BigInteger.parse(state.difficulty);
+    // deserialize BigInts
+    if (state.expectedReward !== undefined && !(state.expectedReward instanceof BigInt)) state.expectedReward = BigInt(state.expectedReward);
+    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInt)) state.difficulty = BigInt(state.difficulty);
   }
   
   toJson() {

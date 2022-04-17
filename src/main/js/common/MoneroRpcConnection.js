@@ -221,7 +221,7 @@ class MoneroRpcConnection {
     try {
       
       // build request body
-      let body = JSON.stringify({  // body is stringified so text/plain is returned so BigIntegers are preserved
+      let body = JSON.stringify({  // body is stringified so text/plain is returned so BigInts are preserved
         id: "0",
         jsonrpc: "2.0",
         method: method,
@@ -282,7 +282,7 @@ class MoneroRpcConnection {
         uri: this.getUri() + '/' + path,
         username: this.getUsername(),
         password: this.getPassword(),
-        body: JSON.stringify(params),  // body is stringified so text/plain is returned so BigIntegers are preserved
+        body: JSON.stringify(params),  // body is stringified so text/plain is returned so BigInts are preserved
         timeout: timeoutInMs,
         rejectUnauthorized: this._config.rejectUnauthorized,
         requestApi: GenUtils.isFirefox() ? "xhr" : "fetch",

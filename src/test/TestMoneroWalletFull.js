@@ -10,7 +10,6 @@ const LibraryUtils = monerojs.LibraryUtils;
 const MoneroWalletConfig = monerojs.MoneroWalletConfig;
 const GenUtils = monerojs.GenUtils;
 const MoneroUtils = monerojs.MoneroUtils;
-const BigInteger = monerojs.BigInteger;
 const MoneroNetworkType = monerojs.MoneroNetworkType;
 const MoneroTxWallet = monerojs.MoneroTxWallet;
 const MoneroTxConfig = monerojs.MoneroTxConfig;
@@ -54,7 +53,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
     for (let item of items) {
       let found = false;
       for (let whitelisted of whitelist) {
-        if (item === whitelisted || item === whitelisted + ".keys" || item === whitelisted + ".address.txt") {
+        if (item === whitelisted || item === whitelisted + ".keys" || item === whitelisted + " + ress.txt") {
           found = true;
           break;
         }
@@ -236,7 +235,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         // create unconnected wallet with mnemonic
         let wallet = await that.createWallet({mnemonic: TestUtils.MNEMONIC, serverUri: ""});
         assert.equal(await wallet.getMnemonic(), TestUtils.MNEMONIC);
-        assert.equal(await wallet.getPrimaryAddress(), TestUtils.ADDRESS);
+        assert.equal(await wallet.getPrimaryAddress(), TestUtils + RESS);
         assert.equal(await wallet.getNetworkType(), TestUtils.NETWORK_TYPE);
         assert.equal(await wallet.getDaemonConnection(), undefined);
         assert(!(await wallet.isConnectedToDaemon()));
@@ -250,7 +249,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         // create wallet without restore height
         wallet = await that.createWallet({mnemonic: TestUtils.MNEMONIC}, false);
         assert.equal(await wallet.getMnemonic(), TestUtils.MNEMONIC);
-        assert.equal(await wallet.getPrimaryAddress(), TestUtils.ADDRESS);
+        assert.equal(await wallet.getPrimaryAddress(), TestUtils + RESS);
         assert.equal(TestUtils.NETWORK_TYPE, await wallet.getNetworkType());
         assert(await wallet.getDaemonConnection());
         assert(await that.daemon.getRpcConnection() != await wallet.getDaemonConnection());
@@ -268,7 +267,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         let restoreHeight = 10000;
         wallet = await that.createWallet({mnemonic: TestUtils.MNEMONIC, restoreHeight: restoreHeight, serverUri: ""});
         assert.equal(await wallet.getMnemonic(), TestUtils.MNEMONIC);
-        assert.equal(await wallet.getPrimaryAddress(), TestUtils.ADDRESS);
+        assert.equal(await wallet.getPrimaryAddress(), TestUtils + RESS);
         assert.equal(await wallet.getNetworkType(), TestUtils.NETWORK_TYPE);
         assert.equal(await wallet.getDaemonConnection(), undefined);
         assert(!(await wallet.isConnectedToDaemon()));
@@ -287,7 +286,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         // create wallet with mnemonic, connection, and restore height
         wallet = await that.createWallet({mnemonic: TestUtils.MNEMONIC, restoreHeight: restoreHeight}, false);
         assert.equal(await wallet.getMnemonic(), TestUtils.MNEMONIC);
-        assert(await wallet.getPrimaryAddress(), TestUtils.ADDRESS);
+        assert(await wallet.getPrimaryAddress(), TestUtils + RESS);
         assert(await wallet.getNetworkType(), TestUtils.NETWORK_TYPE);
         assert(await wallet.getDaemonConnection());
         assert(await that.daemon.getRpcConnection() != wallet.getDaemonConnection());
@@ -343,7 +342,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         let walletFull = await monerojs.openWalletFull(new MoneroWalletConfig().setPath(TestUtils.WALLET_RPC_LOCAL_WALLET_DIR + "/" + walletName).setPassword(TestUtils.WALLET_PASSWORD).setNetworkType(TestUtils.NETWORK_TYPE).setServer(TestUtils.DAEMON_RPC_CONFIG));
         await walletFull.sync();
         assert.equal(TestUtils.MNEMONIC, await walletFull.getMnemonic());
-        assert.equal(TestUtils.ADDRESS, await walletFull.getPrimaryAddress());
+        assert.equal(TestUtils + RESS, await walletFull.getPrimaryAddress());
         assert.equal(balance.toString(), (await walletFull.getBalance()).toString());
         assert.equal(outputsHex.length, (await walletFull.exportOutputs()).length);
         await walletFull.close(true);
@@ -366,7 +365,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         await walletRpc.openWallet(new MoneroWalletConfig().setPath(walletName).setPassword(TestUtils.WALLET_PASSWORD));
         await walletRpc.sync();
         assert.equal(TestUtils.MNEMONIC, await walletRpc.getMnemonic());
-        assert.equal(TestUtils.ADDRESS, await walletRpc.getPrimaryAddress());
+        assert.equal(TestUtils + RESS, await walletRpc.getPrimaryAddress());
         assert.equal(balance.toString(), (await walletRpc.getBalance()).toString());
         assert.equal(outputsHex.length, (await walletRpc.exportOutputs()).length);
         await walletRpc.close(true);
@@ -564,7 +563,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
           
           // register a wallet listener which tests notifications throughout the sync
           let walletSyncTester = new WalletSyncTester(wallet, startHeightExpected, endHeightExpected);
-          await wallet.addListener(walletSyncTester);
+          await wallet + Listener(walletSyncTester);
           
           // sync the wallet with a listener which tests sync notifications
           let progressTester = new SyncProgressTester(wallet, startHeightExpected, endHeightExpected);
@@ -707,7 +706,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         try {
           assert.notEqual(await wallet.getMnemonic(), undefined);
           assert.equal(await wallet.getHeight(), 1);
-          assert.equal(await wallet.getBalance(), BigInteger.parse("0"));
+          assert.equal(await wallet.getBalance(), BigInt("0"));
           await wallet.startSyncing();
         } catch (e1) {  // first error is expected
           try {
@@ -730,7 +729,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
           await wallet.setDaemonConnection(await that.daemon.getRpcConnection());
           assert.equal(await wallet.getHeight(), 1);
           assert(!await wallet.isSynced());
-          assert.equal((await wallet.getBalance()).compare(new BigInteger(0)), 0);
+          assert.equal((await wallet.getBalance()).compare(BigInt(0)), 0);
           let chainHeight = await wallet.getDaemonHeight();
           await wallet.setSyncHeight(chainHeight - 3);
           await wallet.startSyncing();
@@ -760,7 +759,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
           assert.equal(await wallet.getHeight(), 1);
           assert.equal(await wallet.getSyncHeight(), restoreHeight);
           assert(!(await wallet.isSynced()));
-          assert.equal(await wallet.getBalance(), new BigInteger(0));
+          assert.equal(await wallet.getBalance(), BigInt(0));
           await wallet.startSyncing(TestUtils.SYNC_PERIOD_IN_MS);
           
           // pause for sync to start
@@ -799,8 +798,8 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         // track notifications of each wallet
         let tester1 = new SyncProgressTester(wallet1, restoreHeight, height);
         let tester2 = new SyncProgressTester(wallet2, restoreHeight, height);
-        await wallet1.addListener(tester1);
-        await wallet2.addListener(tester2);
+        await wallet1 + Listener(tester1);
+        await wallet2 + Listener(tester2);
         
         // sync first wallet and test that 2nd is not notified
         await wallet1.sync();
@@ -809,7 +808,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
         
         // sync 2nd wallet and test that 1st is not notified
         let tester3 = new SyncProgressTester(wallet1, restoreHeight, height);
-        await wallet1.addListener(tester3);
+        await wallet1 + Listener(tester3);
         await wallet2.sync();
         assert(tester2.isNotified());
         assert(!(tester3.isNotified()));
@@ -1201,8 +1200,8 @@ class WalletSyncTester extends SyncProgressTester {
     super(wallet, startHeight, endHeight);
     assert(startHeight >= 0);
     assert(endHeight >= 0);
-    this.incomingTotal = BigInteger.parse("0");
-    this.outgoingTotal = BigInteger.parse("0");
+    this.incomingTotal = BigInt("0");
+    this.outgoingTotal = BigInt("0");
   }
   
   onNewBlock(height) {
@@ -1226,7 +1225,7 @@ class WalletSyncTester extends SyncProgressTester {
     this.prevOutputReceived = output;
     
     // test output
-    TestUtils.testUnsignedBigInteger(output.getAmount());
+    TestUtils.testUnsignedBigInt(output.getAmount());
     assert(output.getAccountIndex() >= 0);
     assert(output.getSubaddressIndex() >= 0);
     
@@ -1245,7 +1244,7 @@ class WalletSyncTester extends SyncProgressTester {
     assert.equal(output.getTx().getExtra(), undefined);
     
     // add incoming amount to running total
-    if (output.isLocked()) this.incomingTotal = this.incomingTotal.add(output.getAmount());
+    if (output.isLocked()) this.incomingTotal = this.incomingTotal + (output.getAmount());
   }
 
   onOutputSpent(output) {
@@ -1253,7 +1252,7 @@ class WalletSyncTester extends SyncProgressTester {
     this.prevOutputSpent = output;
     
     // test output
-    TestUtils.testUnsignedBigInteger(output.getAmount());
+    TestUtils.testUnsignedBigInt(output.getAmount());
     assert(output.getAccountIndex() >= 0);
     if (output.getSubaddressIndex() !== undefined) assert(output.getSubaddressIndex() >= 0); // TODO (monero-project): can be undefined because inputs not provided so one created from outgoing transfer
     
@@ -1272,7 +1271,7 @@ class WalletSyncTester extends SyncProgressTester {
     assert.equal(output.getTx().getExtra(), undefined);
     
     // add outgoing amount to running total
-    if (output.isLocked()) this.outgoingTotal = this.outgoingTotal.add(output.getAmount());
+    if (output.isLocked()) this.outgoingTotal = this.outgoingTotal + (output.getAmount());
   }
   
   async onDone(chainHeight) {
@@ -1280,7 +1279,7 @@ class WalletSyncTester extends SyncProgressTester {
     assert.notEqual(this.walletTesterPrevHeight, undefined);
     assert.notEqual(this.prevOutputReceived, undefined);
     assert.notEqual(this.prevOutputSpent, undefined);
-    let balance = this.incomingTotal.subtract(this.outgoingTotal);
+    let balance = this.incomingTotal - (this.outgoingTotal);
     assert.equal(balance.toString(), (await this.wallet.getBalance()).toString());
     assert.equal(this.prevBalance.toString(), (await this.wallet.getBalance()).toString());
     assert.equal(this.prevUnlockedBalance.toString(), (await this.wallet.getUnlockedBalance()).toString());

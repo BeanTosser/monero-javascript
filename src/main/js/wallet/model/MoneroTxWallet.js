@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("../../common/biginteger").BigInteger;
 const GenUtils = require("../../common/GenUtils");
 const MoneroIncomingTransfer = require("./MoneroIncomingTransfer");
 const MoneroOutgoingTransfer = require("./MoneroOutgoingTransfer");
@@ -56,10 +55,10 @@ class MoneroTxWallet extends MoneroTx {
       }
     }
     
-    // deserialize BigIntegers
-    if (state.inputSum !== undefined && !(state.inputSum instanceof BigInteger)) state.inputSum = BigInteger.parse(state.inputSum);
-    if (state.outputSum !== undefined && !(state.outputSum instanceof BigInteger)) state.outputSum = BigInteger.parse(state.outputSum);
-    if (state.changeAmount !== undefined && !(state.changeAmount instanceof BigInteger)) state.changeAmount = BigInteger.parse(state.changeAmount);
+    // deserialize BigInts
+    if (state.inputSum !== undefined && !(state.inputSum instanceof BigInt)) state.inputSum = BigInt(state.inputSum);
+    if (state.outputSum !== undefined && !(state.outputSum instanceof BigInt)) state.outputSum = BigInt(state.outputSum);
+    if (state.changeAmount !== undefined && !(state.changeAmount instanceof BigInt)) state.changeAmount = BigInt(state.changeAmount);
   }
   
   toJson() {
@@ -106,8 +105,8 @@ class MoneroTxWallet extends MoneroTx {
   
   getIncomingAmount() {
     if (this.getIncomingTransfers() === undefined) return undefined;
-    let incomingAmt = BigInteger.parse("0");
-    for (let transfer of this.getIncomingTransfers()) incomingAmt = incomingAmt.add(transfer.getAmount());
+    let incomingAmt = BigInt("0");
+    for (let transfer of this.getIncomingTransfers()) incomingAmt = incomingAmt + transfer.getAmount();
     return incomingAmt;
   }
   

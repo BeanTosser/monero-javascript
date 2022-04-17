@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Models results from importing key images.
@@ -7,8 +6,8 @@ class MoneroKeyImageImportResult {
   
   constructor(state) {
     state = Object.assign({}, state);
-    if (state.spentAmount !== undefined && !(state.spentAmount instanceof BigInteger)) state.spentAmount = BigInteger.parse(state.spentAmount);
-    if (state.unspentAmount !== undefined && !(state.unspentAmount instanceof BigInteger)) state.unspentAmount = BigInteger.parse(state.unspentAmount);
+    if (state.spentAmount !== undefined && !(state.spentAmount instanceof BigInt)) state.spentAmount = BigInt(state.spentAmount);
+    if (state.unspentAmount !== undefined && !(state.unspentAmount instanceof BigInt)) state.unspentAmount = BigInt(state.unspentAmount);
     this.state = state;
   }
   

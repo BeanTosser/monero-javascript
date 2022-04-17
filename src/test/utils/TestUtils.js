@@ -5,7 +5,6 @@ const LibraryUtils = monerojs.LibraryUtils;
 const GenUtils = monerojs.GenUtils;
 const MoneroRpcError = monerojs.MoneroRpcError;
 const MoneroRpcConnection = monerojs.MoneroRpcConnection;
-const BigInteger = monerojs.BigInteger;
 const MoneroNetworkType = monerojs.MoneroNetworkType;
 const MoneroWalletRpc = monerojs.MoneroWalletRpc;
 
@@ -205,10 +204,10 @@ class TestUtils {
     return TestUtils.walletKeys;
   }
   
-  static testUnsignedBigInteger(num, nonZero) {
+  static testUnsignedBigInt(num, nonZero) {
     assert(num);
-    assert(num instanceof BigInteger);
-    let comparison = num.compare(new BigInteger(0));
+    assert(num instanceof BigInt);
+    let comparison = num.compare(BigInt(0));
     assert(comparison >= 0);
     if (nonZero === true) assert(comparison > 0);
     if (nonZero === false) assert(comparison === 0);
@@ -247,7 +246,7 @@ TestUtils.WALLET_PASSWORD = "supersecretpassword123";
 TestUtils.TEST_WALLETS_DIR = "./test_wallets";
 TestUtils.WALLET_FULL_PATH = TestUtils.TEST_WALLETS_DIR + "/" + TestUtils.WALLET_NAME;
 
-TestUtils.MAX_FEE = new BigInteger("7500000").multiply(new BigInteger("10000"));
+TestUtils.MAX_FEE = BigInt("7500000") * BigInt("10000");
 TestUtils.NETWORK_TYPE = MoneroNetworkType.STAGENET;
 
 // default keypair to test

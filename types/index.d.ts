@@ -1,7 +1,6 @@
 declare module 'monero-javascript' {
   import * as GenUtils from "./src/main/js/common/GenUtils";
   export import GenUtils = GenUtils;
-  export var BigInteger: typeof import("./src/main/js/common/biginteger").BigInteger;
   import * as Filter from "./src/main/js/common/Filter";
   export import Filter = Filter;
   import * as MoneroError from "./src/main/js/common/MoneroError";

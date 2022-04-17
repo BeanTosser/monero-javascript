@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Models the result from submitting a tx to a daemon.
@@ -9,8 +8,8 @@ class MoneroSubmitTxResult {
     state = Object.assign({}, state);
     this.state = state;
     
-    // deserialize BigIntegers
-    if (state.credits !== undefined && !(state.credits instanceof BigInteger)) state.credits = BigInteger.parse(state.credits);
+    // deserialize BigInts
+    if (state.credits !== undefined && !(state.credits instanceof BigInt)) state.credits = BigInt(state.credits);
   }
   
   toJson() {

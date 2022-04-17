@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 const MoneroConnectionSpan = require("./MoneroConnectionSpan");
 const MoneroPeer = require("./MoneroPeer");
 
@@ -27,7 +26,7 @@ class MoneroDaemonSyncInfo {
         }
       }
     }
-    if (state.credits !== undefined && !(state.credits instanceof BigInteger)) state.credits = BigInteger.parse(state.credits);
+    if (state.credits !== undefined && !(state.credits instanceof BigInt)) state.credits = BigInt(state.credits);
     
     // assign internal state
     this.state = state;

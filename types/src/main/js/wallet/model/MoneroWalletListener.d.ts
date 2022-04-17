@@ -22,10 +22,10 @@ declare class MoneroWalletListener {
     /**
      * Invoked when the wallet's balances change.
      *
-     * @param {BigInteger} newBalance - new wallet balance
-     * @param {BigInteger} newUnlockedBalance - new unlocked wallet balance
+     * @param {BigInt} newBalance - new wallet balance
+     * @param {BigInt} newUnlockedBalance - new unlocked wallet balance
      */
-    onBalancesChanged(newBalance: BigInteger, newUnlockedBalance: BigInteger): Promise<void>;
+    onBalancesChanged(newBalance: BigInt, newUnlockedBalance: BigInt): Promise<void>;
     /**
      * Invoked 3 times per received output: once when unconfirmed, once when confirmed, and
      * once when unlocked.

@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("../../common/biginteger").BigInteger;
 const GenUtils = require("../../common/GenUtils");
 const MoneroKeyImage = require("./MoneroKeyImage");
 
@@ -25,7 +24,7 @@ class MoneroOutput {
     this.state = state;
     
     // deserialize fields if necessary
-    if (state.amount !== undefined && !(state.amount instanceof BigInteger)) state.amount = BigInteger.parse(state.amount);
+    if (state.amount !== undefined && !(state.amount instanceof BigInt)) state.amount = BigInt(state.amount);
     if (state.keyImage && !(state.keyImage instanceof MoneroKeyImage)) state.keyImage = new MoneroKeyImage(state.keyImage);
   }
   

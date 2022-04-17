@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Monero daemon info.
@@ -9,10 +8,10 @@ class MoneroDaemonInfo {
     state = Object.assign({}, state);
     this.state = state;
     
-    // deserialize BigIntegers
-    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInteger)) state.difficulty = BigInteger.parse(state.difficulty);
-    if (state.cumulativeDifficulty !== undefined && !(state.cumulativeDifficulty instanceof BigInteger)) state.cumulativeDifficulty = BigInteger.parse(state.cumulativeDifficulty);
-    if (state.credits !== undefined && !(state.credits instanceof BigInteger)) state.credits = BigInteger.parse(state.credits);
+    // deserialize BigInts
+    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInt)) state.difficulty = BigInt(state.difficulty);
+    if (state.cumulativeDifficulty !== undefined && !(state.cumulativeDifficulty instanceof BigInt)) state.cumulativeDifficulty = BigInt(state.cumulativeDifficulty);
+    if (state.credits !== undefined && !(state.credits instanceof BigInt)) state.credits = BigInt(state.credits);
   }
   
   toJson() {

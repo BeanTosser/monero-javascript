@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Monero hard fork info.
@@ -7,7 +6,7 @@ class MoneroHardForkInfo {
   
   constructor(state) {
     this.state = Object.assign({}, state);
-    if (this.state.credits !== undefined && !(this.state.credits instanceof BigInteger)) this.state.credits = BigInteger.parse(this.state.credits);
+    if (this.state.credits !== undefined && !(this.state.credits instanceof BigInt)) this.state.credits = BigInt(this.state.credits);
   }
   
   toJson() {

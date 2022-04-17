@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 const MoneroError = require("../../common/MoneroError");
 const MoneroOutputWallet = require("./MoneroOutputWallet");
 
@@ -20,7 +19,7 @@ class MoneroOutputQuery extends MoneroOutputWallet {
    * &nbsp;&nbsp; isSpent: false,<br>
    * &nbsp;&nbsp; isLocked: false,<br>
    * &nbsp;&nbsp; accountIndex: 0,<br>
-   * &nbsp;&nbsp; minAmount: new BigInteger("750000")<br>
+   * &nbsp;&nbsp; minAmount: BigInt("750000")<br>
    * });
    * </code>
    * 
@@ -30,9 +29,9 @@ class MoneroOutputQuery extends MoneroOutputWallet {
    * @@param {number} config.accountIndex - get outputs in this account index
    * @@param {number} config.subaddressIndex - get outputs in this subaddress index
    * @param {int[]} config.subaddressIndices - get outputs in these subaddress indices
-   * @param {BigInteger} config.amount - get outputs with this amount
-   * @param {BigInteger} config.minAmount - get outputs with amount greater than or equal to this amount
-   * @param {BigInteger} config.maxAmount - get outputs with amount less than or equal to this amount
+   * @param {BigInt} config.amount - get outputs with this amount
+   * @param {BigInt} config.minAmount - get outputs with amount greater than or equal to this amount
+   * @param {BigInt} config.maxAmount - get outputs with amount less than or equal to this amount
    * @param {boolean} config.isSpent - get spent xor unspent outputs
    * @param {boolean} config.isFrozen - get frozen xor thawed outputs
    * @param {object|MoneroKeyImage} config.keyImage - get outputs with a key image matching fields defined in this key image
@@ -45,8 +44,8 @@ class MoneroOutputQuery extends MoneroOutputWallet {
     
     // deserialize if necessary
     const MoneroTxQuery = require("./MoneroTxQuery");
-    if (this.state.minAmount !== undefined && !(this.state.minAmount instanceof BigInteger)) this.state.minAmount = BigInteger.parse(this.state.minAmount);
-    if (this.state.maxAmount !== undefined && !(this.state.maxAmount instanceof BigInteger)) this.state.maxAmount = BigInteger.parse(this.state.maxAmount);
+    if (this.state.minAmount !== undefined && !(this.state.minAmount instanceof BigInt)) this.state.minAmount = BigInt(this.state.minAmount);
+    if (this.state.maxAmount !== undefined && !(this.state.maxAmount instanceof BigInt)) this.state.maxAmount = BigInt(this.state.maxAmount);
     if (this.state.txQuery && !(this.state.txQuery instanceof MoneroTxQuery)) this.state.txQuery = new MoneroTxQuery(this.state.txQuery);
     if (this.state.txQuery) this.state.txQuery.setOutputQuery(this);
     if (this.state.isLocked !== undefined) throw new MoneroError("isLocked must be part of tx query, not output query");

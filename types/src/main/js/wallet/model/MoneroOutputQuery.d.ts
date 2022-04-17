@@ -16,7 +16,7 @@ declare class MoneroOutputQuery extends MoneroOutputWallet {
      * &nbsp;&nbsp; isSpent: false,<br>
      * &nbsp;&nbsp; isLocked: false,<br>
      * &nbsp;&nbsp; accountIndex: 0,<br>
-     * &nbsp;&nbsp; minAmount: new BigInteger("750000")<br>
+     * &nbsp;&nbsp; minAmount: new BigInt("750000")<br>
      * });
      * </code>
      *
@@ -26,9 +26,9 @@ declare class MoneroOutputQuery extends MoneroOutputWallet {
      * @@param {number} config.accountIndex - get outputs in this account index
      * @@param {number} config.subaddressIndex - get outputs in this subaddress index
      * @param {int[]} config.subaddressIndices - get outputs in these subaddress indices
-     * @param {BigInteger} config.amount - get outputs with this amount
-     * @param {BigInteger} config.minAmount - get outputs with amount greater than or equal to this amount
-     * @param {BigInteger} config.maxAmount - get outputs with amount less than or equal to this amount
+     * @param {BigInt} config.amount - get outputs with this amount
+     * @param {BigInt} config.minAmount - get outputs with amount greater than or equal to this amount
+     * @param {BigInt} config.maxAmount - get outputs with amount less than or equal to this amount
      * @param {boolean} config.isSpent - get spent xor unspent outputs
      * @param {boolean} config.isFrozen - get frozen xor thawed outputs
      * @param {object|MoneroKeyImage} config.keyImage - get outputs with a key image matching fields defined in this key image

@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 const GenUtils = require("../../common/GenUtils");
 const assert = require("assert");
 
@@ -16,8 +15,8 @@ class MoneroSubaddress {
     } else {
       this.state = stateOrAddress;
       assert(accountIndex === undefined && index === undefined, "Can construct MoneroSubaddress with object or params but not both");
-      if (this.state.balance !== undefined && !(this.state.balance instanceof BigInteger)) this.state.balance = BigInteger.parse(this.state.balance);
-      if (this.state.unlockedBalance !== undefined && !(this.state.unlockedBalance instanceof BigInteger)) this.state.unlockedBalance = BigInteger.parse(this.state.unlockedBalance);
+      if (this.state.balance !== undefined && !(this.state.balance instanceof BigInt)) this.state.balance = BigInt(this.state.balance);
+      if (this.state.unlockedBalance !== undefined && !(this.state.unlockedBalance instanceof BigInt)) this.state.unlockedBalance = BigInt(this.state.unlockedBalance);
     }
   }
   

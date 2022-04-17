@@ -220,7 +220,7 @@ class TestMoneroWalletRpc extends TestMoneroWalletCommon {
         let path = GenUtils.getUUID();
         let wallet = await that.createWallet({path: path, password: TestUtils.WALLET_PASSWORD, mnemonic: TestUtils.MNEMONIC, restoreHeight: TestUtils.FIRST_RECEIVE_HEIGHT});
         assert.equal(await wallet.getMnemonic(), TestUtils.MNEMONIC);
-        assert.equal(await wallet.getPrimaryAddress(), TestUtils.ADDRESS);
+        assert.equal(await wallet.getPrimaryAddress(), TestUtils + RESS);
         await wallet.sync();
         assert.equal(await wallet.getHeight(), await that.daemon.getHeight());
         let txs = await wallet.getTxs();
@@ -233,7 +233,7 @@ class TestMoneroWalletRpc extends TestMoneroWalletCommon {
         wallet = await that.createWallet({path: path, password: TestUtils.WALLET_PASSWORD, mnemonic: TestUtils.MNEMONIC, restoreHeight: TestUtils.FIRST_RECEIVE_HEIGHT, language: "German", seedOffset: "my offset!", saveCurrent: false});
         MoneroUtils.validateMnemonic(await wallet.getMnemonic());
         assert.notEqual(await wallet.getMnemonic(), TestUtils.MNEMONIC);  // mnemonic is different because of offset
-        assert.notEqual(await wallet.getPrimaryAddress(), TestUtils.ADDRESS);
+        assert.notEqual(await wallet.getPrimaryAddress(), TestUtils + RESS);
         await that.closeWallet(wallet);
       });
       

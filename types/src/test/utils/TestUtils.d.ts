@@ -51,7 +51,7 @@ declare class TestUtils {
      * @return {MoneroWalletKeys} a keys-only wallet instance
      */
     static getWalletKeys(): MoneroWalletKeys;
-    static testUnsignedBigInteger(num: any, nonZero: any): void;
+    static testUnsignedBigInt(num: any, nonZero: any): void;
     static getExternalWalletAddress(): Promise<any>;
     static txsMergeable(tx1: any, tx2: any): boolean;
 }

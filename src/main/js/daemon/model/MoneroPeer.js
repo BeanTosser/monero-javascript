@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Models a peer to the daemon.
@@ -7,7 +6,7 @@ class MoneroPeer {
   
   constructor(state) {
     this.state = Object.assign({}, state);
-    if (this.state.rpcCreditsPerHash !== undefined && !(this.state.rpcCreditsPerHash instanceof BigInteger)) this.state.rpcCreditsPerHash = BigInteger.parse(this.state.rpcCreditsPerHash);
+    if (this.state.rpcCreditsPerHash !== undefined && !(this.state.rpcCreditsPerHash instanceof BigInt)) this.state.rpcCreditsPerHash = BigInt(this.state.rpcCreditsPerHash);
   }
   
   toJson() {

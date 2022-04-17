@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("../../common/biginteger").BigInteger;
 const GenUtils = require("../../common/GenUtils");
 
 /**
@@ -23,10 +22,10 @@ class MoneroBlockHeader {
     else throw new MoneroError("state must be a MoneroBlockHeader or JavaScript object");
     this.state = state;
     
-    // deserialize BigIntegers
-    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInteger)) state.difficulty = BigInteger.parse(state.difficulty);
-    if (state.cumulativeDifficulty !== undefined && !(state.cumulativeDifficulty instanceof BigInteger)) state.cumulativeDifficulty = BigInteger.parse(state.cumulativeDifficulty);
-    if (state.reward !== undefined && !(state.reward instanceof BigInteger)) state.reward = BigInteger.parse(state.reward);
+    // deserialize BigInts
+    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInt)) state.difficulty = BigInt(state.difficulty);
+    if (state.cumulativeDifficulty !== undefined && !(state.cumulativeDifficulty instanceof BigInt)) state.cumulativeDifficulty = BigInt(state.cumulativeDifficulty);
+    if (state.reward !== undefined && !(state.reward instanceof BigInt)) state.reward = BigInt(state.reward);
   }
   
   copy() {

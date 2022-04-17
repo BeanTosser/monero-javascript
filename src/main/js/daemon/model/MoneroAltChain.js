@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 
 /**
  * Models an alternative chain seen by the node.
@@ -7,7 +6,7 @@ class MoneroAltChain {
   
   constructor(state) {
     state = Object.assign({}, state);
-    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInteger)) state.difficulty = BigInteger.parse(state.difficulty);
+    if (state.difficulty !== undefined && !(state.difficulty instanceof BigInt)) state.difficulty = BigInt(state.difficulty);
     this.state = state;
   }
   

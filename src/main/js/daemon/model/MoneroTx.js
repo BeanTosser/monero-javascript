@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("../../common/biginteger").BigInteger;
 const GenUtils = require("../../common/GenUtils");
 const MoneroOutput = require("./MoneroOutput");
 
@@ -25,7 +24,7 @@ class MoneroTx {
     this.state = state;
     
     // deserialize fee
-    if (state.fee !== undefined && !(state.fee instanceof BigInteger)) state.fee = BigInteger.parse(state.fee);
+    if (state.fee !== undefined && !(state.fee instanceof BigInt)) state.fee = BigInt(state.fee);
     
     // deserialize inputs
     if (state.inputs) {

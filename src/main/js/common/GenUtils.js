@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("./biginteger").BigInteger;
 
 /**
  * MIT License
@@ -1408,9 +1407,9 @@ class GenUtils {
     // check for equality
     if (val1 === val2) return val1;
     
-    // check for BigInteger equality
+    // check for BigInt equality
     let comparison; // save comparison for later if applicable
-    if (val1 instanceof BigInteger && val2 instanceof BigInteger) {
+    if (val1 instanceof BigInt && val2 instanceof BigInt) {
       comparison = val1.compare(val2);  
       if (comparison === 0) return val1;
     }
@@ -1436,8 +1435,8 @@ class GenUtils {
         return config.resolveMax ? Math.max(val1, val2) : Math.min(val1, val2);
       }
       
-      // resolve BigIntegers
-      if (val1 instanceof BigInteger && val2 instanceof BigInteger) {
+      // resolve BigInts
+      if (val1 instanceof BigInt && val2 instanceof BigInt) {
         return config.resolveMax ? (comparison < 0 ? val2 : val1) : (comparison < 0 ? val1 : val2);
       }
     }

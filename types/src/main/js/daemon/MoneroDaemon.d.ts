@@ -222,9 +222,9 @@ declare class MoneroDaemon {
      * Get the fee estimate per kB.
      *
      * @@param {number} graceBlocks TODO
-     * @return {BigInteger} fee estimate per kB.
+     * @return {BigInt} fee estimate per kB.
      */
-    getFeeEstimate(graceBlocks: number): BigInteger;
+    getFeeEstimate(graceBlocks: number): BigInt;
     /**
      * Submits a transaction to the daemon's pool.
      *
@@ -303,24 +303,24 @@ declare class MoneroDaemon {
      * parameters), gives the number of outputs on the chain for that amount.
      * RingCT outputs counts as 0 amount.
      *
-     * @param {BigInteger[]} amounts - amounts of outputs to make the histogram with
+     * @param {BigInt[]} amounts - amounts of outputs to make the histogram with
      * @@param {number} minCount - TODO
      * @@param {number} maxCount - TODO
      * @param {boolean} isUnlocked - makes a histogram with outputs with the specified lock state
      * @@param {number} recentCutoff - TODO
      * @return {MoneroOutputHistogramEntry[]} are entries meeting the parameters
      */
-    getOutputHistogram(amounts: BigInteger[], minCount: number, maxCount: number, isUnlocked: boolean, recentCutoff: number): MoneroOutputHistogramEntry[];
+    getOutputHistogram(amounts: BigInt[], minCount: number, maxCount: number, isUnlocked: boolean, recentCutoff: number): MoneroOutputHistogramEntry[];
     /**
      * Creates an output distribution.
      *
-     * @param {BigInteger[]} amounts - amounts of outputs to make the distribution with
+     * @param {BigInt[]} amounts - amounts of outputs to make the distribution with
      * @param {boolean} [cumulative] - specifies if the results should be cumulative (defaults to TODO)
      * @@param {number} [startHeight] - start height lower bound inclusive (optional)
      * @@param {number} [endHeight] - end height upper bound inclusive (optional)
      * @return {MoneroOutputDistributionEntry[]} are entries meeting the parameters
      */
-    getOutputDistribution(amounts: BigInteger[], cumulative?: boolean, startHeight?: number, endHeight?: number): MoneroOutputDistributionEntry[];
+    getOutputDistribution(amounts: BigInt[], cumulative?: boolean, startHeight?: number, endHeight?: number): MoneroOutputDistributionEntry[];
     /**
      * Get general information about the state of the node and the network.
      *

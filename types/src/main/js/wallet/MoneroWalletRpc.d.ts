@@ -304,8 +304,8 @@ declare class MoneroWalletRpc extends MoneroWallet implements MoneroWallet {
     sync(startHeight: any, onProgress: any): Promise<MoneroSyncResult>;
     startSyncing(syncPeriodInMs: any): Promise<void>;
     stopSyncing(): Promise<any>;
-    getBalance(accountIdx: any, subaddressIdx: any): Promise<BigInteger>;
-    getUnlockedBalance(accountIdx: any, subaddressIdx: any): Promise<BigInteger>;
+    getBalance(accountIdx: any, subaddressIdx: any): Promise<any>;
+    getUnlockedBalance(accountIdx: any, subaddressIdx: any): Promise<any>;
     getAccounts(includeSubaddresses: any, tag: any, skipBalances: any): Promise<MoneroAccount[]>;
     getAccount(accountIdx: any, includeSubaddresses: any, skipBalances: any): Promise<MoneroAccount>;
     createAccount(label: any): Promise<MoneroAccount>;
@@ -383,7 +383,7 @@ declare class MoneroWalletRpc extends MoneroWallet implements MoneroWallet {
     getTxNote(...args: any[]): Promise<string>;
     setTxNote(...args: any[]): Promise<void>;
     _clear(): Promise<void>;
-    _getBalances(accountIdx: any, subaddressIdx: any): Promise<BigInteger[]>;
+    _getBalances(accountIdx: any, subaddressIdx: any): Promise<any[]>;
     _getAccountIndices(getSubaddressIndices: any): Promise<Map<any, any>>;
     _getSubaddressIndices(accountIdx: any): Promise<any[]>;
     _getTransfersAux(query: any): Promise<any[]>;
@@ -415,8 +415,6 @@ import MoneroVersion = require("../daemon/model/MoneroVersion");
 import MoneroSubaddress = require("./model/MoneroSubaddress");
 import MoneroIntegratedAddress = require("./model/MoneroIntegratedAddress");
 import MoneroSyncResult = require("./model/MoneroSyncResult");
-import BigInteger_1 = require("../common/biginteger");
-import BigInteger = BigInteger_1.BigInteger;
 import MoneroAccount = require("./model/MoneroAccount");
 import MoneroKeyImage = require("../daemon/model/MoneroKeyImage");
 import MoneroKeyImageImportResult = require("./model/MoneroKeyImageImportResult");

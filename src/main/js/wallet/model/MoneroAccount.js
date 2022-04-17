@@ -1,5 +1,4 @@
 const assert = require("assert");
-const BigInteger = require("../../common/biginteger").BigInteger;
 const MoneroSubaddress = require("./MoneroSubaddress");
 
 /**
@@ -14,8 +13,8 @@ class MoneroAccount {
       this.state = stateOrIndex;
       
       // deserialize balances
-      if (this.state.balance !== undefined && !(this.state.balance instanceof BigInteger)) this.state.balance = BigInteger.parse(this.state.balance);
-      if (this.state.unlockedBalance !== undefined && !(this.state.unlockedBalance instanceof BigInteger)) this.state.unlockedBalance = BigInteger.parse(this.state.unlockedBalance);
+      if (this.state.balance !== undefined && !(this.state.balance instanceof BigInt)) this.state.balance = BigInt(this.state.balance);
+      if (this.state.unlockedBalance !== undefined && !(this.state.unlockedBalance instanceof BigInt)) this.state.unlockedBalance = BigInt(this.state.unlockedBalance);
       
       // deserialize subaddresses
       if (this.state.subaddresses) {

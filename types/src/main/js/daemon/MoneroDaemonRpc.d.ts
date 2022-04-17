@@ -89,12 +89,12 @@ declare class MoneroDaemonRpc extends MoneroDaemon implements MoneroDaemon {
     static _convertRpcUpdateCheckResult(rpcResult: any): any;
     static _convertRpcUpdateDownloadResult(rpcResult: any): any;
     /**
-     * Converts a '0x' prefixed hexidecimal string to a BigInteger.
+     * Converts a '0x' prefixed hexidecimal string to a BigInt.
      *
      * @param hex is the '0x' prefixed hexidecimal string to convert
-     * @return BigInteger is the hexicedimal converted to decimal
+     * @return BigInt is the hexicedimal converted to decimal
      */
-    static _prefixedHexToBI(hex: any): BigInteger;
+    static _prefixedHexToBI(hex: any): bigint;
     /**
      * <p>Construct a daemon RPC client (for internal use).<p>
      *
@@ -151,7 +151,7 @@ declare class MoneroDaemonRpc extends MoneroDaemon implements MoneroDaemon {
     getTxs(txHashes: any, prune: any): Promise<any[]>;
     getTxHexes(txHashes: any, prune: any): Promise<any[]>;
     getMinerTxSum(height: any, numBlocks: any): Promise<MoneroMinerTxSum>;
-    getFeeEstimate(graceBlocks: any): Promise<BigInteger>;
+    getFeeEstimate(graceBlocks: any): Promise<any>;
     submitTxHex(txHex: any, doNotRelay: any): Promise<MoneroSubmitTxResult>;
     relayTxsByHash(txHashes: any): Promise<void>;
     getTxPool(): Promise<MoneroTx[]>;
@@ -226,8 +226,6 @@ import MoneroBlockTemplate = require("./model/MoneroBlockTemplate");
 import MoneroBlockHeader = require("./model/MoneroBlockHeader");
 import MoneroBlock = require("./model/MoneroBlock");
 import MoneroMinerTxSum = require("./model/MoneroMinerTxSum");
-import BigInteger_1 = require("../common/biginteger");
-import BigInteger = BigInteger_1.BigInteger;
 import MoneroSubmitTxResult = require("./model/MoneroSubmitTxResult");
 import MoneroTx = require("./model/MoneroTx");
 import MoneroTxPoolStats = require("./model/MoneroTxPoolStats");

@@ -162,16 +162,16 @@ declare class MoneroUtils {
      * Convert XMR to atomic units.
      *
      * @param {number|string} amountXmr - amount in XMR to convert to atomic units
-     * @return {BigInteger} amount in atomic units
+     * @return {BigInt} amount in atomic units
      */
-    static xmrToAtomicUnits(amountXmr: number | string): BigInteger;
+    static xmrToAtomicUnits(amountXmr: number | string): BigInt;
     /**
      * Convert atomic units to XMR.
      *
-     * @param {BigInteger|string} amountAtomicUnits - amount in atomic units to convert to XMR
+     * @param {BigInt|string} amountAtomicUnits - amount in atomic units to convert to XMR
      * @return {number} amount in XMR
      */
-    static atomicUnitsToXmr(amountAtomicUnits: BigInteger | string): number;
+    static atomicUnitsToXmr(amountAtomicUnits: BigInt | string): number;
     static _isHex64(str: any): boolean;
 }
 declare namespace MoneroUtils {
@@ -182,5 +182,3 @@ declare namespace MoneroUtils {
 }
 import MoneroNetworkType = require("../daemon/model/MoneroNetworkType");
 import MoneroIntegratedAddress = require("../wallet/model/MoneroIntegratedAddress");
-import BigInteger_1 = require("./biginteger");
-import BigInteger = BigInteger_1.BigInteger;

@@ -1,4 +1,3 @@
-const BigInteger = require("../../common/biginteger").BigInteger;
 const MoneroCheck = require("./MoneroCheck");
 
 /**
@@ -10,8 +9,8 @@ class MoneroCheckReserve extends MoneroCheck {
   
   constructor(state) {
     super(state);
-    if (this.state.totalAmount !== undefined && !(this.state.totalAmount instanceof BigInteger)) this.state.totalAmount = BigInteger.parse(this.state.totalAmount);
-    if (this.state.unconfirmedSpentAmount !== undefined && !(this.state.unconfirmedSpentAmount instanceof BigInteger)) this.state.unconfirmedSpentAmount = BigInteger.parse(this.state.unconfirmedSpentAmount);
+    if (this.state.totalAmount !== undefined && !(this.state.totalAmount instanceof BigInt)) this.state.totalAmount = BigInt(this.state.totalAmount);
+    if (this.state.unconfirmedSpentAmount !== undefined && !(this.state.unconfirmedSpentAmount instanceof BigInt)) this.state.unconfirmedSpentAmount = BigInt(this.state.unconfirmedSpentAmount);
   }
   
   toJson() {

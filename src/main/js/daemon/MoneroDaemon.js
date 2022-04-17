@@ -293,7 +293,7 @@ class MoneroDaemon {
    * Get the fee estimate per kB.
    * 
    * @@param {number} graceBlocks TODO
-   * @return {BigInteger} fee estimate per kB.
+   * @return {BigInt} fee estimate per kB.
    */
   async getFeeEstimate(graceBlocks) {
     throw new MoneroError("Subclass must implement");
@@ -412,7 +412,7 @@ class MoneroDaemon {
    * parameters), gives the number of outputs on the chain for that amount.
    * RingCT outputs counts as 0 amount.
    * 
-   * @param {BigInteger[]} amounts - amounts of outputs to make the histogram with
+   * @param {BigInt[]} amounts - amounts of outputs to make the histogram with
    * @@param {number} minCount - TODO
    * @@param {number} maxCount - TODO
    * @param {boolean} isUnlocked - makes a histogram with outputs with the specified lock state
@@ -426,7 +426,7 @@ class MoneroDaemon {
   /**
    * Creates an output distribution.
    * 
-   * @param {BigInteger[]} amounts - amounts of outputs to make the distribution with
+   * @param {BigInt[]} amounts - amounts of outputs to make the distribution with
    * @param {boolean} [cumulative] - specifies if the results should be cumulative (defaults to TODO)
    * @@param {number} [startHeight] - start height lower bound inclusive (optional)
    * @@param {number} [endHeight] - end height upper bound inclusive (optional)
