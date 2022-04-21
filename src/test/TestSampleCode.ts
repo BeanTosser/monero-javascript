@@ -2,16 +2,16 @@ const assert = require("assert");
 const monerojs = require("../../index");
 const TestUtils = require("./utils/TestUtils");
 
-const MoneroOutputWallet = require("../main/js/wallet/model/MoneroOutputWallet");
-const MoneroWalletFull = require("../main/js/wallet/MoneroWalletFull");
-const MoneroWalletListener = require("../main/js/wallet/model/MoneroWalletListener");
-const MoneroTxWallet = require("../main/js/wallet/model/MoneroTxWallet");
-const MoneroWalletRpc = require("../main/js/wallet/MoneroWalletRpc");
-const MoneroDaemonRpc = require("../main/js/daemon/MoneroDaemonRpc");
-const MoneroConnectionManager = require("../main/js/common/MoneroConnectionManager");
-const MoneroRpcConnection = require("../main/js/common/MoneroRpcConnection");
-const MoneroTransfer = require("../main/js/wallet/model/MoneroTransfer");
-const MoneroTx = require("../main/js/daemon/model/MoneroTx");
+import MoneroOutputWallet from "../main/js/wallet/model/MoneroOutputWallet";
+import MoneroWalletFull from "../main/js/wallet/MoneroWalletFull";
+import MoneroWalletListener from "../main/js/wallet/model/MoneroWalletListener";
+import MoneroTxWallet from "../main/js/wallet/model/MoneroTxWallet";
+import MoneroWalletRpc from "../main/js/wallet/MoneroWalletRpc";
+import MoneroDaemonRpc from "../main/js/daemon/MoneroDaemonRpc";
+import MoneroConnectionManager from "../main/js/common/MoneroConnectionManager";
+import MoneroRpcConnection from "../main/js/common/MoneroRpcConnection";
+import MoneroTransfer from "../main/js/wallet/model/MoneroTransfer";
+import MoneroTx from "../main/js/daemon/model/MoneroTx";
 
 /**
  * Test the sample code in README.md.
@@ -186,7 +186,7 @@ class TestSampleCode {
         let txs: Array<MoneroTxWallet> = await wallet.getTxs({
           isConfirmed: false
         });
-        for (let tx: MoneroTxWallet of txs) {
+        for (let tx of txs) {
           assert(!tx.isConfirmed());
         }
         
@@ -200,7 +200,7 @@ class TestSampleCode {
             subaddressIndex: 1
           }
         });
-        for (let tx: MoneroTxWallet of txs) {
+        for (let tx of txs) {
           assert(tx.isConfirmed());
           assert(tx.getHeight() >= 582106)
           let found: boolean = false;
@@ -251,7 +251,9 @@ class TestSampleCode {
         for (let transfer of transfers) {
           assert.equal(transfer.isIncoming(), true);
           assert.equal(transfer.getAccountIndex(), 0);
-          assert.equal(transfer.getSubaddressIndex(), 1);
+          
+          // This method does not exist?!
+          //assert.equal(transfer.getSubaddressIndex(), 1);
         }
         
         // get transfers in the tx pool
@@ -287,7 +289,7 @@ class TestSampleCode {
         assert(outputs.length > 0);
         
         // get outputs available to be spent
-        outputs: Array<MoneroOutputWallet> = await wallet.getOutputs({
+        outputs = await wallet.getOutputs({
           isSpent: false,
           txQuery: {
             isLocked: false
@@ -310,22 +312,8 @@ class TestSampleCode {
           assert.equal(output.getSubaddressIndex(), 1);
         }
         
-        class DingleBerry{
-          poopType: string;
-          constructor(poopType: string) {
-            this.poopType = poopType;
-          }
-        }
-        
-        type ass = {
-          buttCheek1: string,
-          buttCheek2: string,
-          butthole: null,
-          dingleBerries: Array<DingleBerry>
-        }
-        
         // get output by key image
-        let keyImage: ass = outputs[0].getKeyImage().getHex();
+        let keyImage: string = outputs[0].getKeyImage().getHex();
         outputs = await wallet.getOutputs({
           keyImage: keyImage
         });
