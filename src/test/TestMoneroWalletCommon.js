@@ -35,6 +35,12 @@ const SEND_MAX_DIFF = 60;
 const MAX_TX_PROOFS = 25; // maximum number of transactions to check for each proof, undefined to check all
 const NUM_BLOCKS_LOCKED = 10;
 
+const bigIntegerCompare = function(bigint1, bigint2){
+  if(bigint1 === bigint2) return 0;
+  if(bigint1 > bigint2) return 1;
+  return -1;
+}
+
 /**
  * Test a wallet for common functionality.
  */
@@ -1587,7 +1593,7 @@ class TestMoneroWalletCommon {
           assert.equal(output.getAccountIndex(), accountIdx);
           assert.equal(output.getSubaddressIndex(), subaddressIdx);
           assert.equal(output.getTx().isConfirmed(), true);
-          assert(output.getAmount().compare(TestUtils.MAX_FEE) >= 0);
+          assert(bigIntegerCompare(output.getAmount(), TestUtils.MAX_FEE) >= 0);
         }
         
         // get output by key image
@@ -1660,7 +1666,7 @@ class TestMoneroWalletCommon {
         // test wallet balance
         TestUtils.testUnsignedBigInt(walletBalance);
         TestUtils.testUnsignedBigInt(walletUnlockedBalance);
-        assert(walletBalance.compare(walletUnlockedBalance) >= 0);
+        assert(bigIntegerCompare(walletBalance, walletUnlockedBalance) >= 0);
         
         // test that wallet balance equals sum of account balances
         let accountsBalance = BigInt(0);
@@ -1670,8 +1676,8 @@ class TestMoneroWalletCommon {
           accountsBalance = accountsBalance + (account.getBalance());
           accountsUnlockedBalance = accountsUnlockedBalance + (account.getUnlockedBalance());
         }
-        assert.equal(walletBalance.compare(accountsBalance), 0);
-        assert.equal(walletUnlockedBalance.compare(accountsUnlockedBalance), 0);
+        assert.equal(bigIntegerCompare(walletBalance, accountsBalance), 0);
+        assert.equal(bigIntegerCompare(walletUnlockedBalance, accountsUnlockedBalance), 0);
         
 //        // test that wallet balance equals net of wallet's incoming and outgoing tx amounts
 //        // TODO monero-wallet-rpc: these tests are disabled because incoming transfers are not returned when sent from the same account, so doesn't balance #4500
@@ -1710,12 +1716,12 @@ class TestMoneroWalletCommon {
         // wallet balance is sum of all unspent outputs
         let walletSum = BigInt(0);
         for (let output of await that.wallet.getOutputs({isSpent: false})) walletSum = walletSum + (output.getAmount());
-        if (walletBalance.compare(walletSum) !== 0) {
+        if (bigIntegerCompare(walletBalance, walletSum) !== 0) {
           
           // txs may have changed in between calls so retry test
           walletSum = BigInt(0);
           for (let output of await that.wallet.getOutputs({isSpent: false})) walletSum = walletSum + (output.getAmount());
-          if (walletBalance.compare(walletSum) !== 0) assert(hasUnconfirmedTx, "Wallet balance must equal sum of unspent outputs if no unconfirmed txs");
+          if (bigIntegerCompare(walletBalance, walletSum) !== 0) assert(hasUnconfirmedTx, "Wallet balance must equal sum of unspent outputs if no unconfirmed txs");
         }
         
         // account balances are sum of their unspent outputs
@@ -1802,15 +1808,15 @@ class TestMoneroWalletCommon {
           assert(tx.getOutgoingTransfer().getDestinations().length > 0);
           for (let destination of tx.getOutgoingTransfer().getDestinations()) {
             let check = await that.wallet.checkTxKey(tx.getHash(), key, destination.getAddress());
-            if (destination.getAmount().compare(BigInt()) > 0) {
+            if (bigIntegerCompare(destination.getAmount(), BigInt()) > 0) {
               // TODO monero-wallet-rpc: indicates amount received amount is 0 despite transaction with transfer to this address
               // TODO monero-wallet-rpc: returns 0-4 errors, not consistent
 //            assert(check.getReceivedAmount().compare(BigInt(0)) > 0);
-              if (check.getReceivedAmount().compare(BigInt(0)) === 0) {
+              if (bigIntegerCompare(check.getReceivedAmount(), BigInt(0)) === 0) {
                 console.log("WARNING: key proof indicates no funds received despite transfer (txid=" + tx.getHash() + ", key=" + key + ", address=" + destination.getAddress() + ", amount=" + destination.getAmount() + ")");
               }
             }
-            else assert(check.getReceivedAmount().compare(BigInt(0)) === 0);
+            else assert(bigIntegerCompare(check.getReceivedAmount(), BigInt(0)) === 0);
             testCheckTx(tx, check);
           }
         }
@@ -1864,7 +1870,7 @@ class TestMoneroWalletCommon {
         assert(differentAddress, "Could not get a different outgoing address to test; run send tests");
         let check = await that.wallet.checkTxKey(tx.getHash(), key, differentAddress);
         assert(check.isGood());
-        assert(check.getReceivedAmount().compare(BigInt(0)) >= 0);
+        assert(bigIntegerCompare(check.getReceivedAmount(),BigInt(0)) >= 0);
         testCheckTx(tx, check);
       });
       
@@ -2005,7 +2011,7 @@ class TestMoneroWalletCommon {
         assert(check.isGood());
         testCheckReserve(check);
         let balance = await that.wallet.getBalance();
-        if (balance.compare(check.getTotalAmount()) !== 0) {  // TODO monero-wallet-rpc: this check fails with unconfirmed txs
+        if (bigIntegerCompare(balance, check.getTotalAmount()) !== 0) {  // TODO monero-wallet-rpc: this check fails with unconfirmed txs
           let unconfirmedTxs = await that.wallet.getTxs({inTxPool: true});
           assert(unconfirmedTxs.length > 0, "Reserve amount must equal balance unless wallet has unconfirmed txs");
         }
@@ -2050,13 +2056,13 @@ class TestMoneroWalletCommon {
         let accounts = await that.wallet.getAccounts();
         let signature;
         for (let account of accounts) {
-          if (account.getBalance().compare(BigInt(0)) > 0) {
+          if (bigIntegerCompare(account.getBalance(), BigInt(0)) > 0) {
             let checkAmount = (await account.getBalance()) / (BigInt(2));
             signature = await that.wallet.getReserveProofAccount(account.getIndex(), checkAmount, msg);
             let check = await that.wallet.checkReserveProof(await that.wallet.getPrimaryAddress(), msg, signature);
             assert(check.isGood());
             testCheckReserve(check);
-            assert(check.getTotalAmount().compare(checkAmount) >= 0);
+            assert(bigIntegerCompare(check.getTotalAmount(), checkAmount) >= 0);
             numNonZeroTests++;
           } else {
             try {
@@ -2719,7 +2725,7 @@ class TestMoneroWalletCommon {
           let found = false;
           for (let actualOutput of actualOutputs) {
             if (GenUtils.arrayContains(used, actualOutput, true)) continue;
-            if (actualOutput.getAmount().compare(expectedOutput.getAmount()) === 0 && (!matchSubaddress || (actualOutput.getAccountIndex() === expectedOutput.getAccountIndex() && actualOutput.getSubaddressIndex() === expectedOutput.getSubaddressIndex()))) {
+            if (bigIntegerCompare(actualOutput.getAmount(), expectedOutput.getAmount()) === 0 && (!matchSubaddress || (actualOutput.getAccountIndex() === expectedOutput.getAccountIndex() && actualOutput.getSubaddressIndex() === expectedOutput.getSubaddressIndex()))) {
               used.push(actualOutput);
               found = true;
               break;
@@ -3555,7 +3561,7 @@ class TestMoneroWalletCommon {
         let spendableUnlockedOutputs = await that.wallet.getOutputs(new MoneroOutputQuery().setIsSpent(false).setTxQuery(new MoneroTxQuery().setIsLocked(false)));
         let outputsToSweep = [];
         for (let i = 0; i < spendableUnlockedOutputs.length && outputsToSweep.length < numOutputs; i++) {
-          if (spendableUnlockedOutputs[i].getAmount().compare(TestUtils.MAX_FEE) > 0) outputsToSweep.push(spendableUnlockedOutputs[i]);  // output cannot be swept if amount does not cover fee
+          if (bigIntegerCompare(spendableUnlockedOutputs[i].getAmount(), TestUtils.MAX_FEE) > 0) outputsToSweep.push(spendableUnlockedOutputs[i]);  // output cannot be swept if amount does not cover fee
         }
         assert(outputsToSweep.length >= numOutputs, "Wallet does not have enough sweepable outputs; run send tests");
         
@@ -3564,7 +3570,7 @@ class TestMoneroWalletCommon {
           testOutputWallet(output);
           assert.equal(output.isSpent(), false);
           assert.equal(output.isLocked(), false);
-          if (output.getAmount().compare(TestUtils.MAX_FEE) <= 0) continue;
+          if (bigIntegerCompare(output.getAmount(), TestUtils.MAX_FEE) <= 0) continue;
           
           // sweep output to address
           let address = await that.wallet.getAddress(output.getAccountIndex(), output.getSubaddressIndex());
@@ -3835,7 +3841,7 @@ class TestMoneroWalletCommon {
         // all unspent, unlocked outputs must be less than fee
         let spendableOutputs = await that.wallet.getOutputs(new MoneroOutputQuery().setIsSpent(false).setTxQuery(new MoneroTxQuery().setIsLocked(false)));
         for (let spendableOutput of spendableOutputs) {
-          assert(spendableOutput.getAmount().compare(TestUtils.MAX_FEE) < 0, "Unspent output should have been swept\n" + spendableOutput.toString());
+          assert(bigIntegerCompare(spendableOutput.getAmount(), TestUtils.MAX_FEE) < 0, "Unspent output should have been swept\n" + spendableOutput.toString());
         }
         
         // all subaddress unlocked balances must be less than fee
@@ -3977,12 +3983,12 @@ class TestMoneroWalletCommon {
         let maxSkippedOutput = undefined;
         for (let output of outputs) {
           if (!sweptKeyImages.has(output.getKeyImage().getHex())) {
-            if (maxSkippedOutput === undefined || maxSkippedOutput.getAmount().compare(output.getAmount()) < 0) {
+            if (maxSkippedOutput === undefined || bigIntegerCompare(maxSkippedOutput.getAmount(), output.getAmount()) < 0) {
               maxSkippedOutput = output;
             }
           }
         }
-        assert(maxSkippedOutput === undefined || maxSkippedOutput.getAmount().compare(TestUtils.MAX_FEE) < 0);
+        assert(maxSkippedOutput === undefined || bigIntegerCompare(maxSkippedOutput.getAmount(), TestUtils.MAX_FEE) < 0);
       });
       
       function testSpendTx(spendTx) {
@@ -4416,7 +4422,7 @@ class TestMoneroWalletCommon {
       assert(tx.getOutgoingTransfer() !== copy.getOutgoingTransfer());
       assert(tx.getOutgoingTransfer().getTx() !== copy.getOutgoingTransfer().getTx());
       //assert(tx.getOutgoingTransfer().getAmount() !== copy.getOutgoingTransfer().getAmount());  // TODO: BI 0 === BI 0?, testing this instead:
-      if (tx.getOutgoingTransfer().getAmount() === copy.getOutgoingTransfer().getAmount()) assert(tx.getOutgoingTransfer().getAmount().compare(BigInt(0)) === 0);
+      if (tx.getOutgoingTransfer().getAmount() === copy.getOutgoingTransfer().getAmount()) assert(bigIntegerCompare(tx.getOutgoingTransfer().getAmount(), BigInt(0)) === 0);
       if (tx.getOutgoingTransfer().getDestinations()) {
         assert(tx.getOutgoingTransfer().getDestinations() !== copy.getOutgoingTransfer().getDestinations());
         for (let i = 0; i < tx.getOutgoingTransfer().getDestinations().length; i++) {
@@ -4577,7 +4583,7 @@ class TestMoneroWalletCommon {
       await TestUtils.WALLET_TX_TRACKER.waitForUnlockedBalance(this.wallet, 0, undefined, TestUtils.MAX_FEE * (BigInt("20"))); 
       
       // send funds from the main test wallet to destinations in the first multisig wallet
-      assert((await this.wallet.getBalance()).compare(BigInt(0)) > 0);
+      assert(bigIntegerCompare((await this.wallet.getBalance()), BigInt(0)) > 0);
       console.log("Sending funds from main wallet");
       await this.wallet.createTx({accountIndex: 0, destinations: destinations, relay: true});
       let returnAddress = await this.wallet.getPrimaryAddress(); // funds will be returned to this address from the multisig wallet
@@ -4618,7 +4624,7 @@ class TestMoneroWalletCommon {
       
       // multisig wallet should have unlocked balance in account 1 subaddresses 0-3
       for (let i = 0; i < 3; i++) {
-        assert((await participant.getUnlockedBalance(1, i)).compare(BigInt("0")) > 0);
+        assert(bigIntegerCompare((await participant.getUnlockedBalance(1, i)), BigInt("0")) > 0);
       }
       let outputs = await participant.getOutputs({accountIndex: 1});
       assert(outputs.length > 0);
@@ -4901,8 +4907,8 @@ function testAccount(account) {
       balance = balance + (account.getSubaddresses()[i].getBalance());
       unlockedBalance = unlockedBalance + (account.getSubaddresses()[i].getUnlockedBalance());
     }
-    assert(account.getBalance().compare(balance) === 0, "Subaddress balances " + balance.toString() + " != account " + account.getIndex() + " balance " + account.getBalance().toString());
-    assert(account.getUnlockedBalance().compare(unlockedBalance) === 0, "Subaddress unlocked balances " + unlockedBalance.toString() + " != account " + account.getIndex() + " unlocked balance " + account.getUnlockedBalance().toString());
+    assert(bigIntegerCompare(account.getBalance(), balance) === 0, "Subaddress balances " + balance.toString() + " != account " + account.getIndex() + " balance " + account.getBalance().toString());
+    assert(bigIntegerCompare(account.getUnlockedBalance(), unlockedBalance) === 0, "Subaddress unlocked balances " + unlockedBalance.toString() + " != account " + account.getIndex() + " unlocked balance " + account.getUnlockedBalance().toString());
   }
   
   // tag must be undefined or non-empty
@@ -4920,7 +4926,7 @@ function testSubaddress(subaddress) {
   TestUtils.testUnsignedBigInt(subaddress.getUnlockedBalance());
   assert(subaddress.getNumUnspentOutputs() >= 0);
   assert(typeof subaddress.isUsed() === "boolean");
-  if (subaddress.getBalance().compare(BigInt(0)) > 0) assert(subaddress.isUsed());
+  if (bigIntegerCompare(subaddress.getBalance(), BigInt(0)) > 0) assert(subaddress.isUsed());
   assert(subaddress.getNumBlocksToUnlock() >= 0);
 }
 
@@ -4987,7 +4993,7 @@ function testOutgoingTransfer(transfer, ctx) {
       TestUtils.testUnsignedBigInt(destination.getAmount(), true);
       sum = sum + (destination.getAmount());
     }
-    if (transfer.getAmount().compare(sum) !== 0) console.log(transfer.getTx().getTxSet() === undefined ? transfer.getTx().toString() : transfer.getTx().getTxSet().toString());
+    if (bigIntegerCompare(transfer.getAmount(), sum) !== 0) console.log(transfer.getTx().getTxSet() === undefined ? transfer.getTx().toString() : transfer.getTx().getTxSet().toString());
     assert.equal(sum.toString(), transfer.getAmount().toString()); // TODO: sum of destinations != outgoing amount in split txs
   }
 }
@@ -5084,9 +5090,9 @@ function testCheckReserve(check) {
   assert.equal(typeof check.isGood(), "boolean");
   if (check.isGood()) {
     TestUtils.testUnsignedBigInt(check.getTotalAmount());
-    assert(check.getTotalAmount().compare(BigInt(0)) >= 0);
+    assert(bigIntegerCompare(check.getTotalAmount(), BigInt(0)) >= 0);
     TestUtils.testUnsignedBigInt(check.getUnconfirmedSpentAmount());
-    assert(check.getUnconfirmedSpentAmount().compare(BigInt(0)) >= 0);
+    assert(bigIntegerCompare(check.getUnconfirmedSpentAmount(), BigInt(0)) >= 0);
   } else {
     assert.equal(check.getTotalAmount(), undefined);
     assert.equal(check.getUnconfirmedSpentAmount(), undefined);
@@ -5108,7 +5114,7 @@ function testDescribedTxSet(describedTxSet) {
     TestUtils.testUnsignedBigInt(describedTx.getOutputSum(), true);
     TestUtils.testUnsignedBigInt(describedTx.getFee());
     TestUtils.testUnsignedBigInt(describedTx.getChangeAmount());
-    if (describedTx.getChangeAmount().compare(BigInt(0)) === 0) assert.equal(describedTx.getChangeAddress(), undefined);
+    if (bigIntegerCompare(describedTx.getChangeAmount(), BigInt(0)) === 0) assert.equal(describedTx.getChangeAddress(), undefined);
     else MoneroUtils.validateAddress(describedTx.getChangeAddress(), TestUtils.NETWORK_TYPE);
     assert(describedTx.getRingSize() > 1);
     assert(describedTx.getUnlockHeight() >= 0);

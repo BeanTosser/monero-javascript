@@ -1,5 +1,6 @@
 {
   "name": "monero-javascript",
+  "type": "module",
   "description": "A JavaScript library for using Monero",
   "version": "0.6.4",
   "license": "MIT",
@@ -37,6 +38,7 @@
     "serialize-javascript": "^3.1.0",
     "text-encoding": "^0.7.0",
     "tls": "0.0.1",
+    "ts-node": "^10.7.0",
     "uuid": "3.3.2",
     "web-worker": "^1.0.0"
   },

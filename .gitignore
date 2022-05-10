@@ -11,3 +11,4 @@ test_products
 unbuild.sh
 /build_logs/
 comprehensiveBuild.sh
+replaceBigintCompare.cjs

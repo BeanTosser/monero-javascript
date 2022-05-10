@@ -107,6 +107,11 @@ class TestSampleCode {
           }
         });
         
+        type MyFooObject = {
+          foo: string,
+          bar: string
+        }
+        
         // send funds from RPC wallet to WebAssembly wallet
         await TestUtils.WALLET_TX_TRACKER.waitForWalletTxsToClearPool(walletRpc); // *** REMOVE FROM README SAMPLE ***
         let createdTx: MoneroTxWallet = await walletRpc.createTx({
