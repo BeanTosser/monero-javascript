@@ -44,6 +44,26 @@ lineReader.on('line', function (line) {
     let assertIndex = line.search(/((if \()|(assert))/);
 
     let compareParensInfo = getNestedParens(line, compareIndex);
+    
+    // Search backwards from compare index to find start of term on the left side of .compare
+    let compareLeftTermStartIndex;
+    let compareLeftTermParenDepth = 0;
+    for(let i = compareIndex - 1; i >= 0; i--){
+      if(line[i] === " " || (line[i] === "(" && parenDepth === 0)){
+        compareLeftTermStartIndex = i+1;
+        break;
+      }
+      if(line[i] === "("){
+        parenDepth--;
+      } else if(line[i] === ")"){
+        parenDepth++;
+      } else if (/\s/.test(line[i])){
+        //Character is a whitespace
+        compareLeftTermStartIndex = i+1;
+        break;
+      }
+    }
+    
     if(assertIndex !== -1){
       console.log("assert index: " + assertIndex);
       
