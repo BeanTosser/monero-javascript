@@ -1811,7 +1811,7 @@ class TestMoneroWalletCommon {
             if (bigIntegerCompare(destination.getAmount(), BigInt()) > 0) {
               // TODO monero-wallet-rpc: indicates amount received amount is 0 despite transaction with transfer to this address
               // TODO monero-wallet-rpc: returns 0-4 errors, not consistent
-//            assert(check.getReceivedAmount().compare(BigInt(0)) > 0);
+//            assert(BigIntegerCompare(check.getReceivedAmount(), BigInt(0)) > 0);
               if (bigIntegerCompare(check.getReceivedAmount(), BigInt(0)) === 0) {
                 console.log("WARNING: key proof indicates no funds received despite transfer (txid=" + tx.getHash() + ", key=" + key + ", address=" + destination.getAddress() + ", amount=" + destination.getAmount() + ")");
               }
@@ -2566,18 +2566,18 @@ class TestMoneroWalletCommon {
         let outputQuery = new MoneroOutputQuery().setTxQuery(new MoneroTxQuery().setHash(senderTx.getHash())); // query for outputs from sender tx
         if (sameWallet) {
           if (senderTx.getIncomingAmount() === undefined) issues.push("WARNING: sender tx incoming amount is null when sent to same wallet");
-          else if (senderTx.getIncomingAmount().compare(BigInt("0")) === 0) issues.push("WARNING: sender tx incoming amount is 0 when sent to same wallet");
-          else if (senderTx.getIncomingAmount().compare(senderTx.getOutgoingAmount() - (senderTx.getFee())) !== 0) issues.push("WARNING: sender tx incoming amount != outgoing amount - fee when sent to same wallet");
+          else if (BigIntegerCompare(senderTx.getIncomingAmount(), BigInt("0")) === 0) issues.push("WARNING: sender tx incoming amount is 0 when sent to same wallet");
+          else if (BigIntegerCompare(senderTx.getIncomingAmount(), senderTx.getOutgoingAmount() - (senderTx.getFee())) !== 0) issues.push("WARNING: sender tx incoming amount != outgoing amount - fee when sent to same wallet");
         } else {
           if (senderTx.getIncomingAmount() !== undefined) issues.push("ERROR: tx incoming amount should be undefined"); // TODO: should be 0? then can remove undefined checks in this method
         }
         senderTx = (await sender.getTxs(new MoneroTxQuery().setHash(senderTx.getHash()).setIncludeOutputs(true)))[0];
-        if ((await sender.getBalance()).compare(senderBalanceBefore - (senderTx.getFee()) - (senderTx.getOutgoingAmount()) + (senderTx.getIncomingAmount() === undefined ? BigInt("0") : senderTx.getIncomingAmount())) !== 0) issues.push("ERROR: sender balance after send != balance before - tx fee - outgoing amount + incoming amount (" + toStringBI(await sender.getBalance()) + " != " + toStringBI(senderBalanceBefore) + " - " + toStringBI(senderTx.getFee()) + " - " + toStringBI(senderTx.getOutgoingAmount()) + " + " + toStringBI(senderTx.getIncomingAmount()) + ")");
-        if ((await sender.getUnlockedBalance()).compare(senderUnlockedBalanceBefore) >= 0) issues.push("ERROR: sender unlocked balance should have decreased after sending");
+        if ((await BigIntegerCompare(sender.getBalance()), senderBalanceBefore - (senderTx.getFee()) - (senderTx.getOutgoingAmount()) + (senderTx.getIncomingAmount() === undefined ? BigInt("0") : senderTx.getIncomingAmount())) !== 0) issues.push("ERROR: sender balance after send != balance before - tx fee - outgoing amount + incoming amount (" + toStringBI(await sender.getBalance()) + " != " + toStringBI(senderBalanceBefore) + " - " + toStringBI(senderTx.getFee()) + " - " + toStringBI(senderTx.getOutgoingAmount()) + " + " + toStringBI(senderTx.getIncomingAmount()) + ")");
+        if ((await BigIntegerCompare(sender.getUnlockedBalance()), senderUnlockedBalanceBefore) >= 0) issues.push("ERROR: sender unlocked balance should have decreased after sending");
         if (senderNotificationCollector.getBalanceNotifications().length === 0) issues.push("ERROR: sender did not notify balance change after sending");
         else {
-          if ((await sender.getBalance()).compare(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: sender balance != last notified balance after sending (" + toStringBI(await sender.getBalance()) + " != " + toStringBI(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1][0]) + ")");
-          if ((await sender.getUnlockedBalance()).compare(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: sender unlocked balance != last notified unlocked balance after sending (" + toStringBI(await sender.getUnlockedBalance()) + " != " + toStringBI(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1][1]) + ")");
+          if ((await BigIntegerCompare(sender.getBalance()), senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: sender balance != last notified balance after sending (" + toStringBI(await sender.getBalance()) + " != " + toStringBI(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1][0]) + ")");
+          if ((await BigIntegerCompare(sender.getUnlockedBalance()), senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: sender unlocked balance != last notified unlocked balance after sending (" + toStringBI(await sender.getUnlockedBalance()) + " != " + toStringBI(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1][1]) + ")");
         }
         if (senderNotificationCollector.getOutputsSpent(outputQuery).length === 0) issues.push("ERROR: sender did not announce unconfirmed spent output");
         
@@ -2585,19 +2585,19 @@ class TestMoneroWalletCommon {
         await GenUtils.waitFor(TestUtils.SYNC_PERIOD_IN_MS * 2 - (Date.now() - startTime));
         startTime = Date.now(); // reset timer
         let receiverTx = await receiver.getTx(senderTx.getHash());
-        if (senderTx.getOutgoingAmount().compare(receiverTx.getIncomingAmount()) !== 0) {
+        if (BigIntegerCompare(senderTx.getOutgoingAmount(), receiverTx.getIncomingAmount()) !== 0) {
           if (sameAccount) issues.push("WARNING: sender tx outgoing amount != receiver tx incoming amount when sent to same account (" + toStringBI(senderTx.getOutgoingAmount()) + " != " + toStringBI(receiverTx.getIncomingAmount()) + ")");
           else issues.push("ERROR: sender tx outgoing amount != receiver tx incoming amount (" + toStringBI(senderTx.getOutgoingAmount()) + " != " + toStringBI(receiverTx.getIncomingAmount()) + ")");
         }
-        if ((await receiver.getBalance()).compare(receiverBalanceBefore + (receiverTx.getIncomingAmount() === undefined ? BigInt("0") : receiverTx.getIncomingAmount()) - (receiverTx.getOutgoingAmount() === undefined ? BigInt("0") : receiverTx.getOutgoingAmount()) - (sameWallet ? receiverTx.getFee() : BigInt("0"))) !== 0) {
+        if ((await BigIntegerCompare(receiver.getBalance()), receiverBalanceBefore + (receiverTx.getIncomingAmount() === undefined ? BigInt("0") : receiverTx.getIncomingAmount()) - (receiverTx.getOutgoingAmount() === undefined ? BigInt("0") : receiverTx.getOutgoingAmount()) - (sameWallet ? receiverTx.getFee() : BigInt("0"))) !== 0) {
           if (sameAccount) issues.push("WARNING: after sending, receiver balance != balance before + incoming amount - outgoing amount - tx fee when sent to same account (" + toStringBI(await receiver.getBalance()) + " != " + toStringBI(receiverBalanceBefore) + " + " + toStringBI(receiverTx.getIncomingAmount()) + " - " + toStringBI(receiverTx.getOutgoingAmount()) + " - " + (sameWallet ? receiverTx.getFee() : BigInt("0")).toString() + ")");
           else issues.push("ERROR: after sending, receiver balance != balance before + incoming amount - outgoing amount - tx fee (" + toStringBI(await receiver.getBalance()) + " != " + toStringBI(receiverBalanceBefore) + " + " + toStringBI(receiverTx.getIncomingAmount()) + " - " + toStringBI(receiverTx.getOutgoingAmount()) + " - " + (sameWallet ? receiverTx.getFee() : BigInt("0")).toString() + ")");
         }
-        if (!sameWallet && (await receiver.getUnlockedBalance()).compare(receiverUnlockedBalanceBefore) !== 0) issues.push("ERROR: receiver unlocked balance should not have changed after sending");
+        if (!sameWallet && (await BigIntegerCompare(receiver.getUnlockedBalance()), receiverUnlockedBalanceBefore) !== 0) issues.push("ERROR: receiver unlocked balance should not have changed after sending");
         if (receiverNotificationCollector.getBalanceNotifications().length === 0) issues.push("ERROR: receiver did not notify balance change when funds received");
         else {
-          if ((await receiver.getBalance()).compare(receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: receiver balance != last notified balance after funds received");
-          if ((await receiver.getUnlockedBalance()).compare(receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: receiver unlocked balance != last notified unlocked balance after funds received");
+          if ((await BigIntegerCompare(receiver.getBalance()), receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: receiver balance != last notified balance after funds received");
+          if ((await BigIntegerCompare(receiver.getUnlockedBalance()), receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: receiver unlocked balance != last notified unlocked balance after funds received");
         }
         if (receiverNotificationCollector.getOutputsReceived(outputQuery).length === 0) issues.push("ERROR: receiver did not announce unconfirmed received output");
         else {
@@ -2660,7 +2660,7 @@ class TestMoneroWalletCommon {
                   let netAmount = BigInt("0");
                   for (let outputSpent of senderNotificationCollector.getOutputsSpent(confirmedQuery)) netAmount = netAmount + (outputSpent.getAmount());
                   for (let outputReceived of senderNotificationCollector.getOutputsReceived(confirmedQuery)) netAmount = netAmount - (outputReceived.getAmount());
-                  if (tx.getFee().compare(netAmount) !== 0) {
+                  if (BigIntegerCompare(tx.getFee(), netAmount) !== 0) {
                     if (sameAccount) issues.push("WARNING: net output amount != tx fee when funds sent to same account: " + netAmount + " vs " + tx.getFee());
                     else if (sender instanceof MoneroWalletRpc) issues.push("WARNING: net output amount != tx fee when funds sent to same wallet because monero-wallet-rpc does not provide tx inputs: " + netAmount + " vs " + tx.getFee()); // TODO (monero-project): open issue to provide tx inputs
                     else issues.push("ERROR: net output amount must equal tx fee when funds sent to same wallet: " + netAmount + " vs " + tx.getFee());
@@ -2678,16 +2678,16 @@ class TestMoneroWalletCommon {
               let unlockedQuery = outputQuery.getTxQuery().copy().setIsLocked(false).getOutputQuery();
               if (senderNotificationCollector.getOutputsSpent(unlockedQuery).length === 0) issues.push("ERROR: sender did not announce unlocked spent output"); // TODO: test amount?
               for (let output of getMissingOutputs(expectedOutputs, receiverNotificationCollector.getOutputsReceived(unlockedQuery), true)) issues.push("ERROR: receiver did not announce unlocked received output for amount " + output.getAmount() + " to subaddress [" + output.getAccountIndex() + ", " + output.getSubaddressIndex() + "]");
-              if (!sameWallet && (await receiver.getBalance()).compare(await receiver.getUnlockedBalance()) !== 0) issues.push("ERROR: receiver balance != unlocked balance after funds unlocked");
+              if (!sameWallet && (await BigIntegerCompare(receiver.getBalance()), await receiver.getUnlockedBalance()) !== 0) issues.push("ERROR: receiver balance != unlocked balance after funds unlocked");
               if (senderNotificationCollector.getBalanceNotifications().length === 0) issues.push("ERROR: sender did not announce any balance notifications");
               else {
-                if ((await sender.getBalance()).compare(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: sender balance != last notified balance after funds unlocked");
-                if ((await sender.getUnlockedBalance()).compare(senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: sender unlocked balance != last notified unlocked balance after funds unlocked");
+                if ((await BigIntegerCompare(sender.getBalance()), senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: sender balance != last notified balance after funds unlocked");
+                if ((await BigIntegerCompare(sender.getUnlockedBalance()), senderNotificationCollector.getBalanceNotifications()[senderNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: sender unlocked balance != last notified unlocked balance after funds unlocked");
               }
               if (receiverNotificationCollector.getBalanceNotifications().length === 0) issues.push("ERROR: receiver did not announce any balance notifications");
               else {
-                if ((await receiver.getBalance()).compare(receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: receiver balance != last notified balance after funds unlocked");
-                if ((await receiver.getUnlockedBalance()).compare(receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: receiver unlocked balance != last notified unlocked balance after funds unlocked");
+                if ((await BigIntegerCompare(receiver.getBalance()), receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].balance) !== 0) issues.push("ERROR: receiver balance != last notified balance after funds unlocked");
+                if ((await BigIntegerCompare(receiver.getUnlockedBalance()), receiverNotificationCollector.getBalanceNotifications()[receiverNotificationCollector.getBalanceNotifications().length - 1].unlockedBalance) !== 0) issues.push("ERROR: receiver unlocked balance != last notified unlocked balance after funds unlocked");
               }
             }
             threads.push(threadFn());
@@ -2991,7 +2991,7 @@ class TestMoneroWalletCommon {
       
       async function testOutInPair(txOut, txIn) {
         assert.equal(txIn.isConfirmed(), txOut.isConfirmed());
-        assert.equal(txOut.getOutgoingAmount().compare(txIn.getIncomingAmount()), 0);
+        assert.equal(BigIntegerCompare(txOut.getOutgoingAmount(), txIn.getIncomingAmount()), 0);
       }
       
       async function testUnlockTx(wallet, tx, config, isSendResponse) {
@@ -3059,7 +3059,7 @@ class TestMoneroWalletCommon {
           // test balances after
           let balance2 = await that.wallet.getBalance();
           let unlockedBalance2 = await that.wallet.getUnlockedBalance();
-          assert(unlockedBalance2.compare(unlockedBalance1) < 0); // unlocked balance should decrease
+          assert(BigIntegerCompare(unlockedBalance2, unlockedBalance1) < 0); // unlocked balance should decrease
           let expectedBalance = balance1 - (tx.getFee());
           assert.equal(expectedBalance.toString(), balance2.toString(), "Balance after send was not balance before - net tx amount - fee (5 - 1 != 4 test)");
         } catch (e) {
@@ -3100,7 +3100,7 @@ class TestMoneroWalletCommon {
           // test sender balances after
           let balance2 = await that.wallet.getBalance();
           let unlockedBalance2 = await that.wallet.getUnlockedBalance();
-          assert(unlockedBalance2.compare(unlockedBalance1) < 0); // unlocked balance should decrease
+          assert(BigIntegerCompare(unlockedBalance2, unlockedBalance1) < 0); // unlocked balance should decrease
           let expectedBalance = balance1 - (tx.getOutgoingAmount()) - (tx.getFee());
           assert.equal(expectedBalance.toString(), balance2.toString(), "Balance after send was not balance before - net tx amount - fee (5 - 1 != 4 test)");
           
@@ -3143,8 +3143,8 @@ class TestMoneroWalletCommon {
           unlockedSubaddresses = [];
           let numSubaddressBalances = 0;
           for (let subaddress of account.getSubaddresses()) {
-            if (subaddress.getBalance().compare(TestUtils.MAX_FEE) > 0) numSubaddressBalances++;
-            if (subaddress.getUnlockedBalance().compare(TestUtils.MAX_FEE) > 0) unlockedSubaddresses.push(subaddress);
+            if (BigIntegerCompare(subaddress.getBalance(), TestUtils.MAX_FEE) > 0) numSubaddressBalances++;
+            if (BigIntegerCompare(subaddress.getUnlockedBalance(), TestUtils.MAX_FEE) > 0) unlockedSubaddresses.push(subaddress);
           }
           if (numSubaddressBalances >= NUM_SUBADDRESSES + 1) hasBalance = true;
           if (unlockedSubaddresses.length >= NUM_SUBADDRESSES + 1) {
@@ -3197,9 +3197,9 @@ class TestMoneroWalletCommon {
             let subaddressBefore = accounts[i].getSubaddresses()[j];
             let subaddressAfter = accountsAfter[i].getSubaddresses()[j];
             if (i === srcAccount.getIndex() && fromSubaddressIndices.includes(j)) {
-              if (subaddressAfter.getUnlockedBalance().compare(subaddressBefore.getUnlockedBalance()) < 0) srcUnlockedBalanceDecreased = true; 
+              if (BigIntegerCompare(subaddressAfter.getUnlockedBalance(), subaddressBefore.getUnlockedBalance()) < 0) srcUnlockedBalanceDecreased = true; 
             } else {
-              assert(subaddressAfter.getUnlockedBalance().compare(subaddressBefore.getUnlockedBalance()) === 0, "Subaddress [" + i + "," + j + "] unlocked balance should not have changed");          
+              assert(BigIntegerCompare(subaddressAfter.getUnlockedBalance(), subaddressBefore.getUnlockedBalance()) === 0, "Subaddress [" + i + "," + j + "] unlocked balance should not have changed");          
             }
           }
         }
@@ -3218,7 +3218,7 @@ class TestMoneroWalletCommon {
               assert.equal(destination.getAddress(), address);
               destinationSum = destinationSum + (destination.getAmount());
             }
-            assert(tx.getOutgoingAmount().compare(destinationSum) === 0);  // assert that transfers sum up to tx amount
+            assert(BigIntegerCompare(tx.getOutgoingAmount(), destinationSum) === 0);  // assert that transfers sum up to tx amount
           }
         }
         
@@ -3273,8 +3273,8 @@ class TestMoneroWalletCommon {
         for (let account of accounts) {
           let subaddresses = account.getSubaddresses();
           for (let i = 1; i < subaddresses.length; i++) {
-            if (subaddresses[i].getBalance().compare(TestUtils.MAX_FEE) > 0) sufficientBalance = true;
-            if (subaddresses[i].getUnlockedBalance().compare(TestUtils.MAX_FEE) > 0) {
+            if (BigIntegerCompare(subaddresses[i].getBalance(), TestUtils.MAX_FEE) > 0) sufficientBalance = true;
+            if (BigIntegerCompare(subaddresses[i].getUnlockedBalance(), TestUtils.MAX_FEE) > 0) {
               fromAccount = account;
               fromSubaddress = subaddresses[i];
               break;
@@ -3345,8 +3345,8 @@ class TestMoneroWalletCommon {
         // test that balance and unlocked balance decreased
         // TODO: test that other balances did not decrease
         let subaddress = await that.wallet.getSubaddress(fromAccount.getIndex(), fromSubaddress.getIndex());
-        assert(subaddress.getBalance().compare(balanceBefore) < 0);
-        assert(subaddress.getUnlockedBalance().compare(unlockedBalanceBefore) < 0);
+        assert(BigIntegerCompare(subaddress.getBalance(), balanceBefore) < 0);
+        assert(BigIntegerCompare(subaddress.getUnlockedBalance(), unlockedBalanceBefore) < 0);
         
         // query locked txs
         let lockedTxs = await that._getAndTestTxs(that.wallet, new MoneroTxQuery().setIsLocked(true), undefined, true);
@@ -3359,7 +3359,7 @@ class TestMoneroWalletCommon {
           assert.equal(tx.getOutgoingTransfer().getAccountIndex(), fromAccount.getIndex());
           assert.equal(tx.getOutgoingTransfer().getSubaddressIndices().length, 1);
           assert.equal(tx.getOutgoingTransfer().getSubaddressIndices()[0], fromSubaddress.getIndex());
-          assert(sendAmount.compare(tx.getOutgoingAmount()) === 0);
+          assert(BigIntegerCompare(sendAmount, tx.getOutgoingAmount()) === 0);
           if (config.getPaymentId()) assert.equal(config.getPaymentId(), tx.getPaymentId());
           
           // test outgoing destinations
@@ -3368,7 +3368,7 @@ class TestMoneroWalletCommon {
             for (let destination of tx.getOutgoingTransfer().getDestinations()) {
               testDestination(destination);
               assert.equal(destination.getAddress(), address);
-              assert(sendAmount.compare(destination.getAmount()) === 0);
+              assert(BigIntegerCompare(sendAmount, destination.getAmount()) === 0);
             }
           }
           
@@ -3427,8 +3427,8 @@ class TestMoneroWalletCommon {
         let srcAccount;
         let hasBalance = false;
         for (let account of await that.wallet.getAccounts()) {
-          if (account.getBalance().compare(minAccountAmount) > 0) hasBalance = true;
-          if (account.getUnlockedBalance().compare(minAccountAmount) > 0) {
+          if (BigIntegerCompare(account.getBalance(), minAccountAmount) > 0) hasBalance = true;
+          if (BigIntegerCompare(account.getUnlockedBalance(), minAccountAmount) > 0) {
             srcAccount = account;
             break;
           }
@@ -3502,8 +3502,8 @@ class TestMoneroWalletCommon {
         
         // test that wallet balance decreased
         let account = await that.wallet.getAccount(srcAccount.getIndex());
-        assert(account.getBalance().compare(balance) < 0);
-        assert(account.getUnlockedBalance().compare(unlockedBalance) < 0);
+        assert(BigIntegerCompare(account.getBalance(), balance) < 0);
+        assert(BigIntegerCompare(account.getUnlockedBalance(), unlockedBalance) < 0);
         
         // test each transaction
         assert(txs.length > 0);
@@ -3518,7 +3518,7 @@ class TestMoneroWalletCommon {
               assert(destinationAddresses.includes(destination.getAddress()));
               destinationSum = destinationSum + (destination.getAmount());
             }
-            assert(tx.getOutgoingAmount().compare(destinationSum) === 0);  // assert that transfers sum up to tx amount
+            assert(BigIntegerCompare(tx.getOutgoingAmount(), destinationSum) === 0);  // assert that transfers sum up to tx amount
           }
         }
         
@@ -3660,8 +3660,8 @@ class TestMoneroWalletCommon {
           if (account.getIndex() === 0) continue;  // skip default account
           for (let subaddress of account.getSubaddresses()) {
             subaddresses.push(subaddress);
-            if (subaddress.getBalance().compare(TestUtils.MAX_FEE) > 0) subaddressesBalance.push(subaddress);
-            if (subaddress.getUnlockedBalance().compare(TestUtils.MAX_FEE) > 0) subaddressesUnlocked.push(subaddress);
+            if (BigIntegerCompare(subaddress.getBalance(), TestUtils.MAX_FEE) > 0) subaddressesBalance.push(subaddress);
+            if (BigIntegerCompare(subaddress.getUnlockedBalance(), TestUtils.MAX_FEE) > 0) subaddressesUnlocked.push(subaddress);
           }
         }
         
@@ -3691,7 +3691,7 @@ class TestMoneroWalletCommon {
           
           // assert unlocked balance is less than max fee
           let subaddress = await that.wallet.getSubaddress(unlockedSubaddress.getAccountIndex(), unlockedSubaddress.getIndex());
-          assert(subaddress.getUnlockedBalance().compare(TestUtils.MAX_FEE) < 0);
+          assert(BigIntegerCompare(subaddress.getUnlockedBalance(), TestUtils.MAX_FEE) < 0);
         }
         
         // test subaddresses after sweeping
@@ -3718,9 +3718,9 @@ class TestMoneroWalletCommon {
           
           // assert unlocked balance is less than max fee if swept, unchanged otherwise
           if (swept) {
-            assert(subaddressAfter.getUnlockedBalance().compare(TestUtils.MAX_FEE) < 0);
+            assert(BigIntegerCompare(subaddressAfter.getUnlockedBalance(), TestUtils.MAX_FEE) < 0);
           } else {
-            assert(subaddressBefore.getUnlockedBalance().compare(subaddressAfter.getUnlockedBalance()) === 0);
+            assert(BigIntegerCompare(subaddressBefore.getUnlockedBalance(), subaddressAfter.getUnlockedBalance()) === 0);
           }
         }
       });
@@ -3736,8 +3736,8 @@ class TestMoneroWalletCommon {
         let accountsUnlocked = [];
         for (let account of accounts) {
           if (account.getIndex() === 0) continue; // skip default account
-          if (account.getBalance().compare(TestUtils.MAX_FEE) > 0) accountsBalance.push(account);
-          if (account.getUnlockedBalance().compare(TestUtils.MAX_FEE) > 0) accountsUnlocked.push(account);
+          if (BigIntegerCompare(account.getBalance(), TestUtils.MAX_FEE) > 0) accountsBalance.push(account);
+          if (BigIntegerCompare(account.getUnlockedBalance(), TestUtils.MAX_FEE) > 0) accountsUnlocked.push(account);
         }
         
         // test requires at least one more accounts than the number being swept to verify it does not change
@@ -3760,7 +3760,7 @@ class TestMoneroWalletCommon {
           
           // assert unlocked account balance less than max fee
           let account = await that.wallet.getAccount(unlockedAccount.getIndex());
-          assert(account.getUnlockedBalance().compare(TestUtils.MAX_FEE) < 0);
+          assert(BigIntegerCompare(account.getUnlockedBalance(), TestUtils.MAX_FEE) < 0);
         }
         
         // test accounts after sweeping
@@ -3781,9 +3781,9 @@ class TestMoneroWalletCommon {
           
           // assert unlocked balance is less than max fee if swept, unchanged otherwise
           if (swept) {
-            assert(accountAfter.getUnlockedBalance().compare(TestUtils.MAX_FEE) < 0);
+            assert(BigIntegerCompare(accountAfter.getUnlockedBalance(), TestUtils.MAX_FEE) < 0);
           } else {
-            assert.equal(accountBefore.getUnlockedBalance().compare(accountAfter.getUnlockedBalance()), 0);
+            assert.equal(BigIntegerCompare(accountBefore.getUnlockedBalance(), accountAfter.getUnlockedBalance()), 0);
           }
         }
       });
@@ -3808,8 +3808,8 @@ class TestMoneroWalletCommon {
         let subaddressesUnlocked = [];
         for (let account of await that.wallet.getAccounts(true)) {
           for (let subaddress of account.getSubaddresses()) {
-            if (subaddress.getBalance().compare(TestUtils.MAX_FEE) > 0) subaddressesBalance.push(subaddress);
-            if (subaddress.getUnlockedBalance().compare(TestUtils.MAX_FEE) > 0) subaddressesUnlocked.push(subaddress);
+            if (BigIntegerCompare(subaddress.getBalance(), TestUtils.MAX_FEE) > 0) subaddressesBalance.push(subaddress);
+            if (BigIntegerCompare(subaddress.getUnlockedBalance(), TestUtils.MAX_FEE) > 0) subaddressesUnlocked.push(subaddress);
           }
         }
         assert(subaddressesBalance.length >= 2, "Test requires multiple accounts with a balance greater than the fee; run send to multiple first");
@@ -3849,7 +3849,7 @@ class TestMoneroWalletCommon {
         subaddressesUnlocked = [];
         for (let account of await that.wallet.getAccounts(true)) {
           for (let subaddress of account.getSubaddresses()) {
-            assert(subaddress.getUnlockedBalance().compare(TestUtils.MAX_FEE) < 0, "No subaddress should have more unlocked than the fee");
+            assert(BigIntegerCompare(subaddress.getUnlockedBalance(), TestUtils.MAX_FEE) < 0, "No subaddress should have more unlocked than the fee");
           }
         }
       }
@@ -4029,7 +4029,7 @@ class TestMoneroWalletCommon {
         assert.equal(true, check.isGood());
         assert.equal(true, check.inTxPool());
         assert.equal(0, check.getNumConfirmations());
-        assert.equal(true, check.getReceivedAmount().compare(TestUtils.MAX_FEE * (BigInt("2"))) >= 0); // + change amount
+        assert.equal(true, BigIntegerCompare(check.getReceivedAmount(), TestUtils.MAX_FEE * (BigInt("2"))) >= 0); // + change amount
         
         // verify transfer 3
         check = await verifyingWallet.checkTxKey(tx.getHash(), tx.getKey(), address3);
@@ -4231,7 +4231,7 @@ class TestMoneroWalletCommon {
     
     // test miner tx
     if (tx.isMinerTx()) {
-      assert.equal(tx.getFee().compare(BigInt(0)), 0);
+      assert.equal(BigIntegerCompare(tx.getFee(), BigInt(0)), 0);
       assert(tx.getIncomingTransfers().length > 0);
     }
     
@@ -4298,7 +4298,7 @@ class TestMoneroWalletCommon {
       }
       
       // incoming transfers add up to incoming tx amount
-      assert.equal(transferSum.compare(tx.getIncomingAmount()), 0);
+      assert.equal(BigIntegerCompare(transferSum, tx.getIncomingAmount()), 0);
     } else {
       assert(tx.getOutgoingTransfer());
       assert.equal(tx.getIncomingAmount(), undefined);

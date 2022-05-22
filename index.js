@@ -17,6 +17,7 @@ module.exports.MoneroRpcConnection = require("./src/main/js/common/MoneroRpcConn
 module.exports.MoneroRpcError = require("./src/main/js/common/MoneroRpcError");
 module.exports.SslOptions = require("./src/main/js/common/SslOptions");
 module.exports.TaskLooper = require("./src/main/js/common/TaskLooper");
+module.exports.BigIntegerCompare = require("./src/main/js/common/BigIntegerCompare");
 
 // export daemon models
 module.exports.ConnectionType = require("./src/main/js/daemon/model/ConnectionType");

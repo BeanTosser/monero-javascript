@@ -87,7 +87,7 @@ class TestSampleCode {
         
         // synchronize with progress notifications
         await walletFull.sync(new class extends monerojs.MoneroWalletListener {
-          onSyncProgress(height, startHeight, endHeight, percentDone, message) {
+          onSyncProgress(height: number, startHeight: number, endHeight: number, percentDone: number, message: string) {
             // feed a progress bar?
           }
         } as MoneroWalletListener);
@@ -157,7 +157,7 @@ class TestSampleCode {
         
         // receive notifications of any changes to current connection
         connectionManager.addListener(new class extends MoneroConnectionManagerListener {
-          onConnectionChanged(connection) {
+          onConnectionChanged(connection: MoneroRpcConnection) {
             console.log("Connection changed to: " + connection);
           }
         });
@@ -350,7 +350,8 @@ class TestSampleCode {
           
           // relay the transaction
           let hash: string = await wallet.relayTx(tx);
-        } catch (err) {
+        // NOTE: The type of err probably shouldn't be "any"'
+        } catch (err: any) {
           assert.equal(err.message, "not enough money");
         }
         
@@ -362,7 +363,7 @@ class TestSampleCode {
             amount: "1000000000000", // send 1 XMR (denominated in atomic units)
             relay: true // relay the transaction to the network
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "not enough money");
         }
         
@@ -382,7 +383,7 @@ class TestSampleCode {
             priority: monerojs.MoneroTxPriority.IMPORTANT,
             relay: true // relay the transaction to the network
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "not enough money");
         }
         
@@ -393,7 +394,7 @@ class TestSampleCode {
             keyImage: "b7afd6afbb1615c98b1c0350b81c98a77d6d4fc0ab92020d25fd76aca0914f1e",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No outputs found");
         }
         
@@ -403,7 +404,7 @@ class TestSampleCode {
             address: "55bcxMRhBWea6xxsot8moF1rdPprjJR2x4mfnNnTGgBJFgXa4gWXmWAYdUBKiRcJxy9AUAGJEg28DejvWdJU2VgUDrUvCHG",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No unlocked balance in the specified account");
         }
         
@@ -414,7 +415,7 @@ class TestSampleCode {
             address: "55bcxMRhBWea6xxsot8moF1rdPprjJR2x4mfnNnTGgBJFgXa4gWXmWAYdUBKiRcJxy9AUAGJEg28DejvWdJU2VgUDrUvCHG",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No unlocked balance in the specified account");
         }
         
@@ -426,7 +427,7 @@ class TestSampleCode {
             address: "55bcxMRhBWea6xxsot8moF1rdPprjJR2x4mfnNnTGgBJFgXa4gWXmWAYdUBKiRcJxy9AUAGJEg28DejvWdJU2VgUDrUvCHG",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No unlocked balance in the specified account");
         }
       });

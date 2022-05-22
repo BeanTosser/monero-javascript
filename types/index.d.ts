@@ -1,4 +1,6 @@
 declare module 'monero-javascript' {
+  import * as BigIntegerCompare from "./src/main/js/common/BigIntegerCompare";
+  export import BigIntegerCompare = BigIntegerCompare;
   import * as GenUtils from "./src/main/js/common/GenUtils";
   export import GenUtils = GenUtils;
   import * as Filter from "./src/main/js/common/Filter";

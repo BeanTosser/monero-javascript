@@ -1,5 +1,6 @@
 const assert = require("assert");
 
+import BigIntegerCompare from "./BigIntegerCompare";
 /**
  * MIT License
  * 
@@ -1410,7 +1411,7 @@ class GenUtils {
     // check for BigInt equality
     let comparison; // save comparison for later if applicable
     if (val1 instanceof BigInt && val2 instanceof BigInt) {
-      comparison = val1.compare(val2);  
+      comparison = BigIntegerCompare(val1, val2);  
       if (comparison === 0) return val1;
     }
     

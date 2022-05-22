@@ -39,7 +39,7 @@ let configBase = {
       alias: {
         "fs": "html5-fs"
       },
-      extensions: ['.js', '.jsx', '.css', '.json', 'otf', 'ttf', 'eot', 'svg'],
+      extensions: ['.js', '.jsx', '.css', '.json', 'otf', 'ttf', 'eot', 'svg', '.ts', '.tsx'],
       modules: [
         'node_modules'
       ],
