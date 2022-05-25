@@ -5,6 +5,7 @@ const MoneroOutputQuery = require("./model/MoneroOutputQuery");
 const MoneroTransferQuery = require("./model/MoneroTransferQuery");
 const MoneroTxConfig = require("./model/MoneroTxConfig");
 const MoneroTxQuery = require("./model/MoneroTxQuery");
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 
 /**
  * Copyright (c) woodser
@@ -335,14 +336,14 @@ class MoneroWallet {
     
     // get balances
     let balance = await this.getBalance();
-    if (balance.compare(BigInt(0)) === 0) return [undefined, undefined]; // skip if no balance
+    if (BigIntegerCompare(balance, BigInt(0)) === 0) return [undefined, undefined]; // skip if no balance
     let unlockedBalance = await this.getUnlockedBalance();
     
     // compute number of blocks until next funds available
     let txs;
     let height;
     let numBlocksToNextUnlock = undefined;
-    if (unlockedBalance.compare(BigInt(0)) > 0) numBlocksToNextUnlock = 0;
+    if (BigIntegerCompare(unlockedBalance, BigInt(0)) > 0) numBlocksToNextUnlock = 0;
     else {
       txs = await this.getTxs({isLocked: true}); // get locked txs
       height = await this.getHeight(); // get most recent height
@@ -354,8 +355,8 @@ class MoneroWallet {
     
     // compute number of blocks until all funds available
     let numBlocksToLastUnlock = undefined;
-    if (balance.compare(unlockedBalance) === 0) {
-      if (unlockedBalance.compare(BigInt(0)) > 0) numBlocksToLastUnlock = 0;
+    if (BigIntegerCompare(balance, unlockedBalance) === 0) {
+      if (BigIntegerCompare(unlockedBalance, BigInt(0)) > 0) numBlocksToLastUnlock = 0;
     } else {
       if (!txs) {
         txs = await this.getTxs({isLocked: true}); // get locked txs

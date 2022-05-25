@@ -1,6 +1,7 @@
 const monerojs = require("../../../index");
 const GenUtils = monerojs.GenUtils;
 const MoneroUtils = monerojs.MoneroUtils;
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 
 /**
  * Tracks wallets which are in sync with the tx pool and therefore whose txs in the pool
@@ -112,11 +113,11 @@ class WalletTxTracker {
     if (!minAmount) minAmount = BigInt("0");
     
     // check if wallet has balance
-    if ((await wallet.getBalance(accountIndex, subaddressIndex)).compare(minAmount) < 0) throw new Error("Wallet does not have enough balance to wait for");
+    if ((await wallet.getBalance(accountIndex, BigIntegerCompare(subaddressIndex)), minAmount) < 0) throw new Error("Wallet does not have enough balance to wait for");
     
     // check if wallet has unlocked balance
     let unlockedBalance = await wallet.getUnlockedBalance(accountIndex, subaddressIndex);
-    if (unlockedBalance.compare(minAmount) > 0) return unlockedBalance;
+    if (BigIntegerCompare(unlockedBalance, minAmount) > 0) return unlockedBalance;
    
     // start mining
     const TestUtils = require("./TestUtils"); // to avoid circular reference
@@ -136,7 +137,7 @@ class WalletTxTracker {
     
     // wait for unlocked balance // TODO: promote to MoneroWallet interface?
     console.log("Waiting for unlocked balance");
-    while (unlockedBalance.compare(minAmount) < 0) {
+    while (BigIntegerCompare(unlockedBalance, minAmount) < 0) {
       unlockedBalance = await wallet.getUnlockedBalance(accountIndex, subaddressIndex);
       await new Promise(function(resolve) { setTimeout(resolve, TestUtils.SYNC_PERIOD_IN_MS); });
     }

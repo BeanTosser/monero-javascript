@@ -39,6 +39,7 @@ const MoneroMessageSignatureType = require("./model/MoneroMessageSignatureType")
 const MoneroMessageSignatureResult = require("./model/MoneroMessageSignatureResult");
 const ThreadPool = require("../common/ThreadPool");
 const SslOptions = require("../common/SslOptions");
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 
 /**
  * Copyright (c) woodser
@@ -1094,17 +1095,17 @@ class MoneroWalletRpc extends MoneroWallet {
         let subaddressIndices = [];
         indices.set(config.getAccountIndex(), subaddressIndices);
         for (let subaddress of await this.getSubaddresses(config.getAccountIndex())) {
-          if (subaddress.getUnlockedBalance().compare(BigInt(0)) > 0) subaddressIndices.push(subaddress.getIndex());
+          if (BigIntegerCompare(subaddress.getUnlockedBalance(), BigInt(0)) > 0) subaddressIndices.push(subaddress.getIndex());
         }
       }
     } else {
       let accounts = await this.getAccounts(true);
       for (let account of accounts) {
-        if (account.getUnlockedBalance().compare(BigInt(0)) > 0) {
+        if (BigIntegerCompare(account.getUnlockedBalance(), BigInt(0)) > 0) {
           let subaddressIndices = [];
           indices.set(account.getIndex(), subaddressIndices);
           for (let subaddress of account.getSubaddresses()) {
-            if (subaddress.getUnlockedBalance().compare(BigInt(0)) > 0) subaddressIndices.push(subaddress.getIndex());
+            if (BigIntegerCompare(subaddress.getUnlockedBalance(), BigInt(0)) > 0) subaddressIndices.push(subaddress.getIndex());
           }
         }
       }
@@ -1664,7 +1665,7 @@ class MoneroWalletRpc extends MoneroWallet {
         // replace transfer amount with destination sum
         // TODO monero-wallet-rpc: confirmed tx from/to same account has amount 0 but cached transfers
         if (tx.getOutgoingTransfer() !== undefined && tx.isRelayed() && !tx.isFailed() &&
-            tx.getOutgoingTransfer().getDestinations() && tx.getOutgoingAmount().compare(BigInt(0)) === 0) {
+            tx.getOutgoingTransfer().getDestinations() && BigIntegerCompare(tx.getOutgoingAmount(), BigInt(0)) === 0) {
           let outgoingTransfer = tx.getOutgoingTransfer();
           let transferTotal = BigInt(0);
           for (let destination of outgoingTransfer.getDestinations()) transferTotal = transferTotal + destination.getAmount();
@@ -2539,7 +2540,7 @@ class WalletPoller {
   
   async _checkForChangedBalances() {
     let balances = await this._wallet._getBalances();
-    if (balances[0].compare(this._prevBalances[0]) !== 0 || balances[1].compare(this._prevBalances[1]) !== 0) {
+    if (BigIntegerCompare(balances[0], this._prevBalances[0]) !== 0 || BigIntegerCompare(balances[1], this._prevBalances[1]) !== 0) {
       this._prevBalances = balances;
       for (let listener of await this._wallet.getListeners()) await listener.onBalancesChanged(balances[0], balances[1]);
       return true;

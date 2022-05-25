@@ -1,6 +1,7 @@
 const assert = require("assert");
 
-import BigIntegerCompare from "./BigIntegerCompare";
+const BigIntegerCompare = require("~/main/js/common/BigIntegerCompare");
+
 /**
  * MIT License
  * 

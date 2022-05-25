@@ -1,6 +1,6 @@
 const assert = require("assert");
 const GenUtils = require("../../common/GenUtils");
-
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 /**
  * Models a base transfer of funds to or from the wallet.
  * 
@@ -102,7 +102,7 @@ class MoneroTransfer {
     this.setAccountIndex(GenUtils.reconcile(this.getAccountIndex(), transfer.getAccountIndex()));
     
     // TODO monero-project: failed tx in pool (after testUpdateLockedDifferentAccounts()) causes non-originating saved wallets to return duplicate incoming transfers but one has amount of 0
-    if (this.getAmount() !== undefined && transfer.getAmount() !== undefined && this.getAmount().compare(transfer.getAmount()) !== 0 && (this.getAmount().compare(BigInt("0")) === 0 || transfer.getAmount().compare(BigInt("0")) === 0)) {
+    if (this.getAmount() !== undefined && transfer.getAmount() !== undefined && BigIntegerCompare(this.getAmount(), transfer.getAmount()) !== 0 && (BigIntegerCompare(this.getAmount(), BigInt("0")) === 0 || BigIntegerCompare(transfer.getAmount(), BigInt("0")) === 0)) {
       //throw new Error("WARNING: monero-project returning transfers with 0 amount/numSuggestedConfirmations");
     } else {
       this.setAmount(GenUtils.reconcile(this.getAmount(), transfer.getAmount()));

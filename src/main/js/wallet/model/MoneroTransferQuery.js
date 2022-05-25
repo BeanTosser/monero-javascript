@@ -2,7 +2,7 @@ const MoneroIncomingTransfer = require("./MoneroIncomingTransfer");
 const MoneroOutgoingTransfer = require("./MoneroOutgoingTransfer");
 const MoneroTransfer = require("./MoneroTransfer");
 const MoneroError = require("../../common/MoneroError")
-
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 /**
  * Configuration to query wallet transfers.
  * 
@@ -165,7 +165,7 @@ class MoneroTransferQuery extends MoneroTransfer {
     // filter on common fields
     if (this.isIncoming() !== undefined && this.isIncoming() !== transfer.isIncoming()) return false;
     if (this.isOutgoing() !== undefined && this.isOutgoing() !== transfer.isOutgoing()) return false;
-    if (this.getAmount() !== undefined && this.getAmount().compare(transfer.getAmount()) !== 0) return false;
+    if (this.getAmount() !== undefined && BigIntegerCompare(this.getAmount(), transfer.getAmount()) !== 0) return false;
     if (this.getAccountIndex() !== undefined && this.getAccountIndex() !== transfer.getAccountIndex()) return false;
     
     // filter on incoming fields

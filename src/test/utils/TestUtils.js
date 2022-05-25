@@ -7,6 +7,7 @@ const MoneroRpcError = monerojs.MoneroRpcError;
 const MoneroRpcConnection = monerojs.MoneroRpcConnection;
 const MoneroNetworkType = monerojs.MoneroNetworkType;
 const MoneroWalletRpc = monerojs.MoneroWalletRpc;
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 
 /**
  * Collection of test utilities and configurations.
@@ -207,7 +208,7 @@ class TestUtils {
   static testUnsignedBigInt(num, nonZero) {
     assert(num);
     assert(num instanceof BigInt);
-    let comparison = num.compare(BigInt(0));
+    let comparison = BigIntegerCompare(num, BigInt(0));
     assert(comparison >= 0);
     if (nonZero === true) assert(comparison > 0);
     if (nonZero === false) assert(comparison === 0);

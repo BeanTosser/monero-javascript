@@ -1,6 +1,6 @@
 const MoneroError = require("../../common/MoneroError");
 const MoneroOutputWallet = require("./MoneroOutputWallet");
-
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 /**
  * Configuration to query wallet outputs.
  * 
@@ -107,7 +107,7 @@ class MoneroOutputQuery extends MoneroOutputWallet {
     // filter on output
     if (this.getAccountIndex() !== undefined && this.getAccountIndex() !== output.getAccountIndex()) return false;
     if (this.getSubaddressIndex() !== undefined && this.getSubaddressIndex() !== output.getSubaddressIndex()) return false;
-    if (this.getAmount() !== undefined && this.getAmount().compare(output.getAmount()) !== 0) return false;
+    if (this.getAmount() !== undefined && BigIntegerCompare(this.getAmount(), output.getAmount()) !== 0) return false;
     if (this.isSpent() !== undefined && this.isSpent() !== output.isSpent()) return false;
     if (this.isFrozen() !== undefined && this.isFrozen() !== output.isFrozen()) return false;
     
@@ -125,8 +125,8 @@ class MoneroOutputQuery extends MoneroOutputWallet {
     if (this.getTxQuery() && !this.getTxQuery().meetsCriteria(output.getTx(), false)) return false;
     
     // filter on remaining fields
-    if (this.getMinAmount() !== undefined && (output.getAmount() === undefined || output.getAmount().compare(this.getMinAmount()) < 0)) return false;
-    if (this.getMaxAmount() !== undefined && (output.getAmount() === undefined || output.getAmount().compare(this.getMaxAmount()) > 0)) return false;
+    if (this.getMinAmount() !== undefined && (output.getAmount() === undefined || BigIntegerCompare(output.getAmount(), this.getMinAmount()) < 0)) return false;
+    if (this.getMaxAmount() !== undefined && (output.getAmount() === undefined || BigIntegerCompare(output.getAmount(), this.getMaxAmount()) > 0)) return false;
     
     // output meets query
     return true;

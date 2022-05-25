@@ -17,7 +17,7 @@ const MoneroDestination = monerojs.MoneroDestination;
 const MoneroOutputQuery = monerojs.MoneroOutputQuery;
 const MoneroOutputWallet = monerojs.MoneroOutputWallet;
 const MoneroWalletFull = monerojs.MoneroWalletFull;
-const bigIntegerCompare = monerojs.BigIntegerCompare;
+const BigIntegerCompare = monerojs.BigIntegerCompare;
 /**
  * Tests a Monero wallet using WebAssembly to bridge to monero-project's wallet2.
  */
@@ -729,7 +729,7 @@ class TestMoneroWalletFull extends TestMoneroWalletCommon {
           await wallet.setDaemonConnection(await that.daemon.getRpcConnection());
           assert.equal(await wallet.getHeight(), 1);
           assert(!await wallet.isSynced());
-          assert.equal(bigIntegerCompare((await wallet.getBalance()), (BigInt(0))), 0);
+          assert.equal(BigIntegerCompare((await wallet.getBalance()), (BigInt(0))), 0);
           let chainHeight = await wallet.getDaemonHeight();
           await wallet.setSyncHeight(chainHeight - 3);
           await wallet.startSyncing();

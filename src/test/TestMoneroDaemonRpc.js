@@ -13,6 +13,7 @@ const MoneroDaemonListener = monerojs.MoneroDaemonListener;
 const MoneroDaemonSyncInfo = monerojs.MoneroDaemonSyncInfo;
 const MoneroPeer = monerojs.MoneroPeer;
 const MoneroKeyImageSpentStatus = monerojs.MoneroKeyImageSpentStatus;
+const BigIntegerCompare = require("main/js/common/BigIntegerCompare");
 
 // context for testing binary blocks
 // TODO: binary blocks have inconsistent client-side pruning
@@ -1374,7 +1375,7 @@ function testTx(tx, ctx) {
   
   // test miner tx
   if (tx.isMinerTx()) {
-    assert.equal(tx.getFee().compare(BigInt(0)), 0);
+    assert.equal(BigIntegerCompare(tx.getFee(), BigInt(0)), 0);
     assert(tx.getIncomingTransfers().length > 0); // TODO: MoneroTx does not have getIncomingTransfers() but this doesn't fail?
     assert.equal(tx.getInputs(), undefined);
     assert.equal(tx.getSignatures(), undefined);
@@ -1813,7 +1814,7 @@ function testTxCopy(tx, ctx) {
   else {
     assert(copy.getInputs() !== tx.getInputs());
     for (let i = 0; i < copy.getInputs().length; i++) {
-      assert.equal(0, tx.getInputs()[i].getAmount().compare(copy.getInputs()[i].getAmount()));
+      assert.equal(0, BigIntegerCompare(tx.getInputs()[i].getAmount(), copy.getInputs()[i].getAmount()));
     }
   }
   
@@ -1822,7 +1823,7 @@ function testTxCopy(tx, ctx) {
   else {
     assert(copy.getOutputs() !== tx.getOutputs());
     for (let i = 0; i < copy.getOutputs().length; i++) {
-      assert.equal(0, tx.getOutputs()[i].getAmount().compare(copy.getOutputs()[i].getAmount()));
+      assert.equal(0, BigIntegerCompare(tx.getOutputs()[i].getAmount(), copy.getOutputs()[i].getAmount()));
     }
   }
   
