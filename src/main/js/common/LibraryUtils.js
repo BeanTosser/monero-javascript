@@ -1,7 +1,9 @@
-const assert = require("assert");
-const GenUtils = require("./GenUtils");
-const MoneroError = require("./MoneroError");
-const ThreadPool = require("./ThreadPool");
+import assert from "assert";
+import GenUtils from "./GenUtils";
+import MoneroError from "./MoneroError";
+import ThreadPool from "./ThreadPool";
+import Worker from "web-worker";
+import path from "path";
 
 /**
  * Collection of helper utilities for the library.
@@ -13,7 +15,7 @@ class LibraryUtils {
   /**
    * Log a message.
    *
-   * @param {int} level - log level of the message
+   * @param {number} level - log level of the message
    * @param {string} msg - message to log
    */
   static log(level, msg) {
@@ -24,12 +26,20 @@ class LibraryUtils {
   /**
    * Set the library's log level with 0 being least verbose.
    *
-   * @param {int} level - the library's log level
+   * @param {number} level - the library's log level
    */
   static async setLogLevel(level) {
+    console.log("set log level 1");
     assert(level === parseInt(level, 10) && level >= 0, "Log level must be an integer >= 0");
+    console.log("set log level 2");
     LibraryUtils.LOG_LEVEL = level;
-    if (LibraryUtils.WORKER) await LibraryUtils.invokeWorker(GenUtils.getUUID(), "setLogLevel", [level]);
+    console.log("set log level 3");
+    try{
+      if (LibraryUtils.WORKER) await LibraryUtils.invokeWorker(GenUtils.getUUID(), "setLogLevel", [level]);
+    }catch(e){
+      console.log("Failed to invoke worker: " + e);
+    }
+    console.log("set log level 4");
   }
   
   /**
@@ -148,13 +158,18 @@ class LibraryUtils {
    * @return {Worker} a worker to share among wallet instances
    */
   static async getWorker() {
-    
+    console.log("LibraryUtils.getWorker");
     // one time initialization
     if (!LibraryUtils.WORKER) {
-      if (GenUtils.isBrowser()) LibraryUtils.WORKER = new Worker(LibraryUtils.WORKER_DIST_PATH);
-      else { 
-       const Worker = require("web-worker"); // import web worker if nodejs
+      console.log("New worker");
+      if (GenUtils.isBrowser()) {
+        LibraryUtils.WORKER = new Worker(LibraryUtils.WORKER_DIST_PATH);
+        console.log("Dooby 1");
+      } else { 
+       //import Worker from "web-worker"; // import web worker if nodejs
+       console.log("Import worker");
        LibraryUtils.WORKER = new Worker(LibraryUtils.WORKER_DIST_PATH);
+       console.log("Imported worker");
       }
       LibraryUtils.WORKER_OBJECTS = {};  // store per object running in the worker
       
@@ -165,6 +180,7 @@ class LibraryUtils {
       };
       
       // receive worker messages
+      console.log("Setting utils.WORKER.onmessage");
       LibraryUtils.WORKER.onmessage = function(e) {
         
         // lookup object id, callback function, and this arg
@@ -179,9 +195,12 @@ class LibraryUtils {
         // invoke callback function with this arg and arguments
         callbackFn.apply(thisArg, e.data.slice(2));
       }
+      console.log("Set onmessage");
       
       // set worker log level
+      console.log("Setting log level");
       await LibraryUtils.setLogLevel(LibraryUtils.getLogLevel());
+      console.log("set log level");
     }
     return LibraryUtils.WORKER;
   }
@@ -195,15 +214,33 @@ class LibraryUtils {
    * @return {Promise} resolves with response payload from the worker or an error
    */
   static async invokeWorker(objectId, fnName, args) {
+    console.log("invoke worker");
+    console.log("")
+    console.log("")
+    console.log("")
     assert(fnName.length >= 2);
-    let worker = await LibraryUtils.getWorker();
+    console.log("step 1");
+    let worker;
+    try{
+      worker = await LibraryUtils.getWorker();
+    } catch(e){
+      console.log("Failed to get worker: " + e);
+    }
+    console.log("worker from LibraryUtils: " + worker);
+    console.log("step 2");
     if (!LibraryUtils.WORKER_OBJECTS[objectId]) LibraryUtils.WORKER_OBJECTS[objectId] = {callbacks: {}};
+    console.log("step 3");
     return new Promise(function(resolve, reject) {
+      console.log("promise step 1");
       let callbackId = GenUtils.getUUID();
+      console.log("promise step 2");
       LibraryUtils.WORKER_OBJECTS[objectId].callbacks[callbackId] = function(resp) {  // TODO: this defines function once per callback
+        console.log("metacallback step 1");
         resp ? (resp.error ? reject(new MoneroError(resp.error)) : resolve(resp.result)) : resolve();
       };
+      console.log("promise step 3")
       worker.postMessage([objectId, fnName, callbackId].concat(args === undefined ? [] : GenUtils.listify(args)));
+      console.log("promise step 4");
     });
   }
   
@@ -222,9 +259,8 @@ class LibraryUtils {
 
 LibraryUtils.LOG_LEVEL = 0;
 LibraryUtils.WORKER_DIST_PATH_DEFAULT = GenUtils.isBrowser() ? "/monero_web_worker.js" : function() {
-    const path = require("path");
     return LibraryUtils._prefixWindowsPath(path.join(__dirname, "./MoneroWebWorker.js"));
 }();
 LibraryUtils.WORKER_DIST_PATH = LibraryUtils.WORKER_DIST_PATH_DEFAULT;
 
-module.exports = LibraryUtils;
+export default LibraryUtils;

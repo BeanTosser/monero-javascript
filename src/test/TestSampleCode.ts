@@ -1,6 +1,23 @@
-const assert = require("assert");
-const monerojs = require("../../index");
-const TestUtils = require("./utils/TestUtils");
+import assert from "assert";
+import TestUtils from "./utils/TestUtils.js";
+
+import {connectToWalletRpc,
+        connectToDaemonRpc,
+        GenUtils,
+        createWalletFull,
+        MoneroOutputWallet, 
+        MoneroWalletFull,
+        MoneroWalletListener,
+        MoneroTxWallet,
+        MoneroWalletRpc,
+        MoneroDaemonRpc,
+        MoneroConnectionManager,
+        MoneroConnectionManagerListener,
+        MoneroRpcConnection,
+        MoneroTransfer,
+        MoneroIncomingTransfer,
+        MoneroTx,
+        MoneroTxPriority} from "../../index";
 
 /**
  * Test the sample code in README.md.
@@ -9,8 +26,8 @@ class TestSampleCode {
   
   runTests() {
     describe("Test sample code", function() {
-      let that = this;
-      let wallet;
+      let that = this; // Unnecessary? That is never used in the following code
+      let wallet: MoneroWalletFull;
       
       // initialize wallet
       before(async function() {
@@ -20,50 +37,54 @@ class TestSampleCode {
           TestUtils.WALLET_TX_TRACKER.reset();
           
           // create rpc test wallet
-          let walletRpc = await TestUtils.getWalletRpc();
+          let walletRpc: MoneroWalletRpc = await TestUtils.getWalletRpc();
           await walletRpc.close();
-          
           // create directory for test wallets if it doesn't exist
           let fs = TestUtils.getDefaultFs();
           if (!fs.existsSync(TestUtils.TEST_WALLETS_DIR)) {
             if (!fs.existsSync(process.cwd())) fs.mkdirSync(process.cwd(), { recursive: true });  // create current process directory for relative paths which does not exist in memory fs
             fs.mkdirSync(TestUtils.TEST_WALLETS_DIR);
           }
-          
           // create full test wallet
-          wallet = await TestUtils.getWalletFull();
+          try{
+            wallet = await TestUtils.getWalletFull();
+          } catch(e){
+            console.log("Failed to get full wallet: " + e);
+          }
         } catch (e) {
           console.error("Error before tests: ");
           console.error(e);
           throw e;
         }
       });
-      
       after(async function() {
+        console.log("After 1");
         if (wallet) await wallet.close(true);
+        console.log("After 2");
       });
       
       it("Sample code demonstration", async function() {
-        
+        console.log("Starting sample code demonstration");
         // import library
-        const monerojs = require("../../index");	// *** CHANGE README TO "monero-javascript" ***
+        //const monerojs = require("../../index");  // *** CHANGE README TO "monero-javascript" ***
         
         // connect to daemon
-        let daemon = await monerojs.connectToDaemonRpc("http://localhost:28081");
-        let height = await daemon.getHeight();            // 1523651
-        let feeEstimate = await daemon.getFeeEstimate();  // 1014313512
-        let txsInPool = await daemon.getTxPool();         // get transactions in the pool
-        
+        let daemon: MoneroDaemonRpc = await connectToDaemonRpc({uri: "http://localhost:28081", proxyToWorker: TestUtils.PROXY_TO_WORKER});
+        let height: number = await daemon.getHeight();            // 1523651
+        let feeEstimate: BigInt = await daemon.getFeeEstimate();  // 1014313512
+        let txsInPool: Array<MoneroTx> = await daemon.getTxPool();         // get transactions in the pool
+        console.log("sample 1");
         // open wallet on monero-wallet-rpc
-        let walletRpc = await monerojs.connectToWalletRpc("http://localhost:28084", "rpc_user", "abc123");
+        let walletRpc = await connectToWalletRpc({uri: "http://localhost:28084", username:"rpc_user", password:"abc123"});
+
         await walletRpc.openWallet("test_wallet_1", "supersecretpassword123");  // *** CHANGE README TO "sample_wallet_rpc" ***
-        let primaryAddress = await walletRpc.getPrimaryAddress(); // 555zgduFhmKd2o8rPUz...
-        let balance = await walletRpc.getBalance();               // 533648366742
-        let txs = await walletRpc.getTxs();                       // get transactions containing transfers to/from the wallet
-        
+        let primaryAddress: string = await walletRpc.getPrimaryAddress(); // 555zgduFhmKd2o8rPUz...
+        let balance: BigInt = await walletRpc.getBalance();               // 533648366742
+        let txs: Array<MoneroTxWallet> = await walletRpc.getTxs();                       // get transactions containing transfers to/from the wallet
+        console.log("sample 2");
         // create wallet from mnemonic phrase using WebAssembly bindings to monero-project
-        let walletFull = await monerojs.createWalletFull({
-          path: "./test_wallets/" + monerojs.GenUtils.getUUID(),  // *** CHANGE README TO "sample_wallet_full"
+        let walletFull: MoneroWalletFull = await createWalletFull({
+          path: "./test_wallets/" + GenUtils.getUUID(),  // *** CHANGE README TO "sample_wallet_full"
           password: "supersecretpassword123",
           networkType: "testnet",
           serverUri: "http://localhost:28081",
@@ -71,80 +92,92 @@ class TestSampleCode {
           serverPassword: "abctesting123",
           mnemonic: TestUtils.MNEMONIC,                  // *** REPLACE README WITH MNEMONIC ***
           restoreHeight: TestUtils.FIRST_RECEIVE_HEIGHT, // *** REPLACE README WITH FIRST RECEIVE HEIGHT ***
-          fs: TestUtils.getDefaultFs()
+          fs: TestUtils.getDefaultFs(),
+          proxyToWorker: TestUtils.PROXY_TO_WORKER
         });
-        
+        console.log("sample 3");
         // synchronize with progress notifications
-        await walletFull.sync(new class extends monerojs.MoneroWalletListener {
-          onSyncProgress(height, startHeight, endHeight, percentDone, message) {
+        await walletFull.sync(new class extends MoneroWalletListener {
+          async onSyncProgress(height: number, startHeight: number, endHeight: number, percentDone: number, message: string) {
             // feed a progress bar?
           }
-        });
-        
+        } as MoneroWalletListener);
+        console.log("sample 4");
         // synchronize in the background every 5 seconds
         await walletFull.startSyncing(5000);
         
         // receive notifications when funds are received, confirmed, and unlocked
-        let fundsReceived = false;
-        await walletFull.addListener(new class extends monerojs.MoneroWalletListener {
-          onOutputReceived(output) {
-            let amount = output.getAmount();
-            let txHash = output.getTx().getHash();
-            let isConfirmed = output.getTx().isConfirmed();
-            let isLocked = output.getTx().isLocked();
+        let fundsReceived: boolean = false;
+        await walletFull.addListener(new class extends MoneroWalletListener {
+          async onOutputReceived(output: MoneroOutputWallet) {
+            let amount: BigInt = output.getAmount();
+            let txHash = output.getTx().getHash(); //String?
+            let isConfirmed: boolean = output.getTx().isConfirmed();
+            let isLocked: boolean = output.getTx().isLocked();
             fundsReceived = true;
           }
         });
-        
+        console.log("sample 5")
         // send funds from RPC wallet to WebAssembly wallet
-        await TestUtils.WALLET_TX_TRACKER.waitForWalletTxsToClearPool(walletRpc); // *** REMOVE FROM README SAMPLE ***
-        let createdTx = await walletRpc.createTx({
+        try{
+          await TestUtils.WALLET_TX_TRACKER.waitForWalletTxsToClearPool(walletRpc); // *** REMOVE FROM README SAMPLE ***
+        } catch (e) {
+          console.log("failed to wait for txs to clear pool: " + e);
+        }
+        console.log("Txs cleared from pool");
+        let createdTx: MoneroTxWallet = await walletRpc.createTx({
           accountIndex: 0,
           address: await walletFull.getAddress(1, 0),
           amount: "250000000000", // send 0.25 XMR (denominated in atomic units)
           relay: false // create transaction and relay to the network if true
         });
-        let fee = createdTx.getFee(); // "Are you sure you want to send... ?"
+        console.log("sample 6");
+        let fee: BigInt = createdTx.getFee(); // "Are you sure you want to send... ?"
         await walletRpc.relayTx(createdTx); // relay the transaction
         
         // recipient receives unconfirmed funds within 5 seconds
-        await new Promise(function(resolve) { setTimeout(resolve, 5000); });
+        await new Promise(function(resolve) { setTimeout(resolve, 15000); });
         assert(fundsReceived);
         
         // save and close WebAssembly wallet
         await walletFull.close(true);
+        console.log("sample 7");
       });
       
       it("Connection manager demonstration", async function() {
         
         // imports
-        const monerojs = require("../../index");    // *** CHANGE README TO "monero-javascript" ***
-        const MoneroRpcConnection = monerojs.MoneroRpcConnection;
-        const MoneroConnectionManager = monerojs.MoneroConnectionManager;
-        const MoneroConnectionManagerListener = monerojs.MoneroConnectionManagerListener;
+        //const monerojs = require("../../index");    // *** CHANGE README TO "monero-javascript" ***
+        //const MoneroRpcConnection = MoneroRpcConnection;
+        //const MoneroConnectionManager = MoneroConnectionManager;
+        //const MoneroConnectionManagerListener = MoneroConnectionManagerListener;
         
         // create connection manager
-        let connectionManager = new MoneroConnectionManager();
+        let connectionManager: MoneroConnectionManager = new MoneroConnectionManager();
         
         // add managed connections with priorities
-        connectionManager.addConnection(new MoneroRpcConnection("http://localhost:28081").setPriority(1)); // use localhost as first priority
-        connectionManager.addConnection(new MoneroRpcConnection("http://example.com")); // default priority is prioritized last
+        connectionManager.addConnection(new MoneroRpcConnection({uri: "http://localhost:38081", proxyToWorker: TestUtils.PROXY_TO_WORKER}).setPriority(1)); // use localhost as first priority
+        connectionManager.addConnection(new MoneroRpcConnection({uri: "http://example.com", proxyToWorker: TestUtils.PROXY_TO_WORKER})); // default priority is prioritized last
         
         // set current connection
-        connectionManager.setConnection(new MoneroRpcConnection("http://foo.bar", "admin", "password")); // connection is added if new
+        connectionManager.setConnection(new MoneroRpcConnection({uri: "http://foo.bar", username: "admin", password: "password", proxyToWorker: TestUtils.PROXY_TO_WORKER})); // connection is added if new
+        
+        console.log("connection manager test checkpoint 1");
         
         // check connection status
         await connectionManager.checkConnection();
+        console.log("connection manager test checkpoint 2");
         console.log("Connection manager is connected: " + connectionManager.isConnected());
         console.log("Connection is online: " + connectionManager.getConnection().isOnline());
         console.log("Connection is authenticated: " + connectionManager.getConnection().isAuthenticated());
         
         // receive notifications of any changes to current connection
         connectionManager.addListener(new class extends MoneroConnectionManagerListener {
-          onConnectionChanged(connection) {
+          async onConnectionChanged(connection: MoneroRpcConnection) {
             console.log("Connection changed to: " + connection);
           }
         });
+        console.log("Connection manager test checkpoint 3");
         
         // check connection status every 10 seconds
         await connectionManager.startCheckingConnection(10000);
@@ -153,26 +186,27 @@ class TestSampleCode {
         connectionManager.setAutoSwitch(true);
         
         // get best available connection in order of priority then response time
-        let bestConnection = await connectionManager.getBestAvailableConnection();
-        
+        let bestConnection: MoneroRpcConnection = await connectionManager.getBestAvailableConnection();
+        console.log("Connection manager test checkpoint 4");
         // check status of all connections
         await connectionManager.checkConnections();
         
         // get connections in order of current connection, online status from last check, priority, and name
-        let connections = connectionManager.getConnections();
+        let connections: Array<MoneroRpcConnection> = connectionManager.getConnections();
         
         // clear connection manager
         connectionManager.clear();
+        console.log("Connection manager test checkpoint 4");
       });
       
       it("Test developer guide transaction queries", async function() {
         
         // get a transaction by hash
-        let tx = await wallet.getTx((await wallet.getTxs())[0].getHash()); // REPLACE WITH BELOW FOR MD FILE
+        let tx: MoneroTxWallet = await wallet.getTx((await wallet.getTxs())[0].getHash()); // REPLACE WITH BELOW FOR MD FILE
         //let tx = await wallet.getTx("9fb2cb7c73743002f131b72874e77b1152891968dc1f2849d3439ace8bae6d8e");
         
         // get unconfirmed transactions
-        let txs = await wallet.getTxs({
+        let txs: Array<MoneroTxWallet> = await wallet.getTxs({
           isConfirmed: false
         });
         for (let tx of txs) {
@@ -192,7 +226,7 @@ class TestSampleCode {
         for (let tx of txs) {
           assert(tx.isConfirmed());
           assert(tx.getHeight() >= 582106)
-          let found = false;
+          let found: boolean = false;
           for (let transfer of tx.getTransfers()) {
             if (transfer.isIncoming() && transfer.getAccountIndex() === 0 && transfer.getSubaddressIndex() === 1) {
               found = true;
@@ -229,7 +263,7 @@ class TestSampleCode {
       it("Test developer guide transfer queries", async function() {
         
         // get all transfers
-        let transfers = await wallet.getTransfers();
+        let transfers: Array<MoneroTransfer> = await wallet.getTransfers();
         
         // get incoming transfers to account 0, subaddress 1
         transfers = await wallet.getTransfers({
@@ -240,7 +274,9 @@ class TestSampleCode {
         for (let transfer of transfers) {
           assert.equal(transfer.isIncoming(), true);
           assert.equal(transfer.getAccountIndex(), 0);
-          assert.equal(transfer.getSubaddressIndex(), 1);
+          
+          
+          assert.equal((transfer as MoneroIncomingTransfer).getSubaddressIndex(), 1);
         }
         
         // get transfers in the tx pool
@@ -272,7 +308,7 @@ class TestSampleCode {
       it("Test developer guide output queries", async function() {
         
         // get all outputs
-        let outputs = await wallet.getOutputs();
+        let outputs: Array<MoneroOutputWallet> = await wallet.getOutputs();
         assert(outputs.length > 0);
         
         // get outputs available to be spent
@@ -308,7 +344,7 @@ class TestSampleCode {
         }
         
         // get output by key image
-        let keyImage = outputs[0].getKeyImage().getHex();
+        let keyImage: string = outputs[0].getKeyImage().getHex();
         outputs = await wallet.getOutputs({
           keyImage: keyImage
         });
@@ -319,26 +355,30 @@ class TestSampleCode {
       it("Test developer guide send funds", async function() {
         
         // create in-memory test wallet with randomly generated mnemonic
-        let wallet = await monerojs.createWalletFull({
+        let wallet: MoneroWalletFull = await createWalletFull({
           password: "abctesting123",
-          networkType: "testnet",
-          serverUri: "http://localhost:28081"
+          networkType: "stagenet",
+          serverUri: "http://localhost:38081",
+          serverUsername: "superuser",
+          serverPassword: "abctesting123",
+          proxyToWorker: TestUtils.PROXY_TO_WORKER
         });
         
         try {
           // create a transaction to send funds to an address, but do not relay
-          let tx = await wallet.createTx({
+          let tx: MoneroTxWallet = await wallet.createTx({
             accountIndex: 0,  // source account to send funds from
             address: "9tsUiG9bwcU7oTbAdBwBk2PzxFtysge5qcEsHEpetmEKgerHQa1fDqH7a4FiquZmms7yM22jdifVAD7jAb2e63GSJMuhY75",
             amount: "1000000000000" // send 1 XMR (denominated in atomic units)
           });
           
           // can confirm with the user
-          let fee = tx.getFee();  // "Are you sure you want to send... ?"
+          let fee: BigInt = tx.getFee();  // "Are you sure you want to send... ?"
           
           // relay the transaction
-          let hash = await wallet.relayTx(tx);
-        } catch (err) {
+          let hash: string = await wallet.relayTx(tx);
+        // NOTE: The type of err probably shouldn't be "any"'
+        } catch (err: any) {
           assert.equal(err.message, "not enough money");
         }
         
@@ -350,14 +390,14 @@ class TestSampleCode {
             amount: "1000000000000", // send 1 XMR (denominated in atomic units)
             relay: true // relay the transaction to the network
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "not enough money");
         }
         
         try {
           // send funds from a specific subaddress to multiple destinations,
           // allowing transfers to be split across multiple transactions if needed
-          let txs = await wallet.createTxs({
+          let txs: Array<MoneroTxWallet> = await wallet.createTxs({
             accountIndex: 0,    // source account to send funds from
             subaddressIndex: 1, // source subaddress to send funds from
             destinations: [{
@@ -367,54 +407,54 @@ class TestSampleCode {
                 address: "9y3bAgpF9iajSsNa7t4FN7Zh73MadCL4oMDTcD8SGzbxBGnkYhGyC67AD4pVkvaYw1XL97uwDYuFGf9hi1KEVgZpQtPWcZm",
                 amount: "500000000000", // send 0.5 XMR (denominated in atomic units)
               }],
-            priority: monerojs.MoneroTxPriority.IMPORTANT,
+            priority: MoneroTxPriority.ELEVATED,
             relay: true // relay the transaction to the network
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "not enough money");
         }
         
         try {
           // sweep an output
-          let tx = await wallet.sweepOutput({
-            address: "9tsUiG9bwcU7oTbAdBwBk2PzxFtysge5qcEsHEpetmEKgerHQa1fDqH7a4FiquZmms7yM22jdifVAD7jAb2e63GSJMuhY75",
+          let tx: MoneroTxWallet = await wallet.sweepOutput({
+            address: "55bcxMRhBWea6xxsot8moF1rdPprjJR2x4mfnNnTGgBJFgXa4gWXmWAYdUBKiRcJxy9AUAGJEg28DejvWdJU2VgUDrUvCHG",
             keyImage: "b7afd6afbb1615c98b1c0350b81c98a77d6d4fc0ab92020d25fd76aca0914f1e",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No outputs found");
         }
         
         try {
           // sweep all unlocked funds in a wallet
-          let txs = await wallet.sweepUnlocked({
-            address: "9tsUiG9bwcU7oTbAdBwBk2PzxFtysge5qcEsHEpetmEKgerHQa1fDqH7a4FiquZmms7yM22jdifVAD7jAb2e63GSJMuhY75",
+          let txs: Array<MoneroTxWallet> = await wallet.sweepUnlocked({
+            address: "55bcxMRhBWea6xxsot8moF1rdPprjJR2x4mfnNnTGgBJFgXa4gWXmWAYdUBKiRcJxy9AUAGJEg28DejvWdJU2VgUDrUvCHG",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No unlocked balance in the specified account");
         }
         
         try {
           // sweep unlocked funds in an account
-          let txs = await wallet.sweepUnlocked({
+          let txs: Array<MoneroTxWallet> = await wallet.sweepUnlocked({
             accountIndex: 0,
             address: "9tsUiG9bwcU7oTbAdBwBk2PzxFtysge5qcEsHEpetmEKgerHQa1fDqH7a4FiquZmms7yM22jdifVAD7jAb2e63GSJMuhY75",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No unlocked balance in the specified account");
         }
         
         try {
           // sweep unlocked funds in a subaddress
-          let txs = await wallet.sweepUnlocked({
+          let txs: Array<MoneroTxWallet> = await wallet.sweepUnlocked({
             accountIndex: 0,
             subaddressIndex: 0,
             address: "9tsUiG9bwcU7oTbAdBwBk2PzxFtysge5qcEsHEpetmEKgerHQa1fDqH7a4FiquZmms7yM22jdifVAD7jAb2e63GSJMuhY75",
             relay: true
           });
-        } catch (err) {
+        } catch (err: any) {
           assert.equal(err.message, "No unlocked balance in the specified account");
         }
       });
