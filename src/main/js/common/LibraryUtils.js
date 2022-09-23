@@ -2,7 +2,6 @@ import assert from "assert";
 import GenUtils from "./GenUtils";
 import MoneroError from "./MoneroError";
 import ThreadPool from "./ThreadPool";
-import Worker from "web-worker";
 import path from "path";
 
 /**
@@ -165,11 +164,11 @@ class LibraryUtils {
       if (GenUtils.isBrowser()) {
         LibraryUtils.WORKER = new Worker(LibraryUtils.WORKER_DIST_PATH);
         console.log("Dooby 1");
-      } else { 
-       //import Worker from "web-worker"; // import web worker if nodejs
-       console.log("Import worker");
-       LibraryUtils.WORKER = new Worker(LibraryUtils.WORKER_DIST_PATH);
-       console.log("Imported worker");
+      } else {
+        const Worker = require("web-worker"); // import web worker if nodejs
+        console.log("Import worker");
+        LibraryUtils.WORKER = new Worker(LibraryUtils.WORKER_DIST_PATH);
+        console.log("Imported worker");
       }
       LibraryUtils.WORKER_OBJECTS = {};  // store per object running in the worker
       

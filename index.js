@@ -279,7 +279,7 @@ export function connectToWalletRpc() { return MoneroWalletRpc._connectToWalletRp
  * @param {MoneroRpcConnection|object} config.server - MoneroRpcConnection or equivalent JS object providing daemon configuration (optional)
  * @param {boolean} config.proxyToWorker - proxies wallet operations to a web worker in order to not block the main thread (default true)
  * @param {fs} config.fs - Node.js compatible file system to use (defaults to disk or in-memory FS if browser)
- * @return {MoneroWalletFull} the created wallet
+ * @return {Promise<MoneroWalletFull>} the created wallet
  */
 export function createWalletFull() { return MoneroWalletFull.createWallet(...arguments); }
 
