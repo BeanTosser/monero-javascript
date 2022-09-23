@@ -12,6 +12,7 @@ import MoneroRpcConnection from "./MoneroRpcConnection";
 import MoneroTxConfig from "../wallet/model/MoneroTxConfig";
 import MoneroTxSet from "../wallet/model/MoneroTxSet";
 import MoneroUtils from "../common/MoneroUtils";
+import MoneroWalletConfig from "../wallet/model/MoneroWalletConfig"
 import MoneroWalletListener from "../wallet/model/MoneroWalletListener";
 import MoneroWalletFull from "../wallet/MoneroWalletFull";
 
